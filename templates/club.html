@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="default">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Members Club — Pencil Insurance</title>
+  <link rel="stylesheet" href="/static/themes.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=JetBrains+Mono:wght@400;700&family=Fraunces:ital,wght@0,300;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:var(--font-body);
+      background:var(--bg);color:var(--text);
+      min-height:100vh;cursor:none;
+      transition:background 0.4s,color 0.4s;
+      padding-bottom:80px;
+    }
+    body.native-cursor{cursor:auto}
+    body::before{
+      content:"";
+      position:fixed;inset:0;
+      background:radial-gradient(circle at 1px 1px,var(--border) 1px,transparent 1px);
+      background-size:32px 32px;opacity:0.3;pointer-events:none;z-index:-1;
+    }
+    .cursor{
+      position:fixed;width:14px;height:14px;
+      background:var(--accent);border-radius:50%;
+      pointer-events:none;z-index:9999;
+      transform:translate(-50%,-50%);
+      mix-blend-mode:difference;
+    }
+    .cursor-ring{
+      position:fixed;width:38px;height:38px;
+      border:1.5px solid var(--accent);border-radius:50%;
+      pointer-events:none;z-index:9998;
+      transform:translate(-50%,-50%);
+      opacity:0.5;
+    }
+    body.native-cursor .cursor,body.native-cursor .cursor-ring{display:none}
+
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:200;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:1rem 2rem;
+      background:var(--glass);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-logo{
+      font-family:var(--font-head);font-size:1.2rem;font-weight:700;
+      color:var(--accent);display:flex;align-items:center;gap:8px;text-decoration:none;
+    }
+    .nav-right{display:flex;align-items:center;gap:10px}
+    .nav-btn{
+      background:var(--bg3);border:1px solid var(--border);color:var(--muted);
+      padding:.4rem .8rem;border-radius:50px;font-size:.78rem;
+      cursor:pointer;font-family:var(--font-body);transition:all .2s;
+      text-decoration:none;display:inline-flex;align-items:center;gap:5px;
+    }
+    .nav-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+    .container{max-width:800px;margin:0 auto;padding:6rem 1.5rem 3rem;}
+
+    .announcement{
+      background:var(--bg2);border:1px solid var(--border);
+      border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem;
+      backdrop-filter:blur(12px);
+      position:relative;
+    }
+    .ann-title{
+      font-family:var(--font-head);font-size:1.3rem;margin-bottom:.3rem;
+      display:flex;align-items:center;gap:0.5rem;
+    }
+    .ann-meta{font-size:.75rem;color:var(--muted);margin-bottom:.8rem;}
+    .ann-body{font-size:.9rem;color:var(--text);line-height:1.6;white-space:pre-wrap;}
+
+    .comments-section{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);}
+    .comment{
+      background:var(--bg3);border-radius:var(--radius);padding:.8rem;margin-bottom:.5rem;
+      font-size:.85rem;color:var(--text);
+    }
+    .comment strong{color:var(--accent);}
+    .comment time{font-size:.7rem;color:var(--muted);float:right;}
+    .comment-form{display:flex;gap:.5rem;margin-top:.8rem;}
+    .comment-form input{
+      flex:1;background:var(--bg3);border:1px solid var(--border);
+      border-radius:50px;padding:.5rem 1rem;color:var(--text);font-family:var(--font-body);
+      outline:none;transition:border-color .2s;
+    }
+    .comment-form input:focus{border-color:var(--accent);}
+    .comment-form button{
+      background:var(--accent);color:var(--bg);border:none;
+      border-radius:50px;padding:.5rem 1.2rem;font-family:var(--font-body);cursor:pointer;
+      transition:opacity .2s;
+    }
+    .comment-form button:hover{opacity:.85;}
+
+    .new-post{
+      background:var(--bg2);border:1px solid var(--border);
+      border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:2rem;
+    }
+    .new-post h3{font-family:var(--font-head);margin-bottom:1rem;}
+    .new-post input,.new-post textarea{
+      width:100%;background:var(--bg3);border:1px solid var(--border);
+      border-radius:var(--radius);padding:.7rem;color:var(--text);
+      margin-bottom:.75rem;font-family:var(--font-body);outline:none;
+    }
+    .new-post textarea{resize:vertical;min-height:80px;}
+
+    .btn-primary{
+      background:var(--accent);color:var(--bg);border:none;
+      padding:.65rem 1.5rem;border-radius:50px;font-size:.9rem;
+      cursor:pointer;font-family:var(--font-body);transition:opacity .2s;
+    }
+    .btn-primary:hover{opacity:.88;}
+
+    .empty-state{text-align:center;padding:3rem;color:var(--muted);}
+    .empty-state span{font-size:2rem;display:block;margin-bottom:.5rem;}
+
+    .delete-post-btn{
+      background:none;border:1px solid var(--border);border-radius:50%;
+      width:26px;height:26px;cursor:pointer;font-size:0.8rem;
+      display:inline-flex;align-items:center;justify-content:center;
+      color:var(--muted);transition:all 0.2s;margin-left:0.3rem;
+    }
+    .delete-post-btn:hover{background:var(--error);color:white;border-color:var(--error);}
+
+    .toast{
+      position:fixed;bottom:2rem;right:2rem;z-index:800;
+      background:var(--accent);color:var(--bg);
+      padding:.7rem 1.4rem;border-radius:50px;font-size:.88rem;
+      font-weight:500;transform:translateY(80px);opacity:0;
+      transition:all .3s ease;box-shadow:var(--shadow);
+    }
+    .toast.show{transform:none;opacity:1;}
+
+    .bottom-nav{display:none;}
+    @media(max-width:768px){
+      .bottom-nav{
+        display:flex;position:fixed;bottom:0;left:0;right:0;z-index:300;
+        background:var(--bg2);border-top:1px solid var(--border);
+        justify-content:space-around;padding:.45rem 0;
+      }
+      .bnav-item{
+        display:flex;flex-direction:column;align-items:center;
+        color:var(--muted);text-decoration:none;font-size:.65rem;
+        gap:4px;padding:.3rem .6rem;border-radius:var(--radius);
+        transition:color .15s;
+      }
+      .bnav-item .icon{font-size:1.3rem;}
+      .bnav-item.active,.bnav-item:hover{color:var(--accent);}
+    }
+
+    .modal-overlay{
+      position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.65);
+      backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;
+      padding:1rem;opacity:0;pointer-events:none;transition:opacity .25s;
+    }
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal-box{
+      background:var(--bg2);border:1px solid var(--border);
+      border-radius:var(--radius-lg);padding:2rem;max-width:460px;width:100%;
+      transform:translateY(16px);transition:transform .25s;
+    }
+    .modal-overlay.open .modal-box{transform:none;}
+    .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;}
+    .modal-head h2{font-family:var(--font-head);font-size:1.25rem;}
+    .modal-close{
+      background:none;border:none;color:var(--muted);font-size:1.3rem;
+      cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+      border-radius:50%;transition:background .2s,color .2s;
+    }
+    .modal-close:hover{color:var(--text);background:var(--bg3);}
+    .theme-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;}
+    .theme-opt{
+      border:1px solid var(--border);border-radius:var(--radius);padding:.9rem;
+      cursor:pointer;transition:all .2s;background:var(--bg3);
+    }
+    .theme-opt:hover,.theme-opt.active{border-color:var(--accent);}
+    .theme-swatch{height:38px;border-radius:8px;margin-bottom:.5rem;}
+    .theme-name{font-size:.85rem;font-weight:500;margin-bottom:.15rem;}
+    .theme-desc{font-size:.73rem;color:var(--muted);}
+  </style>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursor-ring"></div>
+  <div class="toast" id="toast"></div>
+
+  <div class="modal-overlay" id="themeModal">
+    <div class="modal-box">
+      <div class="modal-head"><h2>Choose your theme</h2><button class="modal-close" onclick="closeThemeModal()">✕</button></div>
+      <div class="theme-grid">
+        <div class="theme-opt" data-tid="default" onclick="applyTheme('default',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#1a1714,#d97757)"></div><div class="theme-name">Claude</div><div class="theme-desc">Warm charcoal & coral</div></div>
+        <div class="theme-opt" data-tid="claude" onclick="applyTheme('claude',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#faf9f5,#c15f3c)"></div><div class="theme-name">Claude Paper</div><div class="theme-desc">Warm cream & clay</div></div>
+        <div class="theme-opt" data-tid="gold" onclick="applyTheme('gold',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#0d1117,#e8c84a)"></div><div class="theme-name">Gold & Navy</div><div class="theme-desc">Original elegant dark</div></div>
+        <div class="theme-opt" data-tid="terminal" onclick="applyTheme('terminal',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#000,#00ff41)"></div><div class="theme-name">1994 Terminal</div><div class="theme-desc">Hacker green on black</div></div>
+        <div class="theme-opt" data-tid="neon" onclick="applyTheme('neon',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#f6f7fb,#ff007f)"></div><div class="theme-name">Neon Pop</div><div class="theme-desc">Bright & electric</div></div>
+        <div class="theme-opt" data-tid="sakura" onclick="applyTheme('sakura',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#0e0409,#ff6eb0)"></div><div class="theme-name">Sakura</div><div class="theme-desc">Cherry blossom</div></div>
+        <div class="theme-opt" data-tid="ocean" onclick="applyTheme('ocean',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#010a14,#00cfff)"></div><div class="theme-name">Deep Ocean</div><div class="theme-desc">Cyan on navy</div></div>
+        <div class="theme-opt" data-tid="glass" onclick="applyTheme('glass',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#0f0f1e,#a78bfa)"></div><div class="theme-name">Glass Prism</div><div class="theme-desc">Frosted violet</div></div>
+        <div class="theme-opt" data-tid="google" onclick="applyTheme('google',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#0b0d12,#4285f4)"></div><div class="theme-name">Google</div><div class="theme-desc">Material & Gemini</div></div>
+        <div class="theme-opt" data-tid="netflix" onclick="applyTheme('netflix',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#141414,#e50914)"></div><div class="theme-name">Netflix Red</div><div class="theme-desc">Bold crimson</div></div>
+      </div>
+    </div>
+  </div>
+
+  <nav>
+    <a href="/" class="nav-logo">✏️ Pencil Insurance</a>
+    <div class="nav-right">
+      <button class="nav-btn" onclick="openThemeModal()">🎨 Theme</button>
+      <a href="/" class="nav-btn">← Home</a>
+      <a href="/profile" class="nav-btn">👤 Profile</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 style="font-family:var(--font-head);font-size:2.2rem;margin-bottom:1.5rem;">👥 Members Club</h1>
+    <div id="clubContent">Loading…</div>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="/" class="bnav-item"><span class="icon">🏠</span>Home</a>
+    <a href="/profile" class="bnav-item"><span class="icon">👤</span>Profile</a>
+    <a href="/shop" class="bnav-item"><span class="icon">🛒</span>Shop</a>
+    <a href="/club" class="bnav-item active"><span class="icon">👥</span>Club</a>
+    <a href="/tnc" class="bnav-item"><span class="icon">📄</span>Terms</a>
+  </div>
+
+  <script>
+    const cur = document.getElementById('cursor'), ring = document.getElementById('cursor-ring');
+    let rx = 0, ry = 0;
+    if (/Mobi|Android/i.test(navigator.userAgent)) { document.body.classList.add('native-cursor'); }
+    else {
+      document.addEventListener('mousemove', e => { cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px'; });
+      (function tick() { rx += (parseFloat(cur.style.left || 0) - rx) * 0.12; ry += (parseFloat(cur.style.top || 0) - ry) * 0.12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(tick); })();
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    function applyTheme(id, save = false) {
+      document.documentElement.setAttribute('data-theme', id);
+      localStorage.setItem('pi-theme', id);
+      document.querySelectorAll('.theme-opt').forEach(o => o.classList.toggle('active', o.dataset.tid === id));
+      if (save) {
+        closeThemeModal();
+        fetch('/api/profile')
+          .then(r => r.json())
+          .then(data => {
+            if (!data.authenticated || !data.profile) return;
+            const p = data.profile;
+            return fetch('/api/profile', {
+              method:'POST',
+              headers:{'Content-Type':'application/json'},
+              body:JSON.stringify({
+                name:p.name||'',
+                email:p.email||'',
+                plan:p.plan||'',
+                school:p.school||'',
+                grade:p.grade||'',
+                avatarColor:p.avatarColor||'#d97757',
+                avatarInitials:p.avatarInitials||'PI',
+                theme:id
+              })
+            });
+          })
+          .catch(() => {});
+      }
+    }
+    function openThemeModal() { document.getElementById('themeModal').classList.add('open'); }
+    function closeThemeModal() { document.getElementById('themeModal').classList.remove('open'); }
+    document.getElementById('themeModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeThemeModal(); });
+    const savedTheme = localStorage.getItem('pi-theme'); if (savedTheme) applyTheme(savedTheme, false);
+
+    function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+    async function loadClub() {
+      const res = await fetch('/api/club/announcements');
+      const data = await res.json();
+      const container = document.getElementById('clubContent');
+
+      if (!data.canPost && !data.canComment && data.announcements.length === 0) {
+        container.innerHTML = `<div class="empty-state"><span>🔒</span><p>This club is for approved members only.<br>If you are a Pencil Insurance subscriber, ask the founder to add you!</p></div>`;
+        return;
+      }
+      if (!data.canPost && !data.canComment) {
+        container.innerHTML = `<div class="empty-state"><span>🔒</span><p>You must be an approved member to view posts.</p></div>`;
+        return;
+      }
+
+      let html = '';
+      if (data.canPost) {
+        html += `
+          <div class="new-post">
+            <h3>📢 Post Announcement</h3>
+            <input type="text" id="annTitle" placeholder="Title" />
+            <textarea id="annBody" placeholder="Write your message…"></textarea>
+            <button class="btn-primary" onclick="postAnnouncement()">Publish</button>
+          </div>`;
+      }
+
+      data.announcements.forEach(ann => {
+        const canDelete = data.canPost;
+        const deleteBtn = canDelete
+          ? `<button class="delete-post-btn" onclick="deleteAnnouncement(${ann.id})" title="Delete post">🗑️</button>`
+          : '';
+
+        html += `
+          <div class="announcement" id="ann-${ann.id}">
+            <div class="ann-title">
+              ${esc(ann.title)} ${deleteBtn}
+            </div>
+            <div class="ann-meta">by ${esc(ann.poster_name || 'Admin')} · ${new Date(ann.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })}</div>
+            <div class="ann-body">${esc(ann.body)}</div>
+            <div class="comments-section">
+              ${ann.comments.map(c => `
+                <div class="comment">
+                  <strong>${esc(c.commenter_name)}</strong>
+                  <time>${new Date(c.created_at).toLocaleDateString()}</time>
+                  <br>${esc(c.body)}
+                </div>
+              `).join('')}
+            </div>
+            ${data.canComment ? `
+              <div class="comment-form">
+                <input type="text" id="comment-${ann.id}" placeholder="Add a comment…" />
+                <button onclick="postComment(${ann.id})">Send</button>
+              </div>` : ''}
+          </div>`;
+      });
+
+      container.innerHTML = html || '<p style="color:var(--muted);">No announcements yet.</p>';
+    }
+
+    async function postAnnouncement() {
+      const title = document.getElementById('annTitle').value.trim();
+      const body = document.getElementById('annBody').value.trim();
+      if (!title || !body) return;
+      await fetch('/api/club/announcements', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ title, body }) });
+      showToast('Announcement posted!');
+      loadClub();
+    }
+
+    async function postComment(annId) {
+      const input = document.getElementById('comment-' + annId);
+      const body = input.value.trim();
+      if (!body) return;
+      await fetch('/api/club/announcements/' + annId + '/comments', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ body }) });
+      showToast('Comment added!');
+      loadClub();
+    }
+
+    async function deleteAnnouncement(id) {
+      if (!confirm('Delete this announcement permanently?')) return;
+      try {
+        const res = await fetch(`/api/club/announcements/${id}`, { method:'DELETE' });
+        if (res.ok) {
+          showToast('Announcement deleted');
+          document.getElementById('ann-' + id)?.remove();
+        } else {
+          showToast('Failed to delete');
+        }
+      } catch { showToast('Network error'); }
+    }
+
+    loadClub();
+  </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+<script src="/static/global-animations.js" defer></script>
+
+<script>
+  if (!window.GEMINI_API_KEY) {
+    window.GEMINI_API_KEY = "{{ gemini_api_key }}";
+  }
+</script>
+<script src="/static/google-agent.js" defer></script>
+
+</body>
+</html>

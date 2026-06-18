@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="default">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Profile — Pencil Insurance</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;700&family=Fraunces:ital,wght@0,300;1,300&display=swap" rel="stylesheet"/>
+<style>
+:root,[data-theme="default"]{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--accent:#e8c84a;--accent2:#f5d86a;--text:#f0ece3;--muted:#8b949e;--border:rgba(255,255,255,0.08);--radius:14px;--radius-lg:22px;--font-head:'Playfair Display',serif;--font-body:'DM Sans',sans-serif;--font-mono:'JetBrains Mono',monospace;--shadow:0 8px 32px rgba(0,0,0,0.4)}
+[data-theme="terminal"]{--bg:#000;--bg2:#0a0a00;--bg3:#111100;--accent:#00ff41;--accent2:#39ff14;--text:#00ff41;--muted:#006b1a;--border:rgba(0,255,65,0.15);--font-head:'JetBrains Mono',monospace;--font-body:'JetBrains Mono',monospace;--shadow:0 8px 32px rgba(0,255,65,0.1)}
+[data-theme="claude"]{--bg:#1a0f08;--bg2:#231409;--bg3:#2d1a0a;--accent:#e8784a;--accent2:#f5a07a;--text:#f5e8d8;--muted:#a0856a;--border:rgba(232,120,74,0.15);--font-head:'Fraunces',serif;--shadow:0 8px 32px rgba(100,40,0,0.5)}
+[data-theme="apple"]{--bg:#f5f5f7;--bg2:#fff;--bg3:#f0f0f2;--accent:#1d1d1f;--accent2:#424245;--text:#1d1d1f;--muted:#6e6e73;--border:rgba(0,0,0,0.08);--font-head:-apple-system,'SF Pro Display',sans-serif;--font-body:-apple-system,'SF Pro Text',sans-serif;--shadow:0 8px 32px rgba(0,0,0,0.12)}
+[data-theme="sakura"]{--bg:#1a0a12;--bg2:#240d18;--bg3:#2e1020;--accent:#ff6eb0;--accent2:#ff96c8;--text:#ffe4f0;--muted:#9b6070;--border:rgba(255,110,176,0.15);--font-head:'Playfair Display',serif;--shadow:0 8px 32px rgba(150,0,80,0.3)}
+[data-theme="ocean"]{--bg:#030d1a;--bg2:#051525;--bg3:#071d32;--accent:#00cfff;--accent2:#5de8ff;--text:#e0f4ff;--muted:#4a8aaa;--border:rgba(0,207,255,0.12);--font-head:'Playfair Display',serif;--shadow:0 8px 32px rgba(0,100,180,0.3)}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;cursor:none}
+body.native-cursor{cursor:auto}
+.cursor{position:fixed;width:14px;height:14px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference}
+.cursor-ring{position:fixed;width:38px;height:38px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5}
+body.native-cursor .cursor,body.native-cursor .cursor-ring{display:none}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 3rem;
+  background:rgba(13,17,23,0.85);
+  backdrop-filter:blur(20px);border-bottom:1px solid var(--border);
+}
+[data-theme="apple"] nav{background:rgba(245,245,247,0.85)}
+[data-theme="terminal"] nav{background:rgba(0,0,0,0.95)}
+.nav-logo{font-family:var(--font-head);font-size:1.2rem;font-weight:700;color:var(--accent);letter-spacing:.02em;display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-right{display:flex;align-items:center;gap:10px}
+.theme-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:.4rem .8rem;border-radius:50px;font-size:.78rem;cursor:pointer;font-family:var(--font-body);transition:all .2s}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+.nav-back{color:var(--muted);text-decoration:none;font-size:.88rem;transition:color .2s}
+.nav-back:hover{color:var(--accent)}
+
+.page{padding:7rem 2rem 4rem;max-width:900px;margin:0 auto}
+.page-header{margin-bottom:2.5rem}
+.page-label{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:.5rem;font-family:var(--font-mono)}
+.page-title{font-family:var(--font-head);font-size:2.5rem;font-weight:700}
+
+.profile-grid{display:grid;grid-template-columns:280px 1fr;gap:1.5rem;align-items:start}
+@media(max-width:700px){.profile-grid{grid-template-columns:1fr}}
+
+.profile-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:2rem;text-align:center;
+  position:sticky;top:6rem;
+}
+.avatar-wrap{position:relative;display:inline-block;margin-bottom:1.2rem}
+.avatar-circle{
+  width:90px;height:90px;border-radius:50%;
+  background:var(--accent);color:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;font-weight:700;font-family:var(--font-head);
+  margin:0 auto;overflow:hidden;border:3px solid var(--border);
+}
+.avatar-circle img{width:100%;height:100%;object-fit:cover}
+.profile-name-disp{font-family:var(--font-head);font-size:1.3rem;font-weight:700;margin-bottom:.2rem}
+.profile-email-disp{font-size:.82rem;color:var(--muted);margin-bottom:.8rem}
+.profile-plan-badge{
+  display:inline-block;padding:.3rem .9rem;
+  border-radius:50px;border:1px solid var(--accent);
+  color:var(--accent);font-size:.78rem;font-family:var(--font-mono);
+  margin-bottom:1.5rem;
+}
+.profile-auth-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.75rem;color:var(--muted);margin-bottom:1rem;
+}
+.color-swatches{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:.75rem}
+.color-swatch{
+  width:24px;height:24px;border-radius:50%;cursor:pointer;
+  border:2px solid transparent;transition:border-color .15s;
+}
+.color-swatch.active{border-color:var(--text)}
+.color-swatch:hover{transform:scale(1.15)}
+.logout-btn{
+  display:block;width:100%;margin-top:1.5rem;padding:.65rem;
+  background:transparent;border:1px solid var(--border);
+  color:var(--muted);border-radius:50px;font-size:.85rem;
+  font-family:var(--font-body);cursor:pointer;transition:all .2s;
+}
+.logout-btn:hover{border-color:#f87171;color:#f87171}
+
+.profile-sections{display:flex;flex-direction:column;gap:1.25rem}
+.profile-section{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:1.75rem;
+}
+.section-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:1.5rem;
+}
+.section-head h2{font-family:var(--font-head);font-size:1.1rem;font-weight:600}
+.edit-toggle{
+  background:transparent;border:1px solid var(--border);
+  color:var(--muted);padding:.35rem .9rem;border-radius:50px;
+  font-size:.78rem;cursor:pointer;font-family:var(--font-body);transition:all .2s;
+}
+.edit-toggle:hover{border-color:var(--accent);color:var(--accent)}
+.field-group{display:flex;flex-direction:column;gap:5px;margin-bottom:1rem}
+.field-group:last-of-type{margin-bottom:0}
+.field-group label{font-size:.75rem;color:var(--muted);letter-spacing:.05em;font-family:var(--font-mono)}
+.field-group input,.field-group select{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius);padding:.65rem 1rem;
+  color:var(--text);font-size:.9rem;font-family:var(--font-body);
+  outline:none;transition:border-color .2s;width:100%;
+}
+[data-theme="terminal"] .field-group input,[data-theme="terminal"] .field-group select{border-radius:0}
+.field-group input:focus,.field-group select:focus{border-color:var(--accent)}
+.field-group input:read-only{opacity:.6;cursor:default}
+.field-group select option{background:var(--bg2)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:500px){.form-row{grid-template-columns:1fr}}
+.save-btn{
+  display:inline-block;background:var(--accent);color:var(--bg);
+  border:none;padding:.65rem 1.5rem;border-radius:50px;
+  font-size:.88rem;font-weight:500;cursor:pointer;
+  font-family:var(--font-body);transition:all .2s;margin-top:1rem;
+}
+.save-btn:hover{opacity:.9}
+.save-btn:disabled{opacity:.4;cursor:not-allowed}
+
+.theme-grid-inline{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem}
+@media(max-width:450px){.theme-grid-inline{grid-template-columns:repeat(2,1fr)}}
+.theme-chip{
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:.6rem;cursor:pointer;transition:all .15s;background:var(--bg3);
+  text-align:center;
+}
+.theme-chip:hover,.theme-chip.active{border-color:var(--accent)}
+.theme-swatch-sm{height:28px;border-radius:6px;margin-bottom:.4rem}
+.theme-chip-name{font-size:.75rem;font-weight:500}
+
+.claim-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.75rem 0;border-bottom:1px solid var(--border);
+  font-size:.88rem;
+}
+.claim-item:last-child{border-bottom:none}
+.claim-badge{
+  font-size:.72rem;padding:.2rem .6rem;border-radius:50px;
+  font-family:var(--font-mono);
+}
+.claim-badge.active{background:rgba(var(--accent-rgb,232,200,74),.12);color:var(--accent);border:1px solid rgba(var(--accent-rgb,232,200,74),.3)}
+.claim-badge.used{background:var(--bg3);color:var(--muted);border:1px solid var(--border)}
+
+.not-logged{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;
+  min-height:60vh;gap:1rem;
+}
+.not-logged h2{font-family:var(--font-head);font-size:2rem}
+.not-logged p{color:var(--muted);max-width:400px;line-height:1.6}
+.google-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:.8rem 2rem;border-radius:50px;background:#fff;color:#3c4043;
+  border:1px solid rgba(0,0,0,.1);font-size:.92rem;font-weight:500;
+  cursor:pointer;font-family:var(--font-body);transition:all .2s;
+}
+.google-btn:hover{box-shadow:0 2px 12px rgba(0,0,0,.15);transform:translateY(-1px)}
+.google-btn img{width:18px;height:18px}
+.skip-link{color:var(--muted);font-size:.85rem;cursor:pointer;text-decoration:underline;transition:color .2s;background:none;border:none;font-family:var(--font-body)}
+.skip-link:hover{color:var(--text)}
+
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:800;background:var(--accent);color:var(--bg);padding:.7rem 1.4rem;border-radius:50px;font-size:.88rem;font-weight:500;transform:translateY(80px);opacity:0;transition:all .3s ease;box-shadow:var(--shadow)}
+.toast.show{transform:none;opacity:1}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<div class="toast" id="toast"></div>
+
+<nav>
+  <a href="/" class="nav-logo">✏️ Pencil Insurance</a>
+  <div class="nav-right">
+    <button class="theme-btn" onclick="openThemeModal()">🎨 Theme</button>
+    <a href="/" class="nav-back">← Back to home</a>
+  </div>
+</nav>
+
+<!-- THEME MODAL (inline simple) -->
+<div id="themeModal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1rem">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;max-width:480px;width:100%">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+      <h2 style="font-family:var(--font-head);font-size:1.3rem">Choose theme</h2>
+      <button onclick="document.getElementById('themeModal').style.display='none'" style="background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem">
+      <div onclick="applyTheme('default')" style="border:1px solid var(--border);border-radius:var(--radius);padding:.9rem;cursor:pointer;background:var(--bg3)">
+        <div style="height:36px;border-radius:6px;background:linear-gradient(135deg,#0d1117,#e8c84a);margin-bottom:.5rem"></div>
+        <div style="font-size:.85rem;font-weight:500">Gold & Navy</div>
+      </div>
+      <div onclick="applyTheme('terminal')" style="border:1px solid var(--border);border-radius:var(--radius);padding:.9rem;cursor:pointer;background:var(--bg3)">
+        <div style="height:36px;border-radius:6px;background:linear-gradient(135deg,#000,#00ff41);margin-bottom:.5rem"></div>
+        <div style="font-size:.85rem;font-weight:500">1994 Terminal</div>
+      </div>
+      <div onclick="applyTheme('claude')" style="border:1px solid var(--border);border-radius:var(--radius);padding:.9rem;cursor:pointer;background:var(--bg3)">
+        <div style="height:36px;border-radius:6px;background:linear-gradient(135deg,#1a0f08,#e8784a);margin-bottom:.5rem"></div>
+        <div style="font-size:.85rem;font-weight:500">Claude Cozy</div>
+      </div>
+      <div onclick="applyTheme('apple')" style="border:1px solid var(--border);border-radius:var(--radius);padding:.9rem;cursor:pointer;background:var(--bg3)">
+        <div style="height:36px;border-radius:6px;background:linear-gradient(135deg,#f5f5f7,#1d1d1f);margin-bottom:.5rem"></div>
+        <div style="font-size:.85rem;font-weight:500">Apple Light</div>
+      </div>
+      <div onclick="applyTheme('sakura')" style="border:1px solid var(--border);border-radius:var(--radius);padding:.9rem;cursor:pointer;background:var(--bg3)">
+        <div style="height:36px;border-radius:6px;background:linear-gradient(135deg,#1a0a12,#ff6eb0);margin-bottom:.5rem"></div>
+        <div style="font-size:.85rem;font-weight:500">Sakura</div>
+      </div>
+      <div onclick="applyTheme('ocean')" style="border:1px solid var(--border);border-radius:var(--radius);padding:.9rem;cursor:pointer;background:var(--bg3)">
+        <div style="height:36px;border-radius:6px;background:linear-gradient(135deg,#030d1a,#00cfff);margin-bottom:.5rem"></div>
+        <div style="font-size:.85rem;font-weight:500">Deep Ocean</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="pageContent">
+  <div style="display:flex;align-items:center;justify-content:center;height:50vh;color:var(--muted)">Loading…</div>
+</div>
+
+<script>
+const GOOGLE_CLIENT_ID = '{{ google_client_id if google_configured else "" }}';
+const AVATAR_COLORS = ['#e8c84a','#e8784a','#ff6eb0','#00cfff','#00ff41','#a78bfa','#34d399','#f87171','#60a5fa','#fbbf24'];
+const PLAN_PRICES = {Default:'₹60',Deluxe:'₹100',Ultra:'₹200',Efficiency:'₹1000'};
+
+let profile = null;
+let editing = false;
+
+// cursor
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let rx=0,ry=0;
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px'});
+(function tick(){rx+=(parseFloat(cur.style.left||0)-rx)*.12;ry+=(parseFloat(cur.style.top||0)-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(tick)})();
+if(/Mobi|Android/i.test(navigator.userAgent))document.body.classList.add('native-cursor');
+
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+function openThemeModal(){const m=document.getElementById('themeModal');m.style.display='flex'}
+document.getElementById('themeModal').addEventListener('click',e=>{if(e.target===e.currentTarget)e.target.style.display='none'});
+
+function applyTheme(id){
+  document.documentElement.setAttribute('data-theme',id);
+  localStorage.setItem('pi-theme',id);
+  document.getElementById('themeModal').style.display='none';
+  if(profile) saveField('theme',id);
+}
+const st=localStorage.getItem('pi-theme');if(st)applyTheme(st);
+
+async function loadProfile(){
+  try{
+    const res=await fetch('/api/profile');
+    const data=await res.json();
+    if(data.authenticated && data.profile){
+      profile=data.profile;
+      if(profile.theme) applyTheme(profile.theme);
+      renderProfile();
+    } else {
+      renderNotLogged();
+    }
+  }catch{renderNotLogged();}
+}
+
+function renderNotLogged(){
+  document.getElementById('pageContent').innerHTML=`
+    <div class="not-logged">
+      <div style="font-size:3rem">✏️</div>
+      <h2>Sign in to your account</h2>
+      <p>Create a profile to save your plan, track your coverage, and personalise your experience.</p>
+      ${GOOGLE_CLIENT_ID ? '<div id="google-btn-wrap"></div>' : '<button class="google-btn" onclick="showToast(\'Google sign-in coming soon!\')"><img src=\'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg\' alt=\'G\'/>Continue with Google</button>'}
+      <button class="skip-link" onclick="continueAsGuest()">Continue as guest</button>
+    </div>`;
+  if(GOOGLE_CLIENT_ID && typeof google !== 'undefined'){
+    google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogle,auto_select:false});
+    google.accounts.id.renderButton(document.getElementById('google-btn-wrap'),{theme:'outline',size:'large',text:'continue_with',shape:'pill'});
+  }
+}
+
+async function continueAsGuest(){
+  const res=await fetch('/api/auth/guest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'Guest Student'})});
+  const data=await res.json();
+  if(data.success){profile=data.profile;renderProfile();showToast('Continuing as guest!')}
+}
+
+async function handleGoogle(response){
+  const res=await fetch('/api/auth/google',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({credential:response.credential})});
+  const data=await res.json();
+  if(data.success){profile=data.profile;if(profile.theme)applyTheme(profile.theme);renderProfile();showToast('Signed in as '+profile.name+'!')}
+}
+
+function renderProfile(){
+  const p=profile;
+  const avatarHtml = p.avatarUrl
+    ? `<img src="${p.avatarUrl}" alt=""/>`
+    : p.avatarInitials||'PI';
+  const planLabel = p.plan ? `${p.plan} — ${PLAN_PRICES[p.plan]||''}/mo` : 'No plan selected';
+  const authLabel = p.authProvider==='google' ? '🔵 Google account' : '👤 Guest account';
+
+  const claimsHtml = p.plan
+    ? `<div class="claim-item"><span>Claims remaining this cycle</span><span class="claim-badge active">5 / 5</span></div>
+       <div class="claim-item"><span>Plan active since</span><span style="color:var(--muted);font-size:.82rem">${p.createdAt ? new Date(p.createdAt).toLocaleDateString('en-IN',{month:'long',year:'numeric'}) : 'Recently'}</span></div>`
+    : `<div class="claim-item"><span style="color:var(--muted)">No active plan — choose one to start claiming</span><a href="/#plans" style="color:var(--accent);font-size:.82rem;text-decoration:none">View plans →</a></div>`;
+
+  const colorSwatches = AVATAR_COLORS.map(c=>
+    `<div class="color-swatch${c===p.avatarColor?' active':''}" style="background:${c}" onclick="setAvatarColor('${c}')"></div>`
+  ).join('');
+
+  const themeOptions = [
+    {id:'default',label:'Gold & Navy',sw:'linear-gradient(135deg,#0d1117,#e8c84a)'},
+    {id:'terminal',label:'Terminal',sw:'linear-gradient(135deg,#000,#00ff41)'},
+    {id:'claude',label:'Claude',sw:'linear-gradient(135deg,#1a0f08,#e8784a)'},
+    {id:'apple',label:'Apple',sw:'linear-gradient(135deg,#f5f5f7,#1d1d1f)'},
+    {id:'sakura',label:'Sakura',sw:'linear-gradient(135deg,#1a0a12,#ff6eb0)'},
+    {id:'ocean',label:'Ocean',sw:'linear-gradient(135deg,#030d1a,#00cfff)'},
+  ].map(t=>`
+    <div class="theme-chip${(p.theme||'default')===t.id?' active':''}" onclick="applyThemeAndSave('${t.id}')">
+      <div class="theme-swatch-sm" style="background:${t.sw}"></div>
+      <div class="theme-chip-name">${t.label}</div>
+    </div>`).join('');
+
+  document.getElementById('pageContent').innerHTML=`
+    <div class="page-header">
+      <p class="page-label">// my_profile</p>
+      <h1 class="page-title">Your Account</h1>
+    </div>
+    <div class="profile-grid">
+      <!-- sidebar -->
+      <div class="profile-card">
+        <div class="avatar-wrap">
+          <div class="avatar-circle" id="avatarCircle" style="background:${p.avatarUrl?'transparent':p.avatarColor||'var(--accent)'};color:var(--bg)">${avatarHtml}</div>
+        </div>
+        <div class="profile-name-disp" id="dispName">${p.name||'Student'}</div>
+        <div class="profile-email-disp">${p.email||'No email'}</div>
+        <div class="plan-badge">${planLabel}</div>
+        <div class="profile-auth-badge">${authLabel}</div>
+        ${!p.avatarUrl ? `<div style="font-size:.75rem;color:var(--muted);margin-bottom:.3rem;font-family:var(--font-mono)">// avatar color</div>
+        <div class="color-swatches">${colorSwatches}</div>` : ''}
+        <button class="logout-btn" onclick="logout()">Sign out</button>
+      </div>
+
+      <!-- main sections -->
+      <div class="profile-sections">
+        <!-- personal info -->
+        <div class="profile-section">
+          <div class="section-head">
+            <h2>Personal Info</h2>
+            <button class="edit-toggle" onclick="toggleEdit()" id="editToggle">Edit</button>
+          </div>
+          <div class="form-row">
+            <div class="field-group"><label>Full name</label><input id="f-name" value="${esc(p.name)}" readonly/></div>
+            <div class="field-group"><label>Email</label><input id="f-email" type="email" value="${esc(p.email)}" readonly/></div>
+          </div>
+          <div class="form-row">
+            <div class="field-group"><label>School</label><input id="f-school" value="${esc(p.school)}" placeholder="e.g. OWIS" readonly/></div>
+            <div class="field-group"><label>Grade / Year</label><input id="f-grade" value="${esc(p.grade)}" placeholder="e.g. Grade 9" readonly/></div>
+          </div>
+          <div id="editBtns" style="display:none">
+            <button class="save-btn" onclick="saveProfile()" id="saveBtn">Save changes</button>
+          </div>
+        </div>
+
+        <!-- plan -->
+        <div class="profile-section">
+          <div class="section-head"><h2>My Plan</h2></div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem">
+            ${['Default','Deluxe','Ultra','Efficiency'].map(name=>`
+              <div onclick="choosePlan('${name}')" style="border:1px solid ${p.plan===name?'var(--accent)':'var(--border)'};border-radius:var(--radius);padding:1rem;cursor:pointer;background:${p.plan===name?'rgba(var(--accent-rgb,232,200,74),.07)':'var(--bg3)'};transition:all .2s" id="plan-${name}">
+                <div style="font-weight:500;margin-bottom:.2rem">${name}</div>
+                <div style="color:var(--accent);font-size:.9rem;font-family:var(--font-mono)">${PLAN_PRICES[name]}/mo</div>
+              </div>`).join('')}
+          </div>
+          <p style="font-size:.8rem;color:var(--muted);margin-top:1rem;line-height:1.5">To actually sign up for a plan, <a href="#contact" style="color:var(--accent)">contact us</a>. Choosing here saves your preference.</p>
+        </div>
+
+        <!-- theme -->
+        <div class="profile-section">
+          <div class="section-head"><h2>Theme</h2></div>
+          <div class="theme-grid-inline">${themeOptions}</div>
+        </div>
+
+        <!-- claims -->
+        <div class="profile-section">
+          <div class="section-head"><h2>Claims Status</h2></div>
+          ${claimsHtml}
+          <div style="margin-top:1rem;padding:.9rem;background:var(--bg3);border-radius:var(--radius);font-size:.82rem;color:var(--muted);line-height:1.6">
+            To file a claim, WhatsApp <strong style="color:var(--text)">+91 98765 43210</strong> or email <a href="mailto:pencil.insurance.buisness@gmail.com" style="color:var(--accent)">pencil.insurance.buisness@gmail.com</a>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+
+function toggleEdit(){
+  editing=!editing;
+  ['f-name','f-email','f-school','f-grade'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.readOnly=!editing;
+  });
+  document.getElementById('editToggle').textContent=editing?'Cancel':'Edit';
+  document.getElementById('editBtns').style.display=editing?'block':'none';
+}
+
+async function saveProfile(){
+  const btn=document.getElementById('saveBtn');
+  btn.disabled=true;btn.textContent='Saving…';
+  const payload={
+    name:document.getElementById('f-name').value,
+    email:document.getElementById('f-email').value,
+    school:document.getElementById('f-school').value,
+    grade:document.getElementById('f-grade').value,
+    plan:profile.plan||'',
+    theme:profile.theme||'default',
+    avatarColor:profile.avatarColor||'#e8c84a',
+    avatarInitials:'',
+  };
+  try{
+    const res=await fetch('/api/profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data=await res.json();
+    if(data.success){profile=data.profile;showToast('✓ Profile saved!');toggleEdit();}
+    else showToast('Save failed. Try again.');
+  }catch{showToast('Network error.');}
+  btn.disabled=false;btn.textContent='Save changes';
+}
+
+async function setAvatarColor(color){
+  profile.avatarColor=color;
+  document.querySelectorAll('.color-swatch').forEach(s=>{s.classList.remove('active');if(s.style.background===color)s.classList.add('active');});
+  const av=document.getElementById('avatarCircle');
+  if(av && !profile.avatarUrl) av.style.background=color;
+  await saveField('avatarColor',color);
+}
+
+async function choosePlan(name){
+  profile.plan=name;
+  document.querySelectorAll('[id^="plan-"]').forEach(el=>{
+    const n=el.id.replace('plan-','');
+    el.style.border=`1px solid ${n===name?'var(--accent)':'var(--border)'}`;
+    el.style.background=n===name?'rgba(var(--accent-rgb,232,200,74),.07)':'var(--bg3)';
+  });
+  showToast('✓ Plan preference set to '+name);
+  await saveField('plan',name);
+}
+
+function applyThemeAndSave(id){
+  applyTheme(id);
+  document.querySelectorAll('.theme-chip').forEach(c=>{c.classList.remove('active');if(c.textContent.toLowerCase().includes(id.slice(0,4)))c.classList.add('active');});
+  saveField('theme',id);
+}
+
+async function saveField(key, val){
+  if(!profile) return;
+  const payload={
+    name:profile.name||'',email:profile.email||'',
+    plan:profile.plan||'',school:profile.school||'',
+    grade:profile.grade||'',theme:profile.theme||'default',
+    avatarColor:profile.avatarColor||'#e8c84a',
+    avatarInitials:profile.avatarInitials||'PI',
+  };
+  payload[key]=val;
+  try{await fetch('/api/profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})}catch{}
+}
+
+async function logout(){
+  await fetch('/api/auth/logout',{method:'POST'});
+  profile=null;
+  localStorage.removeItem('pi-signup-skipped');
+  showToast('Signed out!');
+  setTimeout(()=>window.location.href='/',800);
+}
+
+/*{% if google_configured %}*/
+window.onload=function(){
+  loadProfile();
+  if(typeof google!=='undefined'){
+    google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogle,auto_select:false});
+  }
+};
+/*{% else %}*/
+/*document.addEventListener('DOMContentLoaded',loadProfile);*/
+/*{% endif %}*/
+</script>
+<!-- {% if google_configured %} -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<!-- {% endif %} -->
+</body>
+</html>

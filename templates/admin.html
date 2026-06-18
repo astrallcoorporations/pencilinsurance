@@ -1,0 +1,476 @@
+=<!DOCTYPE html>
+<html lang="en" data-theme="default">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Admin — Pencil Insurance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/themes.css">
+<style>
+/* admin styles – same as earlier */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflow-x:hidden;cursor:none;min-height:100vh;transition:background 0.5s ease,color 0.4s ease;-webkit-font-smoothing:antialiased}
+body.native-cursor{cursor:auto}
+.cursor{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width 0.2s,height 0.2s}
+.cursor.expanded{width:36px;height:36px;opacity:0.3}
+.cursor-ring{position:fixed;width:38px;height:38px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:0.4}
+body.native-cursor .cursor,body.native-cursor .cursor-ring{display:none}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;height:68px;background:var(--glass);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--font-head);font-size:1.25rem;font-weight:700;color:var(--accent);letter-spacing:-0.02em;text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-logo span{font-size:1.4rem}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:0.5rem 1rem;border-radius:50px;font-size:0.8rem;font-family:var(--font-ui);font-weight:500;cursor:pointer;transition:all 0.25s ease;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.nav-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--bg4);transform:translateY(-1px)}
+.page-body{max-width:1200px;margin:0 auto;padding:7rem 1.5rem 3rem}
+.page-title{font-family:var(--font-head);font-size:clamp(2rem,5vw,2.8rem);font-weight:700;color:var(--text-bright);margin-bottom:0.5rem}
+.page-sub{color:var(--muted);font-size:1rem;margin-bottom:2rem}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+@media(max-width:800px){.stat-row{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;transition:all 0.3s ease}
+.stat-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 24px var(--glow)}
+.stat-card .num{font-family:var(--font-ui);font-size:2rem;font-weight:700;color:var(--accent);display:block;margin-bottom:0.3rem}
+.stat-card .label{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-mono)}
+.tabs{display:flex;gap:0.5rem;border-bottom:2px solid var(--border);margin-bottom:2rem;flex-wrap:wrap}
+.tab-btn{padding:0.7rem 1.2rem;background:none;border:none;color:var(--muted);font-size:0.9rem;font-family:var(--font-ui);font-weight:500;cursor:pointer;border-radius:var(--radius) var(--radius) 0 0;transition:all 0.2s ease;position:relative}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--accent)}
+.tab-btn.active::after{content:"";position:absolute;bottom:-2px;left:0;right:0;height:2.5px;background:var(--accent);border-radius:2px 2px 0 0}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{text-align:left;padding:0.75rem 1rem;font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-mono);font-weight:500;border-bottom:1.5px solid var(--border);white-space:nowrap}
+.data-table td{padding:0.85rem 1rem;border-bottom:1px solid var(--border);font-size:0.85rem;color:var(--text);vertical-align:middle}
+.data-table tr{transition:background 0.2s ease}
+.data-table tbody tr:hover{background:var(--bg3)}
+.data-table .badge{font-size:0.65rem;padding:0.2rem 0.5rem;border-radius:50px;background:var(--bg3);border:1px solid var(--border);font-weight:600;text-transform:uppercase;letter-spacing:0.05em}
+.data-table .badge-active{background:rgba(52,211,153,0.12);color:var(--success);border-color:rgba(52,211,153,0.3)}
+.action-btn{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:0.35rem 0.8rem;border-radius:50px;font-size:0.7rem;cursor:pointer;transition:all 0.2s;font-family:var(--font-ui);font-weight:500}
+.action-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+.action-btn.danger:hover{border-color:var(--error);color:var(--error);background:rgba(248,113,113,0.1)}
+.section{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:2rem}
+.section-header{padding:1.3rem 1.8rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.section-header h2{font-family:var(--font-head);font-size:1.2rem;font-weight:600;color:var(--text-bright)}
+.section-body{padding:1rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
+.field label{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;display:block;font-family:var(--font-mono);font-weight:500}
+.field input,.field select,.field textarea{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--radius);padding:0.7rem 1rem;color:var(--text);font-size:0.9rem;outline:none;transition:all 0.3s ease;font-family:var(--font-body)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
+.form-btn{padding:0.7rem 1.5rem;background:var(--accent);color:var(--bg);border:none;border-radius:50px;font-size:0.88rem;font-weight:600;font-family:var(--font-ui);cursor:pointer;transition:all 0.3s ease}
+.form-btn:hover{opacity:0.85;transform:translateY(-2px)}
+.form-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:900;background:var(--accent);color:var(--bg);padding:0.85rem 1.6rem;border-radius:50px;font-size:0.9rem;font-weight:600;transform:translateY(100px) scale(0.9);opacity:0;transition:all 0.4s cubic-bezier(.34,1.56,.64,1);box-shadow:var(--shadow);pointer-events:none;font-family:var(--font-ui)}
+.toast.show{transform:translateY(0) scale(1);opacity:1}
+.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.7);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity 0.3s ease}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-xl);padding:2rem;max-width:500px;width:100%;transform:translateY(20px) scale(0.97);transition:transform 0.35s cubic-bezier(.34,1.56,.64,1);max-height:90vh;overflow-y:auto}
+.modal-overlay.open .modal{transform:none}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
+.modal-head h2{font-family:var(--font-head);font-size:1.3rem;color:var(--text-bright)}
+.modal-close{background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:all 0.2s}
+.modal-close:hover{color:var(--text);background:var(--bg3)}
+.bottom-nav{display:none}
+@media(max-width:768px){
+  .bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:300;background:var(--glass);border-top:1px solid var(--border);justify-content:space-around;padding:0.5rem 0;backdrop-filter:blur(20px)}
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.fade-up{animation:fadeUp 0.6s ease both}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<div class="toast" id="toast"></div>
+
+<nav>
+  <a href="/" class="nav-logo"><span>✏️</span>Pencil Insurance</a>
+  <div class="nav-right">
+    <a href="/" class="nav-btn">← Home</a>
+    <a href="/profile" class="nav-btn">👤 Profile</a>
+    <a href="/club" class="nav-btn">👥 Club</a>
+    <a href="/tnc" class="nav-btn">📄 Terms</a>
+  </div>
+</nav>
+
+<div class="page-body">
+  <h1 class="page-title">Admin <em>Dashboard</em></h1>
+  <p class="page-sub">Manage users, plans, items, orders, and club members.</p>
+
+  <div class="stat-row">
+    <div class="stat-card fade-up"><span class="num" id="statUsers">—</span><span class="label">Users</span></div>
+    <div class="stat-card fade-up"><span class="num" id="statItems">—</span><span class="label">Items</span></div>
+    <div class="stat-card fade-up"><span class="num" id="statPlans">—</span><span class="label">Plans</span></div>
+    <div class="stat-card fade-up"><span class="num" id="statClub">—</span><span class="label">Club Members</span></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="users">👥 Users</button>
+    <button class="tab-btn" data-tab="items">📦 Items</button>
+    <button class="tab-btn" data-tab="plans">🏷️ Plans</button>
+    <button class="tab-btn" data-tab="club">👥 Club</button>
+    <button class="tab-btn" data-tab="orders">📋 Orders</button>
+    <button class="tab-btn" data-tab="add-item">➕ Add Item</button>
+  </div>
+
+  <div id="tabContent">
+    <div style="display:flex;align-items:center;justify-content:center;height:40vh;color:var(--muted);font-family:var(--font-mono);font-size:0.85rem">
+      <span style="animation:spin 1s linear infinite;display:inline-block;margin-right:0.5rem">⟳</span> loading...
+    </div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <a href="/" class="bnav-item">🏠 Home</a>
+  <a href="/profile" class="bnav-item">👤 Profile</a>
+  <a href="/shop" class="bnav-item">🛒 Shop</a>
+  <a href="/club" class="bnav-item">👥 Club</a>
+</div>
+
+<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modal"></div></div>
+
+<script>
+let currentTab='users';
+function showToast(msg,dur=3000){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+let allUsers=[],allItems=[],allPlans=[];
+
+async function loadStats(){
+  try{
+    const [users,items,plans,club]=await Promise.all([
+      fetch('/api/admin/users').then(r=>r.json()).catch(()=>({users:[]})),
+      fetch('/api/admin/items').then(r=>r.json()).catch(()=>({items:[]})),
+      fetch('/api/admin/plans').then(r=>r.json()).catch(()=>({plans:[]})),
+      fetch('/api/admin/club/members').then(r=>r.json()).catch(()=>({members:[]})),
+    ]);
+    document.getElementById('statUsers').textContent=(users.users||[]).length;
+    document.getElementById('statItems').textContent=(items.items||[]).length;
+    document.getElementById('statPlans').textContent=(plans.plans||[]).length;
+    document.getElementById('statClub').textContent=(club.members||[]).length;
+    renderTab();
+  }catch{showToast('Failed to load stats');}
+}
+
+function switchTab(tab){
+  currentTab=tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  renderTab();
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  loadStats();
+  document.getElementById('tabContent').addEventListener('click',async(e)=>{
+    const btn=e.target.closest('button[data-action]');
+    if(!btn)return;
+    const action=btn.dataset.action;
+    const id=btn.dataset.id;
+    const name=btn.dataset.name;
+    if(action==='edit-item')editItem(id);
+    else if(action==='delete-item')deleteItem(id);
+    else if(action==='edit-plan')editPlan(name);
+    else if(action==='set-plan')setPlan(id);
+    else if(action==='delete-user')deleteUser(id);
+    else if(action==='remove-member')removeClubMember(id);
+    else if(action==='order-status'){
+      const status=prompt('New status (pending, processing, fulfilled, cancelled):');
+      if(status)updateOrderStatus(id,status);
+    }
+  });
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    b.addEventListener('click',()=>switchTab(b.dataset.tab));
+  });
+});
+
+async function renderTab(){
+  if(currentTab==='users')await loadUsers();
+  else if(currentTab==='items')await loadItems();
+  else if(currentTab==='plans')await loadPlans();
+  else if(currentTab==='club')loadClub();
+  else if(currentTab==='orders')loadOrders();
+  else if(currentTab==='add-item')loadAddItem();
+}
+
+// ── USERS ──
+async function loadUsers(){
+  const res=await fetch('/api/admin/users');
+  const data=await res.json();
+  allUsers=data.users||[];
+  renderUsers(allUsers);
+}
+function renderUsers(users){
+  const el=document.getElementById('tabContent');
+  if(!users.length){el.innerHTML='<p style="text-align:center;color:var(--muted);padding:2rem">No users yet.</p>';return;}
+  el.innerHTML=`
+    <div class="section">
+      <div class="section-header"><h2>Users</h2></div>
+      <div class="section-body">
+        <input class="field" style="margin-bottom:1rem;max-width:300px" id="user-search" type="text" placeholder="Search by name or email…" oninput="filterUsers()"/>
+        <table class="data-table">
+          <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Plan</th><th>Role</th><th>Actions</th></tr></thead>
+          <tbody>
+            ${users.map(u=>`<tr>
+              <td style="font-size:0.7rem;max-width:140px;overflow:hidden;text-overflow:ellipsis" title="${esc(u.id)}">${esc(u.id).slice(0,8)}…</td>
+              <td>${esc(u.name||'—')}</td>
+              <td>${esc(u.email||'—')}</td>
+              <td><span class="badge${u.plan?' badge-active':''}">${esc(u.plan||'None')}</span></td>
+              <td>${esc(u.role||'student')}</td>
+              <td><button class="action-btn" data-action="set-plan" data-id="${esc(u.id)}">Set Plan</button> <button class="action-btn danger" data-action="delete-user" data-id="${esc(u.id)}">Delete</button></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+function filterUsers(){
+  const q=document.getElementById('user-search')?.value.toLowerCase()||'';
+  renderUsers(allUsers.filter(u=>(u.name||'').toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q)||(u.id||'').includes(q)));
+}
+
+// ── ITEMS ──
+async function loadItems(){
+  const res=await fetch('/api/admin/items');
+  const data=await res.json();
+  allItems=data.items||[];
+  renderItems(allItems);
+}
+function renderItems(items){
+  const el=document.getElementById('tabContent');
+  if(!items.length){el.innerHTML='<p style="text-align:center;color:var(--muted);padding:2rem">No items yet.</p>';return;}
+  el.innerHTML=`<div class="section"><div class="section-body"><table class="data-table"><thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Plans</th><th>Actions</th></tr></thead><tbody>
+    ${items.map(it=>`<tr><td>${esc(it.icon||'')} ${esc(it.name)}</td><td>${esc(it.category)}</td><td>₹${it.price}</td><td>${(Array.isArray(it.plans)?it.plans:[]).map(p=>`<span class="badge">${esc(p)}</span>`).join(' ')}</td><td><button class="action-btn" data-action="edit-item" data-id="${it.id}">Edit</button> <button class="action-btn danger" data-action="delete-item" data-id="${it.id}">Delete</button></td></tr>`).join('')}
+  </tbody></table></div></div>`;
+}
+
+// ── PLANS ──
+async function loadPlans(){
+  const res=await fetch('/api/admin/plans');
+  const data=await res.json();
+  allPlans=data.plans||[];
+  renderPlans(allPlans);
+}
+function renderPlans(plans){
+  const el=document.getElementById('tabContent');
+  if(!plans.length){el.innerHTML='<p style="text-align:center;color:var(--muted);padding:2rem">No plans configured.</p>';return;}
+  el.innerHTML=`<div class="section"><div class="section-body"><table class="data-table"><thead><tr><th>Name</th><th>Price</th><th>Description</th><th>Features</th><th>Actions</th></tr></thead><tbody>
+    ${plans.map(p=>`<tr><td><strong>${esc(p.name)}</strong></td><td>₹${p.price}</td><td>${esc(p.description||'')}</td><td>${(p.features||[]).map(f=>`<span class="badge">${esc(f)}</span>`).join(' ')}</td><td><button class="action-btn" data-action="edit-plan" data-name="${esc(p.name)}">Edit</button></td></tr>`).join('')}
+  </tbody></table></div></div>`;
+}
+
+// ── CLUB ──
+function loadClub(){
+  const el=document.getElementById('tabContent');
+  el.innerHTML=`
+    <div class="section">
+      <div class="section-header"><h2>Club Members</h2></div>
+      <div class="section-body">
+        <div style="display:flex;gap:1rem;align-items:flex-end;margin-bottom:1.5rem">
+          <div class="field" style="flex:1">
+            <label>Email address</label>
+            <input id="club-email" type="email" placeholder="user@example.com"/>
+          </div>
+          <button class="form-btn" onclick="approveByEmail()" style="margin-bottom:0.2rem">Approve</button>
+        </div>
+        <div id="club-members-list">Loading…</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-header"><h2>Post Announcement</h2></div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="field"><label>Title</label><input id="club-title" type="text"/></div>
+          <div class="field"><label>Body</label><textarea id="club-body" rows="3"></textarea></div>
+        </div>
+        <button class="form-btn" onclick="postClubAnnouncement()">Publish</button>
+      </div>
+    </div>`;
+  loadClubMembers();
+}
+
+async function loadClubMembers(){
+  const res=await fetch('/api/admin/club/members');
+  const data=await res.json();
+  const members=data.members||[];
+  document.getElementById('club-members-list').innerHTML=members.length
+    ?`<table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Approved</th><th>Action</th></tr></thead><tbody>
+        ${members.map(m=>`<tr><td>${esc(m.name)}</td><td>${esc(m.email)}</td><td>${m.approved_at?new Date(m.approved_at).toLocaleDateString():'—'}</td><td><button class="action-btn danger" data-action="remove-member" data-id="${esc(m.id)}">Remove</button></td></tr>`).join('')}
+      </tbody></table>`
+    :'<p style="text-align:center;color:var(--muted);padding:1rem">No approved members yet.</p>';
+}
+
+async function approveByEmail(){
+  const email=document.getElementById('club-email').value.trim().toLowerCase();
+  if(!email)return showToast('Enter an email address');
+  if(!allUsers.length)await loadUsers();
+  const user=allUsers.find(u=>(u.email||'').toLowerCase()===email);
+  if(!user)return showToast('User with that email not found.');
+  try{
+    const res=await fetch('/api/admin/club/members',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.id})});
+    if(res.ok){showToast('Member approved!');document.getElementById('club-email').value='';loadClubMembers();}
+    else showToast('Failed to approve');
+  }catch{showToast('Network error');}
+}
+
+async function removeClubMember(userId){
+  if(!confirm('Remove this member?'))return;
+  try{
+    const res=await fetch(`/api/admin/club/members/${userId}`,{method:'DELETE'});
+    if(res.ok){showToast('Member removed');loadClubMembers();}
+    else showToast('Failed');
+  }catch{showToast('Network error');}
+}
+
+async function postClubAnnouncement(){
+  const title=document.getElementById('club-title').value.trim();
+  const body=document.getElementById('club-body').value.trim();
+  if(!title||!body)return showToast('Title and body required');
+  try{
+    const res=await fetch('/api/club/announcements',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title,body})});
+    if(res.ok){showToast('Announcement posted!');document.getElementById('club-title').value='';document.getElementById('club-body').value='';}
+    else showToast('Failed to post');
+  }catch{showToast('Network error');}
+}
+
+// ── ORDERS ──
+async function loadOrders(){
+  const res=await fetch('/api/admin/orders');
+  const data=await res.json();
+  const orders=data.orders||[];
+  const el=document.getElementById('tabContent');
+  if(!orders.length){el.innerHTML='<p style="text-align:center;color:var(--muted);padding:2rem">No orders yet.</p>';return;}
+  el.innerHTML=`
+    <div class="section">
+      <div class="section-header"><h2>Orders</h2></div>
+      <div class="section-body">
+        <table class="data-table">
+          <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            ${orders.map(o=>`<tr>
+              <td style="font-size:0.7rem">${esc(o.id).slice(0,8)}…</td>
+              <td>${esc(o.name)}<br><small>${esc(o.email)}</small></td>
+              <td>${(Array.isArray(o.items)?o.items:[]).map(i=>`${esc(i.name)} ×${i.qty}`).join(', ')||'—'}</td>
+              <td>₹${o.total_price - o.covered_value} <span style="color:var(--accent)">(saved ₹${o.covered_value})</span></td>
+              <td><span class="badge${o.status==='fulfilled'?' badge-active':''}">${o.status}</span></td>
+              <td><button class="action-btn" data-action="order-status" data-id="${esc(o.id)}">Change Status</button></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+async function updateOrderStatus(id,status){
+  await fetch(`/api/admin/orders/${id}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
+  showToast('Order status updated');
+  renderTab();
+}
+
+// ── ADD ITEM ──
+function loadAddItem(){
+  const el=document.getElementById('tabContent');
+  el.innerHTML=`
+    <div class="section">
+      <div class="section-header"><h2>Add New Item</h2></div>
+      <div class="section-body">
+        <div class="form-grid">
+          <div class="field"><label>Name</label><input id="newName" type="text"/></div>
+          <div class="field"><label>Price (₹)</label><input id="newPrice" type="number"/></div>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label>Category</label><input id="newCat" type="text"/></div>
+          <div class="field"><label>Icon (emoji)</label><input id="newIcon" type="text" placeholder="📎"/></div>
+        </div>
+        <div class="field"><label>Available in plans (comma-separated)</label><input id="newPlans" type="text" placeholder="Default, Deluxe, Ultra, Efficiency"/></div>
+        <button class="form-btn" id="addBtn" onclick="addItem()">Add Item</button>
+      </div>
+    </div>`;
+}
+
+// ── ACTIONS ──
+async function setPlan(userId){
+  const plan=prompt('Enter plan name (Default, Deluxe, Ultra, Efficiency):');if(!plan)return;
+  try{
+    const res=await fetch(`/api/admin/users/${userId}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan})});
+    if(res.ok){showToast('Plan updated');renderTab();}
+    else showToast('Failed');
+  }catch{showToast('Network error');}
+}
+async function deleteUser(userId){
+  if(!confirm('Delete this user?'))return;
+  try{const res=await fetch(`/api/admin/users/${userId}`,{method:'DELETE'});if(res.ok){showToast('User deleted');renderTab();}else showToast('Failed');}
+  catch{showToast('Network error');}
+}
+async function deleteItem(id){
+  if(!confirm('Delete this item?'))return;
+  try{const res=await fetch(`/api/admin/items/${id}`,{method:'DELETE'});if(res.ok){showToast('Item deleted');renderTab();}else showToast('Failed');}
+  catch{showToast('Network error');}
+}
+async function editItem(id){
+  const res=await fetch('/api/admin/items');const data=await res.json();
+  const item=(data.items||[]).find(i=>i.id==id);
+  if(!item)return;
+  const name=prompt('Item name:',item.name);if(!name)return;
+  const price=prompt('Price (₹):',item.price);
+  const cat=prompt('Category:',item.category);
+  const plansInput=prompt('Plans (comma):',item.plans.join(','));
+  const icon=prompt('Icon emoji:',item.icon);
+  await fetch(`/api/admin/items/${id}`,{method:'PATCH',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:name||undefined,price:price?parseInt(price):undefined,category:cat||undefined,plans:plansInput?plansInput.split(',').map(s=>s.trim()):undefined,icon:icon||undefined})});
+  showToast('Item updated');renderTab();
+}
+async function editPlan(name){
+  const res=await fetch('/api/admin/plans');const data=await res.json();
+  const plan=(data.plans||[]).find(p=>p.name===name);
+  if(!plan)return;
+  const price=prompt('New price:',plan.price);
+  const desc=prompt('Description:',plan.description);
+  const features=prompt('Features (comma):',plan.features.join(','));
+  await fetch(`/api/admin/plans/${name}`,{method:'PATCH',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({price:price?parseInt(price):undefined,description:desc||undefined,features:features?features.split(',').map(s=>s.trim()):undefined})});
+  showToast('Plan updated');renderTab();
+}
+async function addItem(){
+  const name=document.getElementById('newName').value.trim();
+  if(!name)return showToast('Name required');
+  const price=parseInt(document.getElementById('newPrice').value)||0;
+  const cat=document.getElementById('newCat').value.trim()||'Misc';
+  const icon=document.getElementById('newIcon').value.trim()||'📎';
+  const plansRaw=document.getElementById('newPlans').value.trim();
+  const plans=plansRaw?plansRaw.split(',').map(s=>s.trim()).filter(Boolean):[];
+  const btn=document.getElementById('addBtn');btn.disabled=true;
+  try{
+    const res=await fetch('/api/admin/items',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,price,category:cat,icon,plans})});
+    if(res.ok){document.getElementById('newName').value='';document.getElementById('newPrice').value='';document.getElementById('newCat').value='';document.getElementById('newIcon').value='';document.getElementById('newPlans').value='';showToast('Item added!');renderTab();}
+    else showToast('Failed');
+  }catch{showToast('Network error');}
+  btn.disabled=false;
+}
+
+// cursor
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let rx=0,ry=0;
+if(/Mobi|Android|iPad|iPhone/i.test(navigator.userAgent))document.body.classList.add('native-cursor');
+else{
+  document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
+  (function tick(){rx+=(parseFloat(cur.style.left||0)-rx)*0.15;ry+=(parseFloat(cur.style.top||0)-ry)*0.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(tick);})();
+}
+const savedTheme=localStorage.getItem('pi-theme');if(savedTheme)document.documentElement.setAttribute('data-theme',savedTheme);
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+<script src="/static/global-animations.js" defer></script>
+
+<script>
+  if (!window.GEMINI_API_KEY) {
+    window.GEMINI_API_KEY = "{{ gemini_api_key }}";
+  }
+</script>
+<script src="/static/google-agent.js" defer></script>
+
+</body>
+</html>

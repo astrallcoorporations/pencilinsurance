@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="default">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Explore Plans — Pencil Insurance</title>
+  <link rel="stylesheet" href="/static/themes.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { padding: 0; margin: 0; }
+    .plans-hero {
+      padding: 6rem 1.5rem 3rem;
+      text-align: center;
+      background: radial-gradient(ellipse at top, var(--glow), transparent 70%);
+    }
+    .plans-title { font-family: var(--font-head); font-size: 2.8rem; font-weight: 900; }
+    .plans-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    .plan-card {
+      background: var(--bg2);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 2rem 1.5rem;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .plan-card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: var(--shadow); }
+    .plan-card.featured { border-color: var(--accent); }
+    .plan-badge {
+      position: absolute; top: 1rem; right: -2rem;
+      background: var(--accent); color: var(--bg); font-size: 0.7rem; font-weight: 700;
+      padding: 0.25rem 2.5rem; transform: rotate(45deg); letter-spacing: 0.1em;
+    }
+    .plan-name { font-family: var(--font-head); font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .plan-price { font-size: 1.2rem; color: var(--accent); font-weight: 600; margin-bottom: 1rem; }
+    .plan-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+    .plan-items { list-style: none; margin: 1rem 0; }
+    .plan-items li { font-size: 0.85rem; padding: 0.3rem 0; display: flex; align-items: center; gap: 0.5rem; }
+    .plan-items li::before { content: "✓"; color: var(--accent); font-weight: bold; }
+    .cta-button {
+      display: block; width: 100%; padding: 0.7rem; border-radius: 50px;
+      border: none; background: var(--accent); color: var(--bg); font-weight: 600;
+      font-size: 0.9rem; cursor: pointer; transition: opacity 0.2s; margin-top: 1rem;
+    }
+    .cta-button:hover { opacity: 0.9; }
+    nav {
+      padding: 1rem 2rem; display: flex; justify-content: space-between;
+      background: var(--glass); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: var(--font-head); color: var(--accent); font-size: 1.2rem; font-weight: 700; text-decoration: none; }
+    .nav-back { color: var(--muted); text-decoration: none; font-size: 0.9rem; }
+    .nav-back:hover { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .plans-hero { padding: 4rem 1rem 2rem; }
+      .plans-title { font-size: 2rem; }
+    }
+  </style>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav>
+    <a href="/" class="nav-logo">✏️ Pencil Insurance</a>
+    <div>
+      <a href="/" class="nav-back">← Home</a>
+    </div>
+  </nav>
+
+  <div class="plans-hero">
+    <h1 class="plans-title">Pick your <em>protection</em></h1>
+    <p style="color:var(--muted); max-width:500px; margin:1rem auto;">Every plan includes 5 claims per item, delivery to OWIS, and WhatsApp support.</p>
+  </div>
+
+  <div class="plans-grid">
+    <!-- Default -->
+    <div class="plan-card">
+      <div class="plan-name">Default</div>
+      <div class="plan-price">₹60 / month</div>
+      <div class="plan-desc">Essential stationery coverage for everyday school use.</div>
+      <ul class="plan-items">
+        <li>Pencil (HB)</li><li>Eraser</li><li>Sharpener</li><li>Butterflow Pen</li>
+      </ul>
+      <button class="cta-button" onclick="alert('Contact us to activate!')">Choose Default</button>
+    </div>
+
+    <!-- Deluxe -->
+    <div class="plan-card featured">
+      <div class="plan-badge">POPULAR</div>
+      <div class="plan-name">Deluxe</div>
+      <div class="plan-price">₹100 / month</div>
+      <div class="plan-desc">Everything in Default plus geometry tools and better pens.</div>
+      <ul class="plan-items">
+        <li>All Default items</li><li>Octane Pens</li><li>Compass & Divider</li><li>Mechanical Pencil & Scale</li>
+      </ul>
+      <button class="cta-button" onclick="alert('Contact us to activate!')">Choose Deluxe</button>
+    </div>
+
+    <!-- Ultra -->
+    <div class="plan-card">
+      <div class="plan-name">Ultra</div>
+      <div class="plan-price">₹200 / month</div>
+      <div class="plan-desc">Deluxe + notebooks, markers, coloured pencils, and weekly sheets.</div>
+      <ul class="plan-items">
+        <li>All Deluxe items</li><li>Notebooks</li><li>Markers & Highlighters</li><li>Coloured Pencils & Refills</li>
+      </ul>
+      <button class="cta-button" onclick="alert('Contact us to activate!')">Choose Ultra</button>
+    </div>
+
+    <!-- Efficiency -->
+    <div class="plan-card">
+      <div class="plan-name">Efficiency</div>
+      <div class="plan-price">₹1000 / month</div>
+      <div class="plan-desc">Ultimate plan with premium supplies, art gear, and priority support.</div>
+      <ul class="plan-items">
+        <li>All Ultra items</li><li>50 sheets/week</li><li>Premium Notebooks</li><li>Art & Shading Supplies</li>
+      </ul>
+      <button class="cta-button" onclick="alert('Contact us to activate!')">Choose Efficiency</button>
+    </div>
+  </div>
+
+  <script>
+    const savedTheme = localStorage.getItem('pi-theme');
+    if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+<script src="/static/global-animations.js" defer></script>
+
+<script>
+  if (!window.GEMINI_API_KEY) {
+    window.GEMINI_API_KEY = "{{ gemini_api_key }}";
+  }
+</script>
+<script src="/static/google-agent.js" defer></script>
+
+</body>
+</html>

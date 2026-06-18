@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="default">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Parent Portal — Pencil Insurance</title>
+  <link rel="stylesheet" href="/static/shared_styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;700&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/themes.css">
+  <style>
+    /* Theme tokens (default = Claude, + all variants) live in /static/themes.css.
+       Map parent-only aliases onto the canonical themed vars so every theme works. */
+    :root{
+      --border2:var(--border-strong);
+      --green:var(--success);
+      --red:var(--error);
+    }
+
+
+    /* ── LAYOUT ── */
+    html,body{height:100%;overflow:hidden;}
+    body{display:flex;flex-direction:column;}
+
+    /* dot bg */
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(circle at 1px 1px,var(--border) 1px,transparent 0);background-size:28px 28px;opacity:.35;}
+    body::after{content:"";position:fixed;top:-10%;left:50%;transform:translateX(-50%);width:700px;height:500px;pointer-events:none;z-index:0;background:radial-gradient(ellipse,var(--glow) 0%,transparent 65%);}
+
+    /* CURSOR */
+    .cur{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;}
+    .cur-ring{position:fixed;width:34px;height:34px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.4;}
+    body.touch-device .cur,body.touch-device .cur-ring{display:none}
+
+    /* NAV */
+    .nav{
+      position:relative;z-index:300;flex-shrink:0;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:.75rem 1.75rem;height:56px;
+      background:var(--glass);backdrop-filter:blur(24px) saturate(160%);
+      -webkit-backdrop-filter:blur(24px) saturate(160%);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-logo{font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:7px;}
+    .nav-right{display:flex;align-items:center;gap:.45rem;}
+    .nb{background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:.3rem .7rem;border-radius:50px;font-size:.72rem;text-decoration:none;transition:all .18s;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
+    .nb:hover{border-color:var(--accent);color:var(--accent);}
+    .nb.tag{background:var(--accent-dim);color:var(--accent);border-color:color-mix(in srgb, var(--accent) 20%, transparent);font-weight:700;letter-spacing:.04em;}
+
+    /* SHELL */
+    .shell{position:relative;z-index:1;display:flex;flex:1;overflow:hidden;}
+
+    /* SIDEBAR */
+    .sidebar{
+      width:220px;flex-shrink:0;
+      background:var(--bg2);border-right:1px solid var(--border);
+      display:flex;flex-direction:column;overflow:hidden;
+    }
+    .sb-top{padding:1.25rem 1rem .75rem;border-bottom:1px solid var(--border);}
+    .sb-tag{font-size:.62rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted2);margin-bottom:.6rem;}
+    .sb-user{display:flex;align-items:center;gap:.65rem;}
+    .sb-av{width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;flex-shrink:0;}
+    .sb-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+    .sb-info{
+        display:flex;flex-direction:column;gap:.12rem;
+    }
+    .sb-name{font-size:.82rem;font-weight:600;line-height:1.2;}
+    .sb-plan{font-size:.68rem;color:var(--accent);}
+    .sb-nav{flex:1;padding:.75rem .6rem;display:flex;flex-direction:column;gap:.2rem;overflow-y:auto;}
+    .sn{
+      display:flex;align-items:center;gap:.65rem;
+      padding:.6rem .8rem;border-radius:var(--radius);
+      color:var(--muted);font-size:.82rem;cursor:pointer;
+      border:1px solid transparent;transition:all .18s;
+    }
+    .sn:hover{background:var(--bg3);color:var(--text);border-color:var(--border);}
+    .sn.active{background:var(--accent-dim);color:var(--accent);border-color:var(--accent);}
+    .sn-icon{width:26px;height:26px;border-radius:8px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;}
+    .sn.active .sn-icon{background:var(--accent-dim);}
+    .sb-bottom{padding:.75rem 1rem;border-top:1px solid var(--border);}
+    .ai-trigger{
+      display:flex;align-items:center;gap:.6rem;width:100%;
+      padding:.65rem .8rem;border-radius:var(--radius);
+      background:var(--accent-dim);border:1px solid var(--accent);
+      color:var(--accent);font-size:.8rem;cursor:pointer;transition:all .18s;
+    }
+    .ai-trigger:hover{opacity:.85;}
+    .ai-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 2s ease-in-out infinite;margin-left:auto;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+    /* MAIN PANELS */
+    .main{flex:1;overflow:hidden;position:relative;}
+    .panel{
+      position:absolute;inset:0;overflow-y:auto;
+      padding:1.75rem 2rem;
+      opacity:0;pointer-events:none;transform:translateY(10px);
+      transition:opacity .25s,transform .25s;
+    }
+    .panel.active{opacity:1;pointer-events:all;transform:none;}
+
+    /* PANEL COMPONENTS */
+    .panel-head{margin-bottom:1.5rem;}
+    .p-tag{font-size:.65rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem;}
+    .p-title{font-family:var(--font-head);font-size:clamp(1.4rem,2.5vw,1.9rem);font-weight:700;line-height:1.2;margin-bottom:.4rem;}
+    .p-title em{font-style:italic;color:var(--accent);}
+    .p-sub{color:var(--muted);font-size:.88rem;line-height:1.7;max-width:520px;}
+
+    .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:1.1rem;}
+    .card-body{padding:1.4rem 1.6rem;}
+    .card-body h3{font-family:var(--font-head);font-size:1.05rem;margin-bottom:.5rem;}
+    .card-body p{color:var(--muted);font-size:.85rem;line-height:1.75;margin-bottom:.65rem;}
+    .card-body p:last-child{margin-bottom:0;}
+
+    /* WELCOME */
+    .welcome-hero{
+      background:linear-gradient(135deg,var(--accent-dim),transparent);
+      border:1px solid var(--border);border-radius:var(--radius-xl);
+      padding:2rem;margin-bottom:1.25rem;
+      display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;
+    }
+    .welcome-icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2,#f5d86a));display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;box-shadow:0 0 0 6px var(--accent-dim);}
+    .welcome-text h2{font-family:var(--font-head);font-size:1.35rem;font-weight:700;margin-bottom:.3rem;}
+    .welcome-text h2 em{font-style:italic;color:var(--accent);}
+    .welcome-text p{font-size:.85rem;color:var(--muted);line-height:1.65;}
+    .nav-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;}
+    .nav-card{
+      background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);
+      padding:1.1rem;cursor:pointer;transition:all .2s;
+      display:flex;align-items:flex-start;gap:.75rem;
+    }
+    .nav-card:hover{border-color:var(--accent);transform:translateY(-1px);}
+    .nc-icon{width:38px;height:38px;border-radius:10px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;border:1px solid color-mix(in srgb, var(--accent) 15%, transparent);}
+    .nc-text{
+        display:flex;flex-direction:column;gap:.18rem;
+        }       
+    .nc-title{font-weight:700;font-size:.85rem;margin-bottom:.2rem;}
+    .nc-desc{font-size:.74rem;color:var(--muted);line-height:1.5;}
+    
+    /* WHY */
+    .why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1.25rem;}
+    .why-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.2rem;transition:border-color .2s;}
+    .why-card:hover{border-color:var(--border2);}
+    .wc-icon{width:38px;height:38px;border-radius:10px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:1rem;margin-bottom:.75rem;border:1px solid color-mix(in srgb, var(--accent) 12%, transparent);}
+    .wc-title{font-weight:700;font-size:.88rem;margin-bottom:.3rem;}
+    .wc-desc{font-size:.78rem;color:var(--muted);line-height:1.6;}
+
+    /* HOW */
+    .steps{display:flex;flex-direction:column;gap:.65rem;}
+    .step{display:flex;align-items:flex-start;gap:1rem;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;}
+    .step-num{width:32px;height:32px;border-radius:50%;background:var(--accent);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;font-family:var(--font-mono);flex-shrink:0;margin-top:.05rem;}
+    .step-title{font-weight:700;font-size:.88rem;margin-bottom:.18rem;}
+    .step-desc{font-size:.79rem;color:var(--muted);line-height:1.6;}
+
+    /* PLANS */
+    .plans-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;}
+    .plan-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;position:relative;overflow:hidden;transition:all .2s;}
+    .plan-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,var(--accent-dim),transparent);opacity:0;transition:opacity .2s;}
+    .plan-card:hover{border-color:var(--border2);transform:translateY(-1px);}
+    .plan-card:hover::before{opacity:1;}
+    .plan-card.pop{border-color:var(--accent);}
+    .plan-card.pop::before{opacity:1;}
+    .pop-tag{position:absolute;top:.9rem;right:.9rem;font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--accent);color:var(--bg);padding:.15rem .5rem;border-radius:50px;}
+    .plan-name{font-weight:700;font-size:.9rem;margin-bottom:.25rem;}
+    .plan-price{font-family:var(--font-mono);font-size:1.2rem;font-weight:700;color:var(--accent);margin-bottom:.75rem;}
+    .plan-price span{font-size:.72rem;color:var(--muted);font-weight:400;}
+    .plan-items{list-style:none;display:flex;flex-direction:column;gap:.28rem;}
+    .plan-items li{font-size:.76rem;color:var(--muted);display:flex;align-items:flex-start;gap:.35rem;line-height:1.45;}
+    .plan-items li::before{content:"✓";color:var(--accent);font-weight:700;flex-shrink:0;}
+
+    /* LOOKUP */
+    .lookup-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;margin-bottom:1.25rem;}
+    .lc-top{padding:1.4rem 1.6rem;background:linear-gradient(135deg,var(--accent-dim),transparent);border-bottom:1px solid var(--border);}
+    .lc-top h3{font-family:var(--font-head);font-size:1.05rem;margin-bottom:.3rem;}
+    .lc-top p{font-size:.82rem;color:var(--muted);line-height:1.65;}
+    .lc-body{padding:1.25rem 1.6rem;}
+    .input-row{display:flex;gap:.6rem;flex-wrap:wrap;}
+    .token-inp{flex:1;min-width:180px;background:var(--bg3);border:1.5px solid var(--border);border-radius:50px;padding:.6rem 1.1rem;color:var(--text);font-family:var(--font-mono);font-size:.84rem;outline:none;transition:border-color .2s;}
+    .token-inp:focus{border-color:var(--accent);}
+    .token-inp::placeholder{color:var(--muted2);}
+    .btn-go{background:var(--accent);color:var(--bg);border:none;padding:.6rem 1.25rem;border-radius:50px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:var(--font-body);transition:all .2s;white-space:nowrap;}
+    .btn-go:hover{opacity:.88;transform:translateY(-1px);}
+    .lookup-hint{font-size:.73rem;color:var(--muted2);margin-top:.55rem;line-height:1.6;}
+
+    /* CHILD RESULT */
+    .child-result{margin-top:1.1rem;}
+    .child-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
+    .cc-top{padding:1.1rem 1.25rem;display:flex;align-items:center;gap:.85rem;background:linear-gradient(135deg,var(--accent-dim),transparent);border-bottom:1px solid var(--border);}
+    .cc-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:var(--bg);flex-shrink:0;box-shadow:0 0 0 2px var(--bg3),0 0 0 3.5px var(--accent);}
+    .cc-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+    .cc-name{font-weight:700;font-size:.95rem;font-family:var(--font-head);margin-bottom:.12rem;}
+    .cc-meta{font-size:.73rem;color:var(--muted);}
+    .cc-body{padding:1.1rem 1.25rem;}
+    .cc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1rem;}
+    .cc-stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem;text-align:center;}
+    .cc-stat-val{font-size:1.2rem;font-weight:700;color:var(--accent);font-family:var(--font-mono);}
+    .cc-stat-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:.15rem;}
+    .bar-wrap{margin-bottom:1rem;}
+    .bar-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);margin-bottom:.3rem;}
+    .bar-track{height:4px;background:var(--bg4,var(--bg3));border-radius:50px;overflow:hidden;}
+    .bar-fill{height:100%;background:var(--accent);border-radius:50px;transition:width .6s ease;}
+    .plan-badge{display:inline-flex;align-items:center;gap:5px;background:var(--accent-dim);color:var(--accent);border:1px solid color-mix(in srgb, var(--accent) 20%, transparent);padding:.25rem .75rem;border-radius:50px;font-size:.74rem;font-weight:700;margin-bottom:.85rem;}
+    .orders-lbl{font-size:.67rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);margin-bottom:.55rem;}
+    .order-row{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border);font-size:.8rem;}
+    .order-row:last-child{border-bottom:none;}
+    .order-name{font-weight:500;}
+    .order-right{text-align:right;}
+    .status-pill{font-size:.67rem;padding:.12rem .5rem;border-radius:50px;font-weight:600;}
+    .sp-pending{background:rgba(234,179,8,.1);color:#eab308;}
+    .sp-confirmed{background:rgba(59,130,246,.1);color:#60a5fa;}
+    .sp-delivered{background:rgba(52,211,153,.1);color:#34d399;}
+    .sp-cancelled{background:rgba(248,113,113,.1);color:#f87171;}
+    .order-price{font-size:.72rem;color:var(--muted);margin-top:.1rem;}
+    .no-orders{color:var(--muted);font-size:.82rem;text-align:center;padding:1.25rem 0;}
+    .err-box{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.2);border-radius:var(--radius);padding:.9rem 1.1rem;color:var(--red);font-size:.82rem;margin-top:.75rem;}
+    .loading-row{display:flex;align-items:center;gap:.55rem;color:var(--muted);font-size:.82rem;padding:.5rem 0;}
+    .spin{display:inline-block;animation:spin 1s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* FAQ */
+    .faq-list{display:flex;flex-direction:column;gap:.45rem;}
+    .faq-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
+    .faq-q{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.25rem;cursor:pointer;font-weight:600;font-size:.86rem;gap:1rem;transition:color .2s;}
+    .faq-q:hover{color:var(--accent);}
+    .faq-arr{font-size:.7rem;color:var(--muted);transition:transform .25s;flex-shrink:0;}
+    .faq-item.open .faq-arr{transform:rotate(180deg);}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .3s,padding .3s;padding:0 1.25rem;font-size:.82rem;color:var(--muted);line-height:1.75;}
+    .faq-item.open .faq-a{max-height:250px;padding:.1rem 1.25rem 1.1rem;}
+
+    /* CONTACT PANEL */
+    .contact-hero{
+      background:linear-gradient(135deg,var(--accent-dim),transparent);
+      border:1px solid var(--border);border-radius:var(--radius-xl);
+      padding:1.75rem 2rem;text-align:center;margin-bottom:1.25rem;
+    }
+    .contact-hero h2{font-family:var(--font-head);font-size:1.35rem;margin-bottom:.35rem;}
+    .contact-hero h2 em{font-style:italic;color:var(--accent);}
+    .contact-hero p{color:var(--muted);font-size:.85rem;margin-bottom:1.1rem;}
+    .contact-btns{display:flex;gap:.65rem;justify-content:center;flex-wrap:wrap;}
+    .cbtn{display:inline-flex;align-items:center;gap:6px;padding:.65rem 1.2rem;border-radius:50px;font-size:.82rem;font-weight:600;border:1px solid var(--border);color:var(--muted);text-decoration:none;cursor:pointer;transition:all .2s;background:var(--bg3);}
+    .cbtn:hover{border-color:var(--accent);color:var(--accent);}
+    .cbtn.primary{background:var(--accent);color:var(--bg);border-color:var(--accent);}
+    .cbtn.primary:hover{opacity:.88;transform:translateY(-1px);}
+    .contact-cards{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+    .contact-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.2rem;}
+    .contact-card h4{font-size:.88rem;font-weight:700;margin-bottom:.35rem;}
+    .contact-card p{font-size:.8rem;color:var(--muted);line-height:1.6;}
+    .contact-card a{color:var(--accent);text-decoration:none;}
+
+    /* AI CHAT PANEL */
+    .ai-panel{display:flex;flex-direction:column;height:100%;overflow:hidden;padding:0 !important;}
+    .ai-panel-head{padding:1.4rem 2rem 1rem;flex-shrink:0;border-bottom:1px solid var(--border);}
+    .chat-window{flex:1;overflow-y:auto;padding:1rem 2rem;display:flex;flex-direction:column;gap:.55rem;min-height:0;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+    .chat-chips{padding:.75rem 2rem;border-top:1px solid var(--border);display:flex;gap:.4rem;flex-wrap:wrap;flex-shrink:0;}
+    .cc{background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:.25rem .65rem;border-radius:50px;font-size:.72rem;cursor:pointer;transition:all .15s;white-space:nowrap;}
+    .cc:hover{border-color:var(--accent);color:var(--accent);}
+    .chat-input-area{padding:1rem 2rem;border-top:1px solid var(--border);display:flex;gap:.55rem;flex-shrink:0;}
+    .chat-in{flex:1;background:var(--bg3);border:1.5px solid var(--border);border-radius:50px;padding:.58rem 1.1rem;color:var(--text);font-size:.85rem;font-family:var(--font-body);outline:none;transition:border-color .2s;}
+    .chat-in:focus{border-color:var(--accent);}
+    .chat-in::placeholder{color:var(--muted2);}
+    .chat-send{width:36px;height:36px;border-radius:50%;background:var(--accent);color:var(--bg);border:none;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+    .chat-send:hover{opacity:.85;}
+    .chat-send:disabled{opacity:.35;cursor:not-allowed;}
+    .msg{max-width:72%;padding:.55rem .85rem;border-radius:14px;font-size:.84rem;line-height:1.6;word-break:break-word;}
+    .msg.bot{background:var(--bg3);border:1px solid var(--border);border-bottom-left-radius:3px;align-self:flex-start;}
+    .msg.user{background:var(--accent);color:var(--bg);border-bottom-right-radius:3px;align-self:flex-end;font-weight:500;}
+    .msg.typing{display:flex;gap:4px;align-items:center;padding:.6rem .9rem;}
+    .msg.typing span{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:tdot 1.2s ease-in-out infinite;}
+    .msg.typing span:nth-child(2){animation-delay:.2s;}
+    .msg.typing span:nth-child(3){animation-delay:.4s;}
+    @keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(70px);z-index:900;background:var(--bg2);color:var(--text);padding:.55rem 1.3rem;border-radius:50px;font-size:.82rem;border:1px solid var(--border2);box-shadow:var(--shadow);pointer-events:none;opacity:0;transition:all .3s;white-space:nowrap;}
+    .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+    /* MOBILE */
+    @media(max-width:720px){
+      .sidebar{width:100%;height:auto;flex-direction:row;flex-wrap:wrap;border-right:none;border-bottom:1px solid var(--border);padding:.5rem;}
+      .sb-top,.sb-bottom{display:none;}
+      .sb-nav{flex-direction:row;padding:.25rem;gap:.25rem;overflow-x:auto;overflow-y:visible;flex-wrap:nowrap;}
+      .sn{flex-shrink:0;padding:.5rem .75rem;font-size:.75rem;}
+      .sn-icon{width:20px;height:20px;font-size:.7rem;}
+      .shell{flex-direction:column;}
+      .panel{padding:1.1rem 1.1rem;}
+      .why-grid,.plans-grid,.nav-cards,.contact-cards{grid-template-columns:1fr;}
+      .ai-panel-head,.chat-chips,.chat-input-area{padding-left:1.1rem;padding-right:1.1rem;}
+      .chat-window{padding:1rem 1.1rem;}
+      html,body{height:auto;overflow:auto;}
+      .panel{position:relative;inset:auto;}
+      .main{overflow:visible;}
+    }
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    .fade-up{animation:fadeUp .35s ease both;}
+  </style>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="cur" id="cur"></div>
+  <div class="cur-ring" id="cur-ring"></div>
+  <div class="toast" id="toast"></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="/" class="nav-logo">✏️ Pencil Insurance</a>
+    <div class="nav-right">
+      <span class="nb tag">Parent Portal</span>
+      <a href="/" class="nb">← Home</a>
+      <a href="/tnc" class="nb">T&C</a>
+    </div>
+  </nav>
+
+  <!-- SHELL -->
+  <div class="shell">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sb-top">
+        <div class="sb-tag">Parent Portal</div>
+        <div class="sb-user" id="sbUser">
+          <div class="sb-av">👨‍👩‍👧</div>
+          <div class="sb-info">
+            <div class="sb-name">Welcome</div>
+            <div class="sb-plan">Pencil Insurance</div>
+          </div>
+        </div>
+      </div>
+      <div class="sb-nav">
+        <div class="sn active" data-panel="welcome" onclick="go('welcome',this)"><span class="sn-icon">🏠</span>Welcome</div>
+        <div class="sn" data-panel="why" onclick="go('why',this)"><span class="sn-icon">❤️</span>Why us</div>
+        <div class="sn" data-panel="how" onclick="go('how',this)"><span class="sn-icon">⚙️</span>How it works</div>
+        <div class="sn" data-panel="plans" onclick="go('plans',this)"><span class="sn-icon">📋</span>Plans</div>
+        <div class="sn" data-panel="lookup" onclick="go('lookup',this)"><span class="sn-icon">🔍</span>View my child</div>
+        <div class="sn" data-panel="faq" onclick="go('faq',this)"><span class="sn-icon">❓</span>FAQ</div>
+        <div class="sn" data-panel="contact" onclick="go('contact',this)"><span class="sn-icon">📞</span>Contact</div>
+        <div class="sn" data-panel="ai" onclick="go('ai',this)"><span class="sn-icon">🤖</span>Ask PI</div>
+      </div>
+      <div class="sb-bottom">
+        <button class="ai-trigger" onclick="go('ai',document.querySelector('[data-panel=ai]'))">
+          🤖 Ask PI Assistant <div class="ai-dot"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- PANELS -->
+    <div class="main">
+
+      <!-- WELCOME -->
+      <div class="panel active" id="panel-welcome">
+        <div class="welcome-hero fade-up">
+          <div class="welcome-icon">👨‍👩‍👧</div>
+          <div class="welcome-text">
+            <h2>Your child's stationery,<br><em>always covered.</em></h2>
+            <p>Pencil Insurance replaces lost or damaged school stationery fast — delivered to OWIS within the school day. Plans start at ₹60/month.</p>
+          </div>
+        </div>
+        <div class="nav-cards fade-up">
+          <div class="nav-card" onclick="go('why',document.querySelector('[data-panel=why]'))">
+            <div class="nc-icon">❤️</div>
+            <div class="nc-text"><div class="nc-title">Why choose us</div><div class="nc-desc">What makes Pencil Insurance different for OWIS families</div></div>
+          </div>
+          <div class="nav-card" onclick="go('how',document.querySelector('[data-panel=how]'))">
+            <div class="nc-icon">⚙️</div>
+            <div class="nc-text"><div class="nc-title">How it works</div><div class="nc-desc">Simple 4-step process from signup to replacement</div></div>
+          </div>
+          <div class="nav-card" onclick="go('plans',document.querySelector('[data-panel=plans]'))">
+            <div class="nc-icon">📋</div>
+            <div class="nc-text"><div class="nc-title">Browse plans</div><div class="nc-desc">From ₹60/month — pick what fits your family</div></div>
+          </div>
+          <div class="nav-card" onclick="go('lookup',document.querySelector('[data-panel=lookup]'))">
+            <div class="nc-icon">🔍</div>
+            <div class="nc-text"><div class="nc-title">View my child</div><div class="nc-desc">Check their plan, claims, and orders instantly</div></div>
+          </div>
+          <div class="nav-card" onclick="go('faq',document.querySelector('[data-panel=faq]'))">
+            <div class="nc-icon">❓</div>
+            <div class="nc-text"><div class="nc-title">Common questions</div><div class="nc-desc">Everything parents ask, answered clearly</div></div>
+          </div>
+          <div class="nav-card" onclick="go('ai',document.querySelector('[data-panel=ai]'))">
+            <div class="nc-icon">🤖</div>
+            <div class="nc-text"><div class="nc-title">Ask PI Assistant</div><div class="nc-desc">AI that answers your questions in seconds</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WHY -->
+      <div class="panel" id="panel-why">
+        <div class="panel-head">
+          <div class="p-tag">Why parents choose us</div>
+          <h2 class="p-title">Peace of mind, <em>finally.</em></h2>
+          <p class="p-sub">No more emergency trips to the store. No more lecturing about lost pencils. Just simple, affordable coverage.</p>
+        </div>
+        <div class="why-grid">
+          <div class="why-card"><div class="wc-icon">💸</div><div class="wc-title">Cheaper than replacing yourself</div><div class="wc-desc">At ₹60/month, you're covered for the basics. Replacing stationery ad-hoc costs more and wastes time.</div></div>
+          <div class="why-card"><div class="wc-icon">⚡</div><div class="wc-title">Delivered to school in 24 hours</div><div class="wc-desc">Replacements go straight to OWIS. Your child never misses a lesson over a missing pencil.</div></div>
+          <div class="why-card"><div class="wc-icon">👁️</div><div class="wc-title">Full transparency</div><div class="wc-desc">View your child's plan, claims, and orders through a secure Parent View link. Nothing hidden.</div></div>
+          <div class="why-card"><div class="wc-icon">🔒</div><div class="wc-title">Cancel anytime</div><div class="wc-desc">No contracts. Cancel anytime for a full refund on any unused monthly cycle. Zero risk.</div></div>
+          <div class="why-card"><div class="wc-icon">🏫</div><div class="wc-title">OWIS-native</div><div class="wc-desc">Built by OWIS students, for OWIS students. We understand school life because we live it.</div></div>
+          <div class="why-card"><div class="wc-icon">📱</div><div class="wc-title">WhatsApp support</div><div class="wc-desc">Claims via WhatsApp, not a complicated portal. Fast, personal, and actually responsive.</div></div>
+        </div>
+      </div>
+
+      <!-- HOW -->
+      <div class="panel" id="panel-how">
+        <div class="panel-head">
+          <div class="p-tag">How it works</div>
+          <h2 class="p-title">Simple as <em>1, 2, 3.</em></h2>
+          <p class="p-sub">The whole process takes minutes. Your child does all of it — no parent action needed after signup.</p>
+        </div>
+        <div class="steps">
+          <div class="step"><div class="step-num">01</div><div><div class="step-title">Pick a plan</div><div class="step-desc">Your child signs up at pencilinsurance.com, selects their plan, and activates coverage. Takes under 2 minutes.</div></div></div>
+          <div class="step"><div class="step-num">02</div><div><div class="step-title">Coverage is active at school</div><div class="step-desc">Any covered item lost or damaged during school hours is eligible for a free replacement. Up to 5 claims per item per month.</div></div></div>
+          <div class="step"><div class="step-num">03</div><div><div class="step-title">Child reports on WhatsApp</div><div class="step-desc">Same day or next school day — your child messages us with their name, plan, and what was lost. That's it.</div></div></div>
+          <div class="step"><div class="step-num">04</div><div><div class="step-title">Replacement delivered to OWIS</div><div class="step-desc">We deliver the item directly to school within 24 hours. No trips, no forms, no hassle. The claim is logged on their profile.</div></div></div>
+          <div class="step"><div class="step-num">05</div><div><div class="step-title">You can track it all</div><div class="step-desc">Your child shares a Parent View link with you. You can see their plan, every claim, and every order — in real time.</div></div></div>
+        </div>
+      </div>
+
+      <!-- PLANS -->
+      <div class="panel" id="panel-plans">
+        <div class="panel-head">
+          <div class="p-tag">Plans & Pricing</div>
+          <h2 class="p-title">Pick what fits <em>your family.</em></h2>
+          <p class="p-sub">All plans include delivery to school, WhatsApp support, and cancel-anytime flexibility.</p>
+        </div>
+        <div class="plans-grid">
+          <div class="plan-card">
+            <div class="plan-name">Default</div>
+            <div class="plan-price">₹60<span>/month</span></div>
+            <ul class="plan-items"><li>Pencil (HB)</li><li>Eraser</li><li>Sharpener</li><li>Butterflow pen</li></ul>
+          </div>
+          <div class="plan-card pop">
+            <div class="pop-tag">Popular</div>
+            <div class="plan-name">Deluxe</div>
+            <div class="plan-price">₹100<span>/month</span></div>
+            <ul class="plan-items"><li>Everything in Default</li><li>Octane pen</li><li>Compass & divider</li><li>Mechanical pencil</li><li>Scale (15cm + 30cm)</li><li>Protector sheet & pouch</li></ul>
+          </div>
+          <div class="plan-card">
+            <div class="plan-name">Ultra</div>
+            <div class="plan-price">₹200<span>/month</span></div>
+            <ul class="plan-items"><li>Everything in Deluxe</li><li>Notebooks</li><li>Markers & highlighters</li><li>Coloured pencils</li><li>Refills</li><li>10 sheets of paper/week</li></ul>
+          </div>
+          <div class="plan-card">
+            <div class="plan-name">Efficiency</div>
+            <div class="plan-price">₹1,000<span>/month</span></div>
+            <ul class="plan-items"><li>Everything in Ultra</li><li>50 sheets of paper</li><li>Premium notebooks</li><li>Any item up to ₹900</li><li>Art supplies & shading pencils</li><li>Priority support</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOOKUP -->
+      <div class="panel" id="panel-lookup">
+        <div class="panel-head">
+          <div class="p-tag">Parent View</div>
+          <h2 class="p-title">See your child's <em>coverage.</em></h2>
+        </div>
+        <div class="lookup-card">
+          <div class="lc-top">
+            <h3>🔍 Enter your child's token</h3>
+            <p>Ask your child to open their profile, tap Share, and send you the Parent View link. Paste it below — we'll extract everything automatically.</p>
+          </div>
+          <div class="lc-body">
+            <div class="input-row">
+              <input type="text" id="tokenInput" class="token-inp" placeholder="Paste token or full share link…"/>
+              <button class="btn-go" onclick="loadChild()">View →</button>
+            </div>
+            <p class="lookup-hint">Your child goes to <strong>Profile → Share → Generate parent link</strong>. Takes 10 seconds.</p>
+            <div id="childDisplay"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="panel" id="panel-faq">
+        <div class="panel-head">
+          <div class="p-tag">Common questions</div>
+          <h2 class="p-title">Parents ask us <em>everything.</em></h2>
+          <p class="p-sub">Can't find your answer? Jump to Ask PI for instant answers.</p>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is Pencil Insurance legitimate? <span class="faq-arr">▾</span></div><div class="faq-a">Yes — it's a student-run service based at OWIS, Bangalore. Transparent pricing, no hidden fees, cancel anytime for a full refund on unused cycles. Every claim is logged and trackable via the Parent View link.</div></div>
+          <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What if my child loses something expensive? <span class="faq-arr">▾</span></div><div class="faq-a">The Efficiency plan (₹1,000/month) covers any stationery item up to ₹900. For items above that, contact us directly on WhatsApp — we'll assess on a case-by-case basis.</div></div>
+          <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How do I verify the claims are real? <span class="faq-arr">▾</span></div><div class="faq-a">Every claim is logged with a timestamp on your child's profile. You can see it in real time through the Parent View link — what was claimed, when, and the current status.</div></div>
+          <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I cancel anytime? <span class="faq-arr">▾</span></div><div class="faq-a">Yes. Cancel anytime, no questions asked. Any full unused monthly cycle gets a complete refund. No contracts, no lock-in periods.</div></div>
+          <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What if my child forgot to report a claim? <span class="faq-arr">▾</span></div><div class="faq-a">Contact us on WhatsApp as soon as possible. Claims should be reported same-day or next school day. We always try to help if it's recent and the situation is genuine.</div></div>
+          <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How do I sign my child up? <span class="faq-arr">▾</span></div><div class="faq-a">Your child signs up at pencilinsurance.com/profile using a Google account or as a guest. Or WhatsApp us and we'll walk you both through it.</div></div>
+          <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is my child's data safe? <span class="faq-arr">▾</span></div><div class="faq-a">We only store name, school, grade, plan, and claims data. We don't share it with anyone. The Parent View link is read-only — parents can view but not change anything.</div></div>
+          <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What counts as a valid claim? <span class="faq-arr">▾</span></div><div class="faq-a">Items that are covered by your child's plan, lost or damaged during school hours at OWIS, and reported same-day or next school day. Cash payouts are not available — we only replace items.</div></div>
+        </div>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="panel" id="panel-contact">
+        <div class="panel-head">
+          <div class="p-tag">Get in touch</div>
+          <h2 class="p-title">We're <em>quick to respond.</em></h2>
+        </div>
+        <div class="contact-hero">
+          <h2>Still have questions?</h2>
+          <p>WhatsApp is fastest. Email works too — we reply within a day. Or just ask PI below.</p>
+          <div class="contact-btns">
+            <a href="https://wa.me/919901126174" class="cbtn primary" target="_blank">💬 WhatsApp us</a>
+            <a href="mailto:pencil.insurance.buisness@gmail.com" class="cbtn">✉️ Email us</a>
+            <button class="cbtn" onclick="go('ai',document.querySelector('[data-panel=ai]'))">🤖 Ask PI</button>
+          </div>
+        </div>
+        <div class="contact-cards">
+          <div class="contact-card">
+            <h4>📱 WhatsApp</h4>
+            <p>+91 9901126174<br>Fastest response. Usually within minutes during school hours.</p>
+          </div>
+          <div class="contact-card">
+            <h4>✉️ Email</h4>
+            <p><a href="mailto:pencil.insurance.buisness@gmail.com">pencil.insurance.buisness@gmail.com</a><br>We reply within 24 hours.</p>
+          </div>
+          <div class="contact-card">
+            <h4>🏫 Location</h4>
+            <p>OWIS — One World International School<br>Bangalore, India</p>
+          </div>
+          <div class="contact-card">
+            <h4>🕐 Hours</h4>
+            <p>Monday – Friday<br>7:30am – 4:30pm (school hours)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI PANEL -->
+      <div class="panel ai-panel" id="panel-ai">
+        <div class="ai-panel-head">
+          <div class="p-tag">PI Assistant · Parent Mode</div>
+          <h2 class="p-title" style="font-size:1.3rem;margin-bottom:.2rem;">Ask me <em>anything.</em></h2>
+          <p class="p-sub" style="font-size:.82rem;">I know every detail about plans, claims, and how Pencil Insurance works. Fire away.</p>
+        </div>
+        <div class="chat-window" id="chatMsgs"></div>
+        <div class="chat-chips">
+          <button class="cc" onclick="qa('Is this service safe and legitimate?')">Is this legit?</button>
+          <button class="cc" onclick="qa('What does the Deluxe plan cover exactly?')">Deluxe plan</button>
+          <button class="cc" onclick="qa('How do I view my child\'s profile?')">View child</button>
+          <button class="cc" onclick="qa('How does the claims process work?')">Claims process</button>
+          <button class="cc" onclick="qa('Can I cancel anytime?')">Cancel?</button>
+          <button class="cc" onclick="qa('What if my child loses an expensive item?')">Expensive item?</button>
+        </div>
+        <div class="chat-input-area">
+          <input class="chat-in" id="chatIn" placeholder="Ask anything about Pencil Insurance…" onkeydown="if(event.key==='Enter')send()" maxlength="500"/>
+          <button class="chat-send" id="sendBtn" onclick="send()">➤</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // theme from localStorage
+    const savedTheme = localStorage.getItem('pi-theme');
+    if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+    // cursor
+    const cur=document.getElementById('cur'), ring=document.getElementById('cur-ring');
+    let rx=0,ry=0;
+    if(/Mobi|Android|iPad|iPhone/i.test(navigator.userAgent)){document.body.classList.add('touch-device');}
+    else{
+      document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
+      (function tick(){rx+=(parseFloat(cur.style.left||0)-rx)*.12;ry+=(parseFloat(cur.style.top||0)-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(tick);})();
+    }
+
+    function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+    function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+    // PANEL NAV
+    function go(id, btn){
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      document.querySelectorAll('.sn').forEach(n=>n.classList.remove('active'));
+      document.getElementById('panel-'+id).classList.add('active');
+      if(btn) btn.classList.add('active');
+      // init chat on first open
+      if(id==='ai' && chatHistory.length===0) initChat();
+    }
+
+    // FAQ
+    function toggleFaq(q){
+      const item=q.closest('.faq-item');
+      const wasOpen=item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+      if(!wasOpen) item.classList.add('open');
+    }
+
+    // LOOKUP
+    async function loadChild(){
+      let raw=document.getElementById('tokenInput').value.trim();
+      if(!raw){toast('Paste a token or share link first');return;}
+      const m=raw.match(/\/parent\/([^/?#\s]+)/);
+      const token=m?m[1]:raw;
+      const display=document.getElementById('childDisplay');
+      display.innerHTML=`<div class="loading-row"><span class="spin">⟳</span> Loading profile…</div>`;
+      try{
+        const res=await fetch('/api/parent/'+encodeURIComponent(token));
+        if(!res.ok) throw new Error('bad');
+        const data=await res.json();
+        const p=data.profile, orders=data.orders||[];
+        const cu=p.claimsThisCycle||0, pct=Math.min(100,cu/5*100);
+        const noClaim=cu===0;
+        const avInner=p.avatarUrl?`<img src="${esc(p.avatarUrl)}" alt=""/>`:(esc(p.avatarInitials||p.name?.charAt(0)||'?'));
+        const avBg=p.avatarUrl?'transparent':(p.avatarColor||'#d97757');
+        const PRICES={Default:'₹60',Deluxe:'₹100',Ultra:'₹200',Efficiency:'₹1,000'};
+        const sc={'pending':'sp-pending','confirmed':'sp-confirmed','delivered':'sp-delivered','cancelled':'sp-cancelled'};
+        display.innerHTML=`<div class="child-result">
+          <div class="child-card">
+            <div class="cc-top">
+              <div class="cc-av" style="background:${avBg}">${avInner}</div>
+              <div>
+                <div class="cc-name">${esc(p.name||'Student')}</div>
+                <div class="cc-meta">${p.school?esc(p.school):'OWIS'}${p.grade?' · Grade '+esc(p.grade):''}</div>
+              </div>
+            </div>
+            <div class="cc-body">
+              <div class="plan-badge">📋 ${esc(p.plan||'No plan')}${p.plan&&PRICES[p.plan]?' · '+PRICES[p.plan]+'/mo':''}</div>
+              ${noClaim?'<div style="margin-bottom:.75rem"><span style="background:rgba(52,211,153,.08);color:#34d399;border:1px solid rgba(52,211,153,.18);padding:.2rem .65rem;border-radius:50px;font-size:.72rem;font-weight:700;">🎉 No-Claim Bonus Eligible</span></div>':''}
+              <div class="cc-stats">
+                <div class="cc-stat"><div class="cc-stat-val">${cu}</div><div class="cc-stat-label">Claims used</div></div>
+                <div class="cc-stat"><div class="cc-stat-val">${5-cu}</div><div class="cc-stat-label">Remaining</div></div>
+                <div class="cc-stat"><div class="cc-stat-val">${orders.length}</div><div class="cc-stat-label">Orders</div></div>
+              </div>
+              <div class="bar-wrap">
+                <div class="bar-labels"><span>Claims this cycle</span><span>${cu}/5</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+              </div>
+              <div class="orders-lbl">Recent orders</div>
+              ${orders.length?orders.slice(0,5).map(o=>{
+                const items=Array.isArray(o.items)?o.items:[];
+                const summary=items.slice(0,2).map(i=>`${esc(i.icon||'')} ${esc(i.name)} ×${i.qty}`).join(', ')+(items.length>2?` +${items.length-2} more`:'');
+                const saved=o.covered_value||0;
+                return `<div class="order-row">
+                  <div class="order-name">${summary||'—'}</div>
+                  <div class="order-right">
+                    <span class="status-pill ${sc[o.status]||'sp-pending'}">${o.status}</span>
+                    <div class="order-price">₹${(o.total_price||0)-(o.covered_value||0)}${saved>0?' · saved ₹'+saved:''}</div>
+                  </div>
+                </div>`;
+              }).join(''):'<div class="no-orders">No orders yet.</div>'}
+            </div>
+          </div>
+        </div>`;
+        toast('✓ Profile loaded!');
+      }catch{
+        display.innerHTML=`<div class="err-box">⚠️ Couldn't load — check the token and try again. Make sure your child generated a Parent View link from their profile.</div>`;
+      }
+    }
+
+    // auto-load from URL
+    const parts=window.location.pathname.split('/');
+    const urlToken=parts[parts.length-1];
+    if(urlToken && urlToken!=='parent'){
+      document.getElementById('tokenInput').value=urlToken;
+      go('lookup', document.querySelector('[data-panel=lookup]'));
+      setTimeout(loadChild, 300);
+    }
+
+    // AI CHAT
+    let chatHistory=[], chatReady=false;
+
+    function initChat(){
+      if(chatReady) return;
+      chatReady=true;
+      addMsg("Hi! I'm PI, your Pencil Insurance assistant. I'm in Parent Mode — ask me anything about plans, claims, signing up, or how to view your child's profile. I'm here to help! 😊", 'bot');
+    }
+
+    function addMsg(text, role){
+      const w=document.getElementById('chatMsgs');
+      const d=document.createElement('div');
+      d.className='msg '+role;
+      d.textContent=text;
+      w.appendChild(d);
+      w.scrollTop=w.scrollHeight;
+    }
+    function addTyping(){
+      const w=document.getElementById('chatMsgs');
+      const d=document.createElement('div');
+      d.className='msg bot typing';d.id='typing';
+      d.innerHTML='<span></span><span></span><span></span>';
+      w.appendChild(d);w.scrollTop=w.scrollHeight;
+    }
+    function removeTyping(){const t=document.getElementById('typing');if(t)t.remove();}
+
+    function recentChatMessages(){
+      const messages = chatHistory.slice(-10);
+      while(messages.length && messages[0].role !== 'user') messages.shift();
+      return messages;
+    }
+
+    async function send(){
+      const inp=document.getElementById('chatIn');
+      const text=inp.value.trim();if(!text)return;
+      inp.value='';inp.disabled=true;
+      document.getElementById('sendBtn').disabled=true;
+      addMsg(text,'user');chatHistory.push({role:'user',content:text});addTyping();
+      try{
+        const res=await fetch('/api/chat',{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({messages:recentChatMessages(),plan:'',parentMode:true})
+        });
+        const data=await res.json();removeTyping();
+        const reply=data.reply||"Sorry, I couldn't get a response right now. Try WhatsApp instead!";
+        addMsg(reply,'bot');chatHistory.push({role:'assistant',content:reply});
+      }catch{
+        removeTyping();
+        const errMsg='Network error — please try again.';
+        addMsg(errMsg,'bot');
+        // Keep history alternating: push a placeholder assistant reply so the next
+        // user message doesn't create two consecutive user roles (which the API rejects).
+        chatHistory.push({role:'assistant',content:errMsg});
+      }
+      inp.disabled=false;document.getElementById('sendBtn').disabled=false;inp.focus();
+    }
+
+    function qa(text){
+      go('ai', document.querySelector('[data-panel=ai]'));
+      if(!chatReady) initChat();
+      setTimeout(()=>{document.getElementById('chatIn').value=text;send();},100);
+    }
+
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape') document.getElementById('chatIn')?.blur();
+    });
+  </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+<script src="/static/global-animations.js" defer></script>
+
+<script>
+  if (!window.GEMINI_API_KEY) {
+    window.GEMINI_API_KEY = "{{ gemini_api_key }}";
+  }
+</script>
+<script src="/static/google-agent.js" defer></script>
+
+</body>
+</html>

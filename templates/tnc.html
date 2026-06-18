@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="default">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Terms & Conditions — Pencil Insurance · Astral.inc</title>
+<link rel="stylesheet" href="/static/themes.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+/* Theme tokens (default = Claude, + all variants) live in /static/themes.css — single source of truth. */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;cursor:none}
+body.touch-device{cursor:auto}
+.cursor{position:fixed;width:12px;height:12px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference}
+body.touch-device .cursor{display:none}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:300;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border)}
+[data-theme="terminal"] nav{background:rgba(0,4,0,0.96)}
+.nav-logo{font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-back{background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:.38rem .85rem;border-radius:50px;font-size:.78rem;cursor:pointer;font-family:var(--font-body);transition:all .2s;text-decoration:none}
+.nav-back:hover{border-color:var(--accent);color:var(--accent)}
+
+.page{max-width:740px;margin:0 auto;padding:90px 1.5rem 4rem}
+.doc-header{margin-bottom:3rem}
+.doc-label{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);font-weight:500;font-family:var(--font-mono);margin-bottom:.6rem}
+.doc-title{font-family:var(--font-head);font-size:clamp(2rem,5vw,3rem);font-weight:700;line-height:1.1;margin-bottom:.75rem}
+.doc-meta{font-size:.85rem;color:var(--muted);display:flex;gap:1.5rem;flex-wrap:wrap}
+.doc-meta span{display:flex;align-items:center;gap:5px}
+
+.toc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:2.5rem}
+.toc h3{font-size:.78rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-family:var(--font-mono);margin-bottom:1rem}
+.toc ol{list-style:none;display:flex;flex-direction:column;gap:.4rem;counter-reset:toc}
+.toc li{counter-increment:toc;display:flex;gap:.6rem;font-size:.88rem}
+.toc li::before{content:counter(toc,decimal-leading-zero);color:var(--accent);font-family:var(--font-mono);font-size:.75rem;flex-shrink:0;padding-top:.05rem}
+.toc a{color:var(--muted);text-decoration:none;transition:color .2s}
+.toc a:hover{color:var(--accent)}
+
+.doc-section{margin-bottom:2.5rem}
+.doc-section h2{font-family:var(--font-head);font-size:1.35rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;scroll-margin-top:80px}
+.doc-section h2 .sec-num{font-size:.75rem;color:var(--accent);font-family:var(--font-mono);background:var(--accent-dim);padding:.15rem .5rem;border-radius:50px;flex-shrink:0}
+.doc-section h3{font-size:1rem;font-weight:500;margin:1.2rem 0 .5rem;color:var(--text)}
+.doc-section p{font-size:.92rem;color:var(--muted);line-height:1.8;margin-bottom:.75rem}
+.doc-section p:last-child{margin-bottom:0}
+.doc-section ul,.doc-section ol{padding-left:1.4rem;display:flex;flex-direction:column;gap:.4rem;margin:.5rem 0}
+.doc-section li{font-size:.9rem;color:var(--muted);line-height:1.6}
+.doc-section li strong{color:var(--text)}
+.highlight-box{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius);padding:1rem 1.1rem;margin:.75rem 0;font-size:.88rem;color:var(--muted);line-height:1.7}
+.highlight-box strong{color:var(--text)}
+.doc-divider{border:none;border-top:1px solid var(--border);margin:2rem 0}
+.contact-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-top:2rem}
+.contact-card h3{font-family:var(--font-head);font-size:1.1rem;margin-bottom:1rem}
+.contact-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:.75rem;font-size:.88rem}
+.contact-item .ci-label{color:var(--muted);min-width:80px;flex-shrink:0}
+.contact-item a{color:var(--accent);text-decoration:none}
+
+@media(max-width:768px){.page{padding:80px 1rem 3rem}.doc-meta{flex-direction:column;gap:.4rem}}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+
+<nav>
+  <a href="/" class="nav-logo">✏️ Pencil Insurance</a>
+  <a href="/" class="nav-back">← Back</a>
+</nav>
+
+<div class="page">
+  <div class="doc-header">
+    <div class="doc-label">// legal · astral.inc</div>
+    <h1 class="doc-title">Terms &amp; Conditions</h1>
+    <div class="doc-meta">
+      <span>📅 Effective: 1 May 2024</span>
+      <span>🔄 Last updated: May 2025</span>
+      <span>🏢 Astral.inc · Pencil Insurance</span>
+    </div>
+  </div>
+
+  <div class="toc">
+    <h3>// contents</h3>
+    <ol>
+      <li><a href="#s1">About Pencil Insurance</a></li>
+      <li><a href="#s2">Eligibility</a></li>
+      <li><a href="#s3">Plans &amp; Coverage</a></li>
+      <li><a href="#s4">Claims Process</a></li>
+      <li><a href="#s5">Exclusions</a></li>
+      <li><a href="#s6">Payments &amp; Billing</a></li>
+      <li><a href="#s7">Cancellations &amp; Refunds</a></li>
+      <li><a href="#s8">Supply Option</a></li>
+      <li><a href="#s9">User Accounts</a></li>
+      <li><a href="#s10">AI Assistant</a></li>
+      <li><a href="#s11">Intellectual Property</a></li>
+      <li><a href="#s12">Liability</a></li>
+      <li><a href="#s13">Governing Law</a></li>
+      <li><a href="#s14">Amendments</a></li>
+      <li><a href="#s15">Contact</a></li>
+    </ol>
+  </div>
+
+  <div class="highlight-box">
+    <strong>Plain English summary:</strong> Pencil Insurance replaces your school stationery when it's lost or damaged during school hours. You pay a monthly fee, file a claim via WhatsApp or email, and we sort it out. Read the details below — if anything is unclear, just ask us.
+  </div>
+
+  <div class="doc-section" id="s1">
+    <h2><span class="sec-num">01</span> About Pencil Insurance</h2>
+    <p>Pencil Insurance is a stationery protection service operated by <strong>Astral.inc</strong>, designed exclusively for students. We provide coverage for school stationery items that are lost, stolen, or damaged during school hours, depending on the plan selected by the subscriber.</p>
+    <p>Pencil Insurance operates on an honour-based claims system. By subscribing, you agree to use the service honestly and in good faith.</p>
+    <p>Pencil Insurance is not a regulated insurance product under the Insurance Regulatory and Development Authority of India (IRDAI). It is a student-facing subscription protection service.</p>
+  </div>
+
+  <div class="doc-section" id="s2">
+    <h2><span class="sec-num">02</span> Eligibility</h2>
+    <p>To use Pencil Insurance, you must:</p>
+    <ul>
+      <li>Be a currently enrolled student at a recognised school</li>
+      <li>Be under 18 years of age, or have parental/guardian consent</li>
+      <li>Provide accurate information during registration</li>
+      <li>Use the service only for legitimate school-related stationery needs</li>
+    </ul>
+    <p>Astral.inc reserves the right to suspend or terminate access to any subscriber found misusing the service.</p>
+  </div>
+
+  <div class="doc-section" id="s3">
+    <h2><span class="sec-num">03</span> Plans &amp; Coverage</h2>
+    <h3>3.1 Available Plans</h3>
+    <p>We currently offer four subscription tiers:</p>
+    <ul>
+      <li><strong>Default (₹60/month):</strong> Pencil, Sharpener, Eraser, Pen (Butterflow)</li>
+      <li><strong>Deluxe (₹100/month):</strong> Everything in Default, plus Pens (Octane), Protector &amp; Compass, Divider &amp; Pouch, Mechanical Pencil &amp; Scale</li>
+      <li><strong>Ultra (₹200/month):</strong> Everything in Deluxe, plus Notebooks, Branded Stationery, Markers, Coloured Pencils, Refills, and 10 sheets of paper weekly</li>
+      <li><strong>Efficiency (₹1,000/month):</strong> Everything in Ultra, plus 50 sheets of paper, Premium Notebooks, any stationery item up to ₹900, Priority Support, Shading Pencils &amp; Art Supplies</li>
+    </ul>
+    <h3>3.2 Coverage Scope</h3>
+    <p>Coverage applies only to items explicitly listed in your chosen plan. Items not listed are not covered unless otherwise communicated in writing by Astral.inc.</p>
+    <h3>3.3 Claim Limits</h3>
+    <p>Each subscriber may file up to <strong>5 claims per item per payment cycle</strong>. This limit resets at the start of each new billing cycle. Claims in excess of this limit will not be processed.</p>
+    <div class="highlight-box">Claim limits are per-item, not per-account. You can claim up to 5 pencils AND up to 5 erasers in the same cycle (subject to plan coverage).</div>
+  </div>
+
+  <div class="doc-section" id="s4">
+    <h2><span class="sec-num">04</span> Claims Process</h2>
+    <h3>4.1 How to File a Claim</h3>
+    <p>Claims must be submitted via:</p>
+    <ul>
+      <li>WhatsApp: +91 98765 43210</li>
+      <li>Email: pencil.insurance.buisness@gmail.com</li>
+      <li>The Shop page on our website (for direct orders using a claim)</li>
+    </ul>
+    <h3>4.2 Information Required</h3>
+    <p>When filing a claim, you must provide:</p>
+    <ul>
+      <li>Your full name and registered email address</li>
+      <li>Your current plan</li>
+      <li>The item(s) lost or damaged</li>
+      <li>A brief description of how/when the loss occurred</li>
+    </ul>
+    <h3>4.3 Response Time</h3>
+    <p>We aim to respond to all claims within <strong>24 hours</strong> on school days. Efficiency plan subscribers receive priority handling. Claims filed on weekends or public holidays may be processed the following school day.</p>
+    <h3>4.4 Fulfilment</h3>
+    <p>Approved claims will be fulfilled by physical delivery of the replacement item(s) to the subscriber at school, or via an agreed pickup arrangement. We do not provide cash refunds in lieu of item replacement.</p>
+  </div>
+
+  <div class="doc-section" id="s5">
+    <h2><span class="sec-num">05</span> Exclusions</h2>
+    <p>The following are not covered under any Pencil Insurance plan:</p>
+    <ul>
+      <li><strong>Non-school losses:</strong> Items lost or damaged outside of school hours or off school premises</li>
+      <li><strong>Intentional damage:</strong> Items deliberately broken, damaged, or discarded</li>
+      <li><strong>Third-party damage:</strong> Items damaged by another person's negligence where that person can be held responsible</li>
+      <li><strong>Items not in your plan:</strong> Stationery not listed in your chosen tier</li>
+      <li><strong>Electronics and devices:</strong> Calculators, USB drives, and tech items unless explicitly listed in the Efficiency plan</li>
+      <li><strong>Repeated suspicious claims:</strong> We reserve the right to investigate and deny claims that appear to be fraudulent or abusive</li>
+      <li><strong>Items already replaced:</strong> You cannot claim the same item twice within the same claim session</li>
+    </ul>
+  </div>
+
+  <div class="doc-section" id="s6">
+    <h2><span class="sec-num">06</span> Payments &amp; Billing</h2>
+    <h3>6.1 Pricing</h3>
+    <p>All prices are listed in Indian Rupees (₹) and are inclusive of applicable taxes unless otherwise stated. Prices are subject to change with 30 days' notice to existing subscribers.</p>
+    <h3>6.2 Billing Cycle</h3>
+    <p>Subscriptions are billed monthly. A billing cycle begins on the date of subscription activation and renews on the same date each month.</p>
+    <h3>6.3 Payment Methods</h3>
+    <p>Payment arrangements are agreed upon at the time of subscription and may include UPI, bank transfer, or cash payment. Details are communicated during onboarding.</p>
+    <h3>6.4 Non-Payment</h3>
+    <p>Coverage is suspended if payment is not received within 7 days of the billing date. Claims will not be processed during a suspended period.</p>
+  </div>
+
+  <div class="doc-section" id="s7">
+    <h2><span class="sec-num">07</span> Cancellations &amp; Refunds</h2>
+    <h3>7.1 Cancellation</h3>
+    <p>Subscribers may cancel their plan at any time by contacting us via email or WhatsApp. Cancellation takes effect at the end of the current billing cycle.</p>
+    <h3>7.2 Refunds</h3>
+    <p>If a subscriber has not made any claims in the current billing cycle, a full refund of that cycle's payment will be issued upon cancellation request. If one or more claims have been made in the current cycle, no refund will be issued for that cycle.</p>
+    <div class="highlight-box"><strong>Zero-claim refund guarantee:</strong> If you haven't used the service this month and want to cancel, you'll get your money back in full. No questions asked.</div>
+    <h3>7.3 Plan Downgrades</h3>
+    <p>Subscribers may downgrade their plan with 7 days' notice. The downgrade takes effect at the start of the next billing cycle. No partial refunds are issued for downgrades within an active cycle.</p>
+    <h3>7.4 Plan Upgrades</h3>
+    <p>Subscribers may upgrade their plan at any time. Upgrades take effect immediately. The pro-rated cost difference for the remaining days in the cycle will be communicated and billed accordingly.</p>
+  </div>
+
+  <div class="doc-section" id="s8">
+    <h2><span class="sec-num">08</span> Supply Option</h2>
+    <p>Instead of purchasing stationery yourself and filing claims as needed, subscribers may opt into our <strong>Supply Option</strong>. Under this arrangement:</p>
+    <ul>
+      <li>You pay your monthly plan fee to Astral.inc instead of buying items from a shop</li>
+      <li>We supply you with all items covered in your plan at the start of the cycle</li>
+      <li>Standard claim limits still apply for replacement during the cycle</li>
+      <li>Items supplied via the Supply Option are not eligible for cash refunds</li>
+    </ul>
+    <p>The Supply Option is subject to availability and must be arranged in advance each cycle. Contact us to enrol.</p>
+  </div>
+
+  <div class="doc-section" id="s9">
+    <h2><span class="sec-num">09</span> User Accounts</h2>
+    <h3>9.1 Account Creation</h3>
+    <p>You may create an account using Google Sign-In or as a Guest. Account data is stored securely in our database. You are responsible for keeping your login details secure.</p>
+    <h3>9.2 Guest Accounts</h3>
+    <p>Guest accounts are temporary and may not persist across devices or sessions. We recommend signing in with Google for a persistent experience.</p>
+    <h3>9.3 Account Termination</h3>
+    <p>Astral.inc may terminate or suspend accounts that violate these Terms, engage in fraudulent activity, or misuse the service. You may also request account deletion by contacting us directly.</p>
+    <h3>9.4 Data Accuracy</h3>
+    <p>You agree to provide accurate, current, and complete information when creating or updating your account. False information may result in suspension.</p>
+  </div>
+
+  <div class="doc-section" id="s10">
+    <h2><span class="sec-num">10</span> AI Assistant</h2>
+    <p>Our website includes an AI-powered chat assistant built using the Anthropic Claude API. The assistant is designed to help answer questions about plans, coverage, and the claims process.</p>
+    <ul>
+      <li>The AI assistant provides <strong>informational guidance only</strong> and does not constitute official claims decisions</li>
+      <li>Responses from the AI may occasionally be inaccurate — always verify important information with us directly</li>
+      <li>Conversations with the AI assistant may be logged for quality improvement purposes</li>
+      <li>Do not share sensitive personal or financial information with the AI assistant</li>
+    </ul>
+    <p>The AI assistant is rate-limited to 5 messages per minute per user to ensure fair access for all subscribers.</p>
+  </div>
+
+  <div class="doc-section" id="s11">
+    <h2><span class="sec-num">11</span> Intellectual Property</h2>
+    <p>All content on this website, including text, design, logos, branding, and code, is the property of <strong>Astral.inc</strong> and is protected by applicable intellectual property laws.</p>
+    <p>You may not reproduce, redistribute, or commercially exploit any content from this website without prior written permission from Astral.inc.</p>
+    <p>"Pencil Insurance" and the associated logo are trademarks of Astral.inc.</p>
+  </div>
+
+  <div class="doc-section" id="s12">
+    <h2><span class="sec-num">12</span> Limitation of Liability</h2>
+    <p>To the fullest extent permitted by law, Astral.inc's liability in connection with the Pencil Insurance service is limited to the amount paid by the subscriber in the current billing cycle.</p>
+    <p>Astral.inc is not liable for:</p>
+    <ul>
+      <li>Indirect, incidental, or consequential damages arising from loss of stationery</li>
+      <li>Delays in claim fulfilment caused by supply chain issues or circumstances beyond our control</li>
+      <li>Loss or damage caused by events beyond our reasonable control (force majeure)</li>
+      <li>Any harm arising from reliance on the AI assistant's responses</li>
+    </ul>
+    <p>The service is provided "as is" on a best-efforts basis.</p>
+  </div>
+
+  <div class="doc-section" id="s13">
+    <h2><span class="sec-num">13</span> Governing Law</h2>
+    <p>These Terms &amp; Conditions are governed by the laws of <strong>India</strong>. Any disputes arising in connection with this agreement shall be subject to the exclusive jurisdiction of the courts located in India.</p>
+    <p>In the event of a dispute, we encourage subscribers to first contact us directly to seek an amicable resolution before pursuing legal remedies.</p>
+  </div>
+
+  <div class="doc-section" id="s14">
+    <h2><span class="sec-num">14</span> Amendments</h2>
+    <p>Astral.inc reserves the right to modify these Terms &amp; Conditions at any time. Subscribers will be notified of material changes via email or through the website at least <strong>14 days</strong> before the changes take effect.</p>
+    <p>Continued use of the service after the effective date of changes constitutes acceptance of the revised Terms.</p>
+  </div>
+
+  <div class="doc-section" id="s15">
+    <h2><span class="sec-num">15</span> Contact Us</h2>
+    <p>For questions, claims, cancellations, or any other enquiries related to these Terms:</p>
+    <div class="contact-card">
+      <h3>Astral.inc · Pencil Insurance</h3>
+      <div class="contact-item"><span class="ci-label">Email</span><a href="mailto:pencil.insurance.buisness@gmail.com">pencil.insurance.buisness@gmail.com</a></div>
+      <div class="contact-item"><span class="ci-label">WhatsApp</span><a href="https://wa.me/919901126174">+91 99011 26174</a></div>
+      <div class="contact-item"><span class="ci-label">Location</span><span style="color:var(--muted)">OWIS, India</span></div>
+      <div class="contact-item"><span class="ci-label">Website</span><a href="https://pencil-insurance2.netlify.app">pencil-insurance2.netlify.app</a></div>
+    </div>
+  </div>
+
+  <hr class="doc-divider"/>
+  <p style="font-size:.8rem;color:var(--muted);text-align:center;line-height:1.6">
+    © 2024–2025 Astral.inc. All rights reserved.<br/>
+    <a href="/privacy" style="color:var(--accent);text-decoration:none">Privacy Policy</a> ·
+    <a href="/" style="color:var(--accent);text-decoration:none">Back to Pencil Insurance</a>
+  </p>
+</div>
+
+<script>
+const cur=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px'});
+const st=localStorage.getItem('pi-theme');if(st)document.documentElement.setAttribute('data-theme',st);
+if(/Mobi|Android|iPad|iPhone/i.test(navigator.userAgent)){document.body.classList.add('touch-device')}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+<script src="/static/global-animations.js" defer></script>
+
+<script>
+  if (!window.GEMINI_API_KEY) {
+    window.GEMINI_API_KEY = "{{ gemini_api_key }}";
+  }
+</script>
+<script src="/static/google-agent.js" defer></script>
+
+</body>
+</html>

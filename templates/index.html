@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="default">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pencil Insurance — Stationery Protection for Students</title>
+<link rel="stylesheet" href="/static/themes.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;700&family=Fraunces:ital,wght@0,300;1,300&display=swap" rel="stylesheet"/>
+<style>
+.plan-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  z-index: 1000;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 0.7rem 1.6rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: var(--shadow);
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.plan-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+.plan-toast a {
+  color: var(--bg);
+  text-decoration: underline;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+/* ══════════════════════════════════════════════════════
+   BASE (theme vars removed – now in themes.css)
+══════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font-body);
+  background:var(--bg);color:var(--text);
+  overflow-x:hidden;cursor:none;
+  min-height:100vh;
+}
+[data-theme="glass"] body{
+  background:linear-gradient(135deg,#1a1a2e 0%,#16213e 40%,#0f3460 100%);
+  background-attachment:fixed;
+}
+body.native-cursor{cursor:auto}
+
+/* cursor */
+.cursor{
+  position:fixed;width:10px;height:10px;
+  background:var(--accent);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  mix-blend-mode:difference;
+}
+.cursor-ring{
+  position:fixed;width:36px;height:36px;
+  border:1.5px solid var(--accent);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  opacity:.4;transition:left .1s ease,top .1s ease;
+}
+body.native-cursor .cursor,body.native-cursor .cursor-ring{display:none}
+
+/* ══════════════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:400;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.85rem 2rem;
+  background:var(--glass);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid var(--border);
+}
+[data-theme="neon"] nav{background:var(--glass);}
+[data-theme="terminal"] nav{background:rgba(0,4,0,0.96)}
+.nav-logo{
+  font-family:var(--font-head);font-size:1.15rem;font-weight:700;
+  color:var(--accent);letter-spacing:.01em;
+  display:flex;align-items:center;gap:8px;text-decoration:none;
+}
+.nav-links{display:flex;gap:1.4rem;list-style:none}
+.nav-links a{
+  color:var(--muted);text-decoration:none;font-size:.83rem;
+  letter-spacing:.03em;transition:color .2s;
+}
+.nav-links a:hover{color:var(--text)}
+.nav-right{display:flex;align-items:center;gap:7px}
+.nav-pill{
+  background:var(--bg3);border:1px solid var(--border);color:var(--muted);
+  padding:.36rem .85rem;border-radius:50px;font-size:.76rem;
+  cursor:pointer;font-family:var(--font-body);transition:all .18s;
+  text-decoration:none;display:inline-flex;align-items:center;gap:4px;
+}
+.nav-pill:hover{border-color:var(--accent);color:var(--accent)}
+[data-theme="glass"] .nav-pill{background:rgba(255,255,255,.08);backdrop-filter:blur(8px)}
+[data-theme="neon"] .nav-pill{background:rgba(255,255,255,0.6);}
+.nav-profile-btn{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--bg3);border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:600;cursor:pointer;
+  color:var(--muted);transition:all .2s;text-decoration:none;overflow:hidden;
+}
+.nav-profile-btn:hover{border-color:var(--accent);color:var(--accent)}
+.nav-cta{
+  background:var(--accent);color:var(--bg);border:none;
+  padding:.46rem 1.2rem;border-radius:50px;font-size:.83rem;
+  font-weight:600;cursor:pointer;font-family:var(--font-body);
+  transition:all .2s;text-decoration:none;display:inline-block;
+}
+.nav-cta:hover{opacity:.88;transform:scale(1.03)}
+[data-theme="neon"] .nav-cta{color:#fff;}
+[data-theme="glass"] .nav-cta{box-shadow:0 4px 20px rgba(167,139,250,.35)}
+
+/* ══════════════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════════════ */
+.hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;padding:7rem 2rem 3rem;text-align:center;
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 65% 55% at 50% -10%,var(--glow) 0%,transparent 70%),
+    radial-gradient(ellipse 45% 45% at 85% 85%,var(--glow) 0%,transparent 60%);
+}
+.hero-grid{
+  position:absolute;inset:0;z-index:0;
+  background-image:
+    linear-gradient(var(--border) 1px,transparent 1px),
+    linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,black,transparent);
+  -webkit-mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,black,transparent);
+}
+[data-theme="glass"] .hero-grid{background-size:40px 40px}
+.hero-content{position:relative;z-index:1;max-width:780px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  color:var(--accent);padding:.32rem .95rem;border-radius:50px;
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:500;margin-bottom:1.6rem;
+  animation:fadeUp .6s ease both;
+}
+[data-theme="glass"] .hero-badge{
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(8px);
+  border-color:rgba(167,139,250,.3);
+}
+.hero h1{
+  font-family:var(--font-head);
+  font-size:clamp(2.8rem,7.5vw,5.8rem);font-weight:900;
+  line-height:1.03;letter-spacing:-.025em;
+  animation:fadeUp .6s .1s ease both;
+}
+[data-theme="terminal"] .hero h1{letter-spacing:.04em;text-shadow:0 0 30px var(--accent)}
+.hero h1 em{font-style:italic;color:var(--accent)}
+[data-theme="terminal"] .hero h1 em{font-style:normal}
+[data-theme="glass"] .hero h1{
+  background:linear-gradient(135deg,#fff 30%,var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+[data-theme="glass"] .hero h1 em{-webkit-text-fill-color:var(--accent)}
+.hero-sub{
+  margin:1.4rem auto;max-width:500px;
+  font-size:1rem;color:var(--muted);line-height:1.75;font-weight:300;
+  animation:fadeUp .6s .2s ease both;
+}
+.hero-actions{
+  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+  animation:fadeUp .6s .3s ease both;margin-top:.2rem;
+}
+.btn-primary{
+  background:var(--accent);color:var(--bg);border:none;
+  padding:.78rem 1.9rem;border-radius:50px;font-size:.9rem;
+  font-weight:600;cursor:pointer;font-family:var(--font-body);
+  transition:all .2s;text-decoration:none;display:inline-flex;
+  align-items:center;gap:6px;
+}
+.btn-primary:hover{opacity:.88;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+[data-theme="neon"] .btn-primary:hover{box-shadow:0 0 20px var(--accent);}
+[data-theme="terminal"] .btn-primary{border-radius:2px;border:2px solid var(--accent);background:transparent;color:var(--accent)}
+[data-theme="terminal"] .btn-primary:hover{background:var(--accent);color:#000}
+[data-theme="glass"] .btn-primary{box-shadow:0 8px 32px rgba(167,139,250,.4)}
+.btn-outline{
+  background:var(--glass);color:var(--text);
+  border:1px solid var(--border);padding:.78rem 1.9rem;
+  border-radius:50px;font-size:.9rem;cursor:pointer;
+  font-family:var(--font-body);transition:all .2s;
+  text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.hero-stats{
+  margin-top:3.5rem;display:flex;gap:0;justify-content:center;flex-wrap:wrap;
+  animation:fadeUp .6s .4s ease both;
+  border:1px solid var(--border);border-radius:var(--radius-lg);
+  overflow:hidden;backdrop-filter:blur(8px);
+  background:var(--glass);
+  max-width:600px;margin-left:auto;margin-right:auto;
+}
+.hero-stat{
+  flex:1;min-width:100px;
+  text-align:center;padding:1.2rem .5rem;
+  border-right:1px solid var(--border);
+}
+.hero-stat:last-child{border-right:none}
+.hero-stat strong{
+  display:block;font-family:var(--font-head);
+  font-size:1.7rem;color:var(--accent);font-weight:700;line-height:1;
+}
+.hero-stat span{font-size:.68rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:4px;display:block}
+.floating-el{
+  position:absolute;font-size:5rem;opacity:.05;
+  animation:float 6s ease-in-out infinite;pointer-events:none;
+}
+.fp1{top:18%;left:6%}
+.fp2{top:58%;right:6%;animation-delay:2s;font-size:3rem}
+.fp3{bottom:18%;left:14%;animation-delay:4s;font-size:2.5rem}
+
+/* ══════════════════════════════════════════════════════
+   SECTIONS
+══════════════════════════════════════════════════════ */
+section{padding:5rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.section-label{
+  font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);font-weight:500;margin-bottom:.7rem;
+  font-family:var(--font-mono);
+}
+.section-title{
+  font-family:var(--font-head);
+  font-size:clamp(1.7rem,3.8vw,2.7rem);font-weight:700;
+  line-height:1.12;margin-bottom:.9rem;
+}
+.section-sub{color:var(--muted);font-size:.96rem;line-height:1.72;max-width:500px;font-weight:300}
+
+/* ══════════════════════════════════════════════════════
+   PLANS
+═════════════════════════════════════════════════════ */
+#plans{background:var(--bg2)}
+[data-theme="glass"] #plans{background:rgba(255,255,255,.03)}
+.plans-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));
+  gap:1.1rem;margin-top:2.5rem;
+}
+.plan-card{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:1.75rem 1.4rem;
+  position:relative;overflow:hidden;
+  transition:transform .22s,border-color .22s,box-shadow .22s;
+}
+[data-theme="glass"] .plan-card{
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-color:rgba(255,255,255,.1);
+}
+.plan-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 40% at 50% 0%,var(--glow),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.plan-card:hover{transform:translateY(-7px);border-color:var(--accent);box-shadow:0 24px 48px rgba(0,0,0,.35)}
+.plan-card:hover::before{opacity:1}
+.plan-card.featured{border-color:var(--accent)}
+.plan-card.featured::after{
+  content:'POPULAR';
+  position:absolute;top:.85rem;right:-1.75rem;
+  background:var(--accent);color:var(--bg);
+  font-size:.58rem;font-weight:800;letter-spacing:.12em;
+  padding:.22rem 2.4rem;transform:rotate(45deg);
+}
+[data-theme="terminal"] .plan-card{border-radius:2px;border-color:rgba(0,255,65,.15)}
+[data-theme="terminal"] .plan-card:hover{box-shadow:0 0 24px rgba(0,255,65,.15)}
+.plan-icon{font-size:1.75rem;margin-bottom:.85rem;line-height:1}
+[data-theme="terminal"] .plan-icon{display:none}
+.plan-name{font-family:var(--font-head);font-size:1.2rem;font-weight:700;margin-bottom:.15rem}
+[data-theme="terminal"] .plan-name::before{content:'>\00a0'}
+.plan-price{margin:.85rem 0}
+.plan-price strong{font-family:var(--font-head);font-size:2rem;color:var(--accent);font-weight:700}
+.plan-price span{font-size:.8rem;color:var(--muted)}
+.plan-divider{border:none;border-top:1px solid var(--border);margin:.9rem 0}
+.plan-items{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.plan-items li{
+  font-size:.83rem;color:var(--muted);
+  display:flex;gap:7px;align-items:flex-start;line-height:1.45;
+}
+.plan-items li::before{content:'✓';color:var(--accent);flex-shrink:0;font-weight:700;font-size:.78rem;margin-top:.1rem}
+[data-theme="terminal"] .plan-items li::before{content:'→'}
+.plan-btn{
+  display:block;width:100%;margin-top:1.4rem;padding:.65rem;
+  border-radius:50px;border:1px solid var(--border);
+  background:transparent;color:var(--text);font-size:.85rem;
+  font-family:var(--font-body);cursor:pointer;transition:all .2s;font-weight:500;
+}
+[data-theme="terminal"] .plan-btn{border-radius:2px}
+[data-theme="glass"] .plan-btn{backdrop-filter:blur(8px)}
+.plan-card.featured .plan-btn,.plan-btn:hover{
+  background:var(--accent);color:var(--bg);border-color:var(--accent);
+}
+
+/* ══════════════════════════════════════════════════════
+   SHOP BANNER
+══════════════════════════════════════════════════════ */
+.shop-banner{
+  margin-top:2rem;
+  background:var(--glass);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:1.4rem 1.8rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+}
+[data-theme="glass"] .shop-banner{background:rgba(167,139,250,.08);border-color:rgba(167,139,250,.2)}
+.shop-banner-text h3{font-size:1rem;font-weight:600;margin-bottom:.2rem}
+.shop-banner-text p{font-size:.82rem;color:var(--muted);line-height:1.5}
+
+/* ══════════════════════════════════════════════════════
+   HOW IT WORKS
+══════════════════════════════════════════════════════ */
+.steps{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));
+  gap:1.5rem;margin-top:2.5rem;
+}
+.step{
+  position:relative;padding:1.5rem;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  transition:border-color .2s,transform .2s;
+}
+[data-theme="glass"] .step{
+  background:rgba(255,255,255,.05);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.step:hover{border-color:var(--accent);transform:translateY(-3px)}
+.step-num{
+  font-family:var(--font-head);font-size:2.8rem;font-weight:900;
+  color:var(--accent);opacity:.18;line-height:1;margin-bottom:-.3rem;
+}
+[data-theme="terminal"] .step-num{font-family:var(--font-mono);opacity:.35}
+.step h3{font-size:.95rem;font-weight:600;margin-bottom:.35rem}
+.step p{font-size:.84rem;color:var(--muted);line-height:1.65}
+
+/* ══════════════════════════════════════════════════════
+   SAVINGS CALCULATOR
+══════════════════════════════════════════════════════ */
+#savings{background:var(--bg2)}
+[data-theme="glass"] #savings{background:rgba(255,255,255,.02)}
+.calc-wrap{
+  margin-top:2rem;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-lg);overflow:hidden;
+}
+[data-theme="glass"] .calc-wrap{
+  background:rgba(255,255,255,.05);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-color:rgba(255,255,255,.1);
+}
+.calc-search-area{padding:1.25rem 1.4rem}
+.calc-search-row{display:flex;gap:8px;margin-bottom:.85rem}
+.calc-search-input{
+  flex:1;background:var(--bg);border:1px solid var(--border);
+  border-radius:50px;padding:.65rem 1.1rem;
+  color:var(--text);font-size:.88rem;font-family:var(--font-body);
+  outline:none;transition:border-color .2s;
+}
+[data-theme="glass"] .calc-search-input{
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(8px);
+}
+[data-theme="terminal"] .calc-search-input{border-radius:2px}
+.calc-search-input:focus{border-color:var(--accent)}
+.calc-search-input::placeholder{color:var(--muted)}
+.calc-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:6px;max-height:264px;overflow-y:auto;padding:0 1.4rem 1rem;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+}
+.calc-item{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:.55rem .75rem;
+  display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;transition:all .14s;gap:5px;
+}
+[data-theme="glass"] .calc-item{background:rgba(255,255,255,.04)}
+.calc-item:hover{border-color:var(--accent)}
+.calc-item.selected{border-color:var(--accent);background:rgba(255,255,255,.06)}
+.calc-item-name{font-size:.78rem;flex:1;line-height:1.3}
+.qty-btn{
+  width:18px;height:18px;border-radius:50%;border:1px solid var(--border);
+  background:transparent;color:var(--text);font-size:.85rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .14s;line-height:1;
+}
+.qty-btn:hover{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.qty-num{font-size:.78rem;min-width:14px;text-align:center}
+.calc-results{
+  border-top:1px solid var(--border);padding:1.4rem;
+  display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;
+}
+@media(max-width:580px){.calc-results{grid-template-columns:1fr}}
+.calc-summary h3,.calc-recommendation h3{
+  font-family:var(--font-head);font-size:1rem;margin-bottom:.85rem;
+}
+.calc-selected-list{display:flex;flex-direction:column;gap:.4rem;max-height:130px;overflow-y:auto}
+.calc-selected-item{
+  display:flex;justify-content:space-between;font-size:.8rem;
+  padding:.28rem 0;border-bottom:1px solid var(--border);
+}
+.calc-total{
+  margin-top:.85rem;padding-top:.65rem;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.calc-total span{font-size:.82rem;color:var(--muted)}
+.calc-total strong{font-size:1.25rem;color:var(--accent);font-family:var(--font-head)}
+.calc-empty{grid-column:1/-1;text-align:center;padding:2.5rem;color:var(--muted);font-size:.88rem}
+
+/* ══════════════════════════════════════════════════════
+   ABOUT
+══════════════════════════════════════════════════════ */
+#about{background:var(--bg2)}
+[data-theme="glass"] #about{background:rgba(255,255,255,.03)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center;margin-top:2.5rem}
+@media(max-width:700px){.about-grid{grid-template-columns:1fr}}
+.about-values{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.val-card{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.1rem;transition:all .2s;
+}
+[data-theme="glass"] .val-card{
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.val-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.val-card .icon{font-size:1.35rem;margin-bottom:.35rem}
+.val-card h4{font-size:.88rem;font-weight:600;margin-bottom:.2rem}
+.val-card p{font-size:.78rem;color:var(--muted);line-height:1.5}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:1.2rem;margin-top:2.5rem}
+.team-card{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:1.75rem 1.4rem;
+  text-align:center;transition:transform .2s,border-color .2s;
+}
+[data-theme="glass"] .team-card{
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.team-card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.team-avatar{
+  width:60px;height:60px;border-radius:50%;
+  background:var(--accent);color:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;font-weight:700;margin:0 auto .9rem;
+  font-family:var(--font-head);
+}
+.team-name{font-weight:600;font-size:.95rem;margin-bottom:.2rem}
+.team-role{font-size:.75rem;color:var(--accent);margin-bottom:.45rem;font-family:var(--font-mono)}
+.team-bio{font-size:.8rem;color:var(--muted);line-height:1.55}
+.team-add{
+  border:1.5px dashed var(--border);background:transparent;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.45rem;min-height:190px;border-radius:var(--radius-lg);
+  cursor:pointer;transition:border-color .2s,color .2s;padding:2rem;
+}
+.team-add:hover{border-color:var(--accent)}
+.team-add span{font-size:1.8rem;color:var(--muted)}
+.team-add p{font-size:.82rem;color:var(--muted);text-align:center;line-height:1.5}
+
+/* ══════════════════════════════════════════════════════
+   FAQ
+══════════════════════════════════════════════════════ */
+.faq-list{margin-top:2rem}
+.faq-item{border-top:1px solid var(--border)}
+.faq-item:last-child{border-bottom:1px solid var(--border)}
+.faq-q{
+  width:100%;background:none;border:none;color:var(--text);
+  font-family:var(--font-body);font-size:.92rem;font-weight:400;
+  padding:1.1rem 0;display:flex;justify-content:space-between;
+  align-items:center;cursor:pointer;text-align:left;gap:1rem;transition:color .2s;
+}
+.faq-q:hover{color:var(--accent)}
+.faq-arrow{
+  width:22px;height:22px;border-radius:50%;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;transition:all .25s;flex-shrink:0;color:var(--muted);
+}
+.faq-item.open .faq-arrow{transform:rotate(45deg);border-color:var(--accent);color:var(--accent);background:rgba(255,255,255,.04)}
+.faq-a{
+  max-height:0;overflow:hidden;transition:max-height .35s ease,padding .25s;
+  font-size:.86rem;color:var(--muted);line-height:1.75;
+}
+.faq-item.open .faq-a{max-height:220px;padding-bottom:1.1rem}
+
+/* ══════════════════════════════════════════════════════
+   CONTACT
+══════════════════════════════════════════════════════ */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;margin-top:2.5rem;align-items:start}
+@media(max-width:700px){.contact-grid{grid-template-columns:1fr}}
+.contact-info{display:flex;flex-direction:column;gap:1.2rem}
+.contact-item{display:flex;gap:12px;align-items:flex-start}
+.contact-icon{
+  width:40px;height:40px;border-radius:var(--radius);
+  background:var(--bg3);
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.95rem;flex-shrink:0;
+}
+[data-theme="glass"] .contact-icon{
+  background:rgba(255,255,255,.08);backdrop-filter:blur(8px);
+}
+.contact-item h4{font-size:.75rem;color:var(--muted);margin-bottom:2px;font-family:var(--font-mono)}
+.contact-item a,.contact-item p{font-size:.9rem;color:var(--text);text-decoration:none}
+.contact-item a:hover{color:var(--accent)}
+.contact-form{display:flex;flex-direction:column;gap:.8rem}
+.field-group{display:flex;flex-direction:column;gap:4px}
+.field-group label{font-size:.73rem;color:var(--muted);letter-spacing:.06em;font-family:var(--font-mono);text-transform:uppercase}
+.field-group input,.field-group textarea,.field-group select{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius);padding:.65rem .9rem;
+  color:var(--text);font-size:.87rem;font-family:var(--font-body);
+  outline:none;transition:border-color .2s;width:100%;
+}
+[data-theme="glass"] .field-group input,
+[data-theme="glass"] .field-group textarea,
+[data-theme="glass"] .field-group select{
+  background:rgba(255,255,255,.06);backdrop-filter:blur(8px);
+}
+[data-theme="terminal"] .field-group input,[data-theme="terminal"] .field-group textarea,[data-theme="terminal"] .field-group select{border-radius:2px}
+.field-group input:focus,.field-group textarea:focus,.field-group select:focus{border-color:var(--accent)}
+.field-group input::placeholder,.field-group textarea::placeholder{color:var(--muted)}
+.field-group select option{background:var(--bg2)}
+.field-group textarea{resize:vertical;min-height:105px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+@media(max-width:500px){.form-row{grid-template-columns:1fr}}
+
+/* ══════════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════════ */
+footer{
+  background:var(--bg2);border-top:1px solid var(--border);
+  padding:2.5rem 2rem 1.5rem;
+}
+[data-theme="glass"] footer{background:rgba(255,255,255,.03)}
+.footer-inner{
+  max-width:1080px;margin:0 auto;
+  display:grid;grid-template-columns:2fr 1fr 1fr;gap:2.5rem;
+}
+@media(max-width:700px){.footer-inner{grid-template-columns:1fr}}
+.footer-brand .logo{
+  font-family:var(--font-head);color:var(--accent);
+  font-size:1.1rem;font-weight:700;margin-bottom:.6rem;
+}
+.footer-brand p{font-size:.8rem;color:var(--muted);line-height:1.65;max-width:260px}
+.footer-col h4{font-size:.68rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.85rem;font-family:var(--font-mono)}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.footer-col a{font-size:.83rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-col a:hover{color:var(--accent)}
+.footer-bottom{
+  max-width:1080px;margin:1.5rem auto 0;
+  padding-top:1.25rem;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:.75rem;font-size:.75rem;color:var(--muted);
+}
+
+/* ══════════════════════════════════════════════════════
+   MOBILE BOTTOM NAV
+══════════════════════════════════════════════════════ */
+.bottom-nav{display:none}
+@media(max-width:768px){
+  .bottom-nav{
+    display:flex;position:fixed;bottom:0;left:0;right:0;z-index:400;
+    background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border-top:1px solid var(--border);
+    justify-content:space-around;
+    padding:.4rem 0 max(.4rem,env(safe-area-inset-bottom));
+  }
+  .bnav-item{
+    display:flex;flex-direction:column;align-items:center;
+    color:var(--muted);text-decoration:none;font-size:.6rem;
+    gap:2px;padding:.3rem .5rem;border-radius:10px;transition:color .15s;
+  }
+  .bnav-item .icon{font-size:1.2rem}
+  .bnav-item.active,.bnav-item:hover{color:var(--accent)}
+}
+
+/* ══════════════════════════════════════════════════════
+   MODALS
+══════════════════════════════════════════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;z-index:600;
+  background:rgba(0,0,0,.65);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;padding:1rem;
+  opacity:0;pointer-events:none;transition:opacity .22s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:1.75rem;
+  max-width:500px;width:100%;
+  transform:translateY(16px);transition:transform .22s;
+  max-height:90vh;overflow-y:auto;
+}
+[data-theme="glass"] .modal{
+  background:rgba(255,255,255,.07);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-color:rgba(255,255,255,.15);
+}
+.modal-overlay.open .modal{transform:none}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem}
+.modal-head h2{font-family:var(--font-head);font-size:1.2rem}
+.modal-close{
+  background:var(--bg3);border:1px solid var(--border);color:var(--muted);
+  font-size:.9rem;cursor:pointer;padding:.3rem .55rem;border-radius:50px;transition:all .2s;
+}
+.modal-close:hover{color:var(--text);border-color:var(--muted)}
+.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem}
+@media(max-width:400px){.theme-grid{grid-template-columns:repeat(2,1fr)}}
+.theme-option{
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:.75rem .65rem;cursor:pointer;transition:all .18s;
+  background:var(--bg3);text-align:center;
+}
+[data-theme="glass"] .theme-option{background:rgba(255,255,255,.06)}
+.theme-option:hover,.theme-option.active{border-color:var(--accent)}
+.theme-option.active{box-shadow:0 0 0 2px var(--accent) inset}
+.theme-swatch{height:32px;border-radius:8px;margin-bottom:.5rem}
+.theme-option-name{font-size:.8rem;font-weight:600}
+.theme-option-desc{font-size:.68rem;color:var(--muted);margin-top:.15rem}
+
+/* SIGNUP */
+.signup-overlay{
+  position:fixed;inset:0;z-index:700;
+  background:rgba(0,0,0,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:center;padding:1rem;
+  opacity:0;pointer-events:none;transition:opacity .28s;
+}
+.signup-overlay.open{opacity:1;pointer-events:all}
+.signup-box{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:2.2rem;
+  max-width:400px;width:100%;text-align:center;
+  transform:scale(.96) translateY(12px);transition:transform .28s;
+}
+[data-theme="glass"] .signup-box{
+  background:rgba(255,255,255,.07);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-color:rgba(255,255,255,.15);
+}
+.signup-overlay.open .signup-box{transform:none}
+.signup-logo{font-size:2.2rem;margin-bottom:.4rem}
+.signup-box h2{font-family:var(--font-head);font-size:1.4rem;margin-bottom:.4rem}
+.signup-box p{color:var(--muted);font-size:.87rem;line-height:1.55;margin-bottom:1.6rem}
+.google-btn{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  width:100%;padding:.8rem;border-radius:50px;
+  background:#fff;color:#3c4043;
+  border:1px solid rgba(0,0,0,.1);
+  font-size:.9rem;font-weight:500;cursor:pointer;
+  font-family:var(--font-body);transition:all .2s;margin-bottom:.65rem;
+}
+.google-btn:hover{box-shadow:0 4px 16px rgba(0,0,0,.18);transform:translateY(-1px)}
+.google-btn img{width:17px;height:17px}
+.skip-btn{
+  background:none;border:none;color:var(--muted);
+  font-size:.83rem;cursor:pointer;font-family:var(--font-body);
+  text-decoration:underline;transition:color .2s;
+  display:block;width:100%;padding:.4rem;
+}
+.skip-btn:hover{color:var(--text)}
+#google-signin-btn{margin-bottom:.65rem}
+
+/* ══════════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════════ */
+.toast{
+  position:fixed;bottom:5rem;left:50%;z-index:900;
+  transform:translateX(-50%) translateY(30px);
+  background:var(--accent);color:var(--bg);
+  padding:.65rem 1.3rem;border-radius:50px;font-size:.85rem;font-weight:600;
+  opacity:0;transition:all .28s ease;
+  box-shadow:var(--shadow);white-space:nowrap;pointer-events:none;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ══════════════════════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-7deg)}50%{transform:translateY(-14px) rotate(7deg)}}
+
+@media(max-width:768px){
+  nav{padding:.75rem 1rem}
+  .nav-links{display:none}
+  .hero h1{font-size:clamp(2.2rem,10vw,2.8rem)}
+  .hero-stats{flex-wrap:wrap}
+  section{padding:3.5rem 1.2rem}
+  body{padding-bottom:64px}
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<div class="toast" id="toast"></div>
+<!-- plan selection toast – referenced by pickPlan() / dismissPlanToast() -->
+<div class="plan-toast" id="planToast">
+  ✓ <span id="planToastName"></span> plan selected!
+  <a href="/profile" onclick="dismissPlanToast()">Set up profile →</a>
+  <button onclick="dismissPlanToast()" style="background:none;border:none;color:inherit;cursor:pointer;font-size:1.1rem;margin-left:.4rem;line-height:1;">✕</button>
+</div>
+
+<!-- ═══════ SIGN-UP POPUP ═══════ -->
+<div class="signup-overlay" id="signupOverlay">
+  <div class="signup-box">
+    <div class="signup-logo">✏️</div>
+    <h2>Welcome to Pencil Insurance</h2>
+    <p>Sign in to save your plan, track claims, and get personalised coverage recommendations.</p>
+    {% if google_configured %}
+    <div id="google-signin-btn"></div>
+    {% else %}
+    <button class="google-btn" onclick="showToast('Google sign-in coming soon! Skip for now.')">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G"/>
+      Continue with Google
+    </button>
+    {% endif %}
+    <button class="skip-btn" onclick="skipSignup()">Skip for now →</button>
+  </div>
+</div>
+
+<!-- ═══════ THEME PICKER ═══════ -->
+<div class="modal-overlay" id="themeModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Choose your theme</h2>
+      <button class="modal-close" onclick="closeThemeModal()">✕</button>
+    </div>
+    <div class="theme-grid">
+      <div class="theme-option active" data-theme-id="default" onclick="applyTheme('default',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#1a1714,#d97757)"></div><div class="theme-option-name">Claude</div><div class="theme-option-desc">Warm charcoal & coral</div></div>
+      <div class="theme-option" data-theme-id="claude" onclick="applyTheme('claude',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#faf9f5,#c15f3c)"></div><div class="theme-option-name">Claude Paper</div><div class="theme-option-desc">Warm cream & clay</div></div>
+      <div class="theme-option" data-theme-id="gold" onclick="applyTheme('gold',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#0d1117,#e8c84a)"></div><div class="theme-option-name">Gold & Navy</div><div class="theme-option-desc">Original elegant dark</div></div>
+      <div class="theme-option" data-theme-id="terminal" onclick="applyTheme('terminal',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#000,#00ff41)"></div><div class="theme-option-name">1994 Terminal</div><div class="theme-option-desc">Hacker green on black</div></div>
+      <div class="theme-option" data-theme-id="neon" onclick="applyTheme('neon',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#f8f9fc,#ff007f)"></div><div class="theme-option-name">Neon Pop</div><div class="theme-option-desc">Bright & electric</div></div>
+      <div class="theme-option" data-theme-id="sakura" onclick="applyTheme('sakura',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#1a0a12,#ff6eb0)"></div><div class="theme-option-name">Sakura</div><div class="theme-option-desc">Cherry blossom pink</div></div>
+      <div class="theme-option" data-theme-id="ocean" onclick="applyTheme('ocean',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#030d1a,#00cfff)"></div><div class="theme-option-name">Deep Ocean</div><div class="theme-option-desc">Electric cyan on navy</div></div>
+      <div class="theme-option" data-theme-id="glass" onclick="applyTheme('glass',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#1a1a2e,#a78bfa)"></div><div class="theme-option-name">Glass Prism</div><div class="theme-option-desc">Frosted glass & neon</div></div>
+      <div class="theme-option" data-theme-id="google" onclick="applyTheme('google',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#0b0d12,#1a73e8)"></div><div class="theme-option-name">Google</div><div class="theme-option-desc">Material & Gemini</div></div>
+      <div class="theme-option" data-theme-id="netflix" onclick="applyTheme('netflix',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#141414,#e50914)"></div><div class="theme-option-name">Netflix Red</div><div class="theme-option-desc">Bold crimson</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ NAV ═══════ -->
+<nav>
+  <a href="/" class="nav-logo">✏️ Pencil Insurance</a>
+  <ul class="nav-links">
+    <li><a href="#plans">📋 Plans</a></li>
+    <li><a href="#savings">🧮 Savings Calc</a></li>
+    <li><a href="#how">⚙️ How it works</a></li>
+    <li><a href="#about">👥 About</a></li>
+    <li><a href="#faq">❓ FAQ</a></li>
+    <li><a href="#contact">💬 Contact</a></li>
+    <li><a href="/tnc">📄 Terms</a></li>
+    <li><a href="/parent" style="color:var(--accent)">👨‍👩‍👧 Parents</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-btn" onclick="openThemeModal()">🎨 Theme</button>
+    <a href="/profile" class="nav-profile-btn" id="navProfileBtn">?</a>
+    <a href="#contact" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="floating-el fp1">✏️</div>
+  <div class="floating-el fp2">📐</div>
+  <div class="floating-el fp3">📏</div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ India's first stationery insurance</div>
+    <h1>Never lose a<br><em>pencil</em> again.</h1>
+    <p class="hero-sub">Affordable stationery protection for students. Lose it, claim it, get it back — starting at ₹60 a month.</p>
+    <div class="hero-actions">
+      <a href="#plans" class="btn-primary">View Plans →</a>
+      <a href="/parent" class="btn-outline">👨‍👩‍👧 For Parents</a>
+      <a href="/scanner" class="btn-outline">📸 Scan Your Pouch</a>
+      <a href="/plans-explorer" class="btn-outline">🔍 Explore Plans</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>₹60</strong><span>Starting from</span></div>
+      <div class="hero-stat"><strong>5×</strong><span>Claims per cycle</span></div>
+      <div class="hero-stat"><strong>24h</strong><span>Response time</span></div>
+      <div class="hero-stat"><strong>100%</strong><span>Cancel anytime</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ PLANS ═══════ -->
+<section id="plans">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">// coverage_plans</p>
+      <h2 class="section-title">Pick your protection.</h2>
+      <p class="section-sub">Every plan includes hassle-free claims and quick replacements. Cancel anytime for a full refund.</p>
+    </div>
+    <div class="plans-grid reveal">
+      <div class="plan-card">
+        <div class="plan-icon">⭐</div>
+        <div class="plan-name">Default</div>
+        <div class="plan-price"><strong>₹60</strong><span>/month</span></div>
+        <hr class="plan-divider"/>
+        <ul class="plan-items">
+          <li>✏️ Pencil</li><li>✂️ Sharpener</li><li>🗑️ Eraser</li><li>🖊️ Pen (Butterflow)</li>
+        </ul>
+        <button class="plan-btn" onclick="pickPlan('Default','₹60')">Choose Default</button>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-icon">💎</div>
+        <div class="plan-name">Deluxe</div>
+        <div class="plan-price"><strong>₹100</strong><span>/month</span></div>
+        <hr class="plan-divider"/>
+        <ul class="plan-items">
+          <li>✅ Everything in Default</li><li>🖊️ Pens (Octane)</li>
+          <li>📐 Protector &amp; Compass</li><li>📏 Divider &amp; Pouch</li>
+          <li>✏️ Mechanical Pencil &amp; Scale</li>
+        </ul>
+        <button class="plan-btn" onclick="pickPlan('Deluxe','₹100')">Choose Deluxe</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-icon">👑</div>
+        <div class="plan-name">Ultra</div>
+        <div class="plan-price"><strong>₹200</strong><span>/month</span></div>
+        <hr class="plan-divider"/>
+        <ul class="plan-items">
+          <li>✅ Everything in Deluxe</li><li>📓 Notebooks &amp; Branded Stationery</li>
+          <li>🖍️ Markers &amp; Colored Pencils</li><li>📎 Refills &amp; 10 sheets weekly</li>
+        </ul>
+        <button class="plan-btn" onclick="pickPlan('Ultra','₹200')">Choose Ultra</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-icon">⚡</div>
+        <div class="plan-name">Efficiency</div>
+        <div class="plan-price"><strong>₹1000</strong><span>/month</span></div>
+        <hr class="plan-divider"/>
+        <ul class="plan-items">
+          <li>✅ Everything in Ultra</li><li>📄 50 sheets &amp; premium notebooks</li>
+          <li>📦 Any stationery up to ₹900</li><li>🚀 Priority &amp; express delivery</li>
+          <li>🎨 Shading pencils &amp; art supplies</li>
+        </ul>
+        <button class="plan-btn" onclick="pickPlan('Efficiency','₹1000')">Choose Efficiency</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SAVINGS CALCULATOR ═══════ -->
+<section id="savings">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">// savings_calculator</p>
+      <h2 class="section-title">See how much you'd save.</h2>
+      <p class="section-sub">Search from 200+ popular Indian stationery items, pick what you use, and we'll find the best plan for you.</p>
+    </div>
+    <div class="calc-wrap reveal">
+      <div class="calc-search-area">
+        <div class="calc-search-row">
+          <input class="calc-search-input" id="calcSearch" type="text" placeholder="Search stationery items… e.g. 'pencil', 'notebook', 'compass'" oninput="filterCalcItems()"/>
+        </div>
+        <div class="calc-grid" id="calcGrid"></div>
+      </div>
+      <div class="calc-results" id="calcResults">
+        <div class="calc-empty">Select items above to see your savings and recommended plan</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ HOW IT WORKS ═══════ -->
+<section id="how">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">// process</p>
+      <h2 class="section-title">Simple as sharpening a pencil.</h2>
+    </div>
+    <div class="steps reveal">
+      <div class="step"><div class="step-num">01</div><h3>📋 Pick your plan</h3><p>Choose from Default to Efficiency based on your needs. Setup takes under 2 minutes.</p></div>
+      <div class="step"><div class="step-num">02</div><h3>⚠️ Lose or damage</h3><p>Drop your pencil mid-class? Snap your ruler? You're covered for school-time losses.</p></div>
+      <div class="step"><div class="step-num">03</div><h3>📩 File a claim</h3><p>WhatsApp or email us. We process fast — no paperwork, no hassle. Up to 5 claims per item.</p></div>
+      <div class="step"><div class="step-num">04</div><h3>📦 Get your stuff</h3><p>Replacement comes to you. Back to studying. Done. Or use our supply option — pay us instead of the shop.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ ABOUT + TEAM ═══════ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid reveal">
+      <div>
+        <p class="section-label">// about_us</p>
+        <h2 class="section-title">Built <b>By students</b>, <b>For students.</b></h2>
+        <p style="color:var(--muted);line-height:1.8;margin-top:1rem;font-size:.93rem;font-weight:300;">Pencil Insurance was born from a simple frustration — losing a pencil mid-exam, or finding your eraser missing when it matters most. We built something affordable, fast, and designed for real student life at OWIS and beyond.</p>
+        <p style="color:var(--muted);line-height:1.8;margin-top:.7rem;font-size:.93rem;font-weight:300;">We also offer a <strong style="color:var(--text)">direct supply option</strong> — give us your monthly budget instead of buying stationery yourself, and we'll keep you stocked with everything in your plan.</p>
+      </div>
+      <div class="about-values">
+        <div class="val-card"><div class="icon">⚡</div><h4>Fast Replacements</h4><p>Quick turnaround when you need supplies most.</p></div>
+        <div class="val-card"><div class="icon">💰</div><h4>₹2/day</h4><p>Real value for every rupee spent.</p></div>
+        <div class="val-card"><div class="icon">📋</div><h4>Easy Claims</h4><p>File in minutes via WhatsApp or email.</p></div>
+        <div class="val-card"><div class="icon">🎓</div><h4>Student-First</h4><p>Designed around how students actually study.</p></div>
+      </div>
+    </div>
+    <div style="margin-top:4rem">
+      <p class="section-label">// the_team</p>
+      <h2 class="section-title">Who we are.</h2>
+      <div class="team-grid reveal">
+        <div class="team-card">
+          <div class="team-avatar">F</div>
+          <div class="team-name">Co-founder - Arsh</div>
+          <div class="team-role">// CEO & Co-founder</div>
+          <div class="team-bio">Built Pencil Insurance from scratch. Passionate about making school life easier for every student.</div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar">C</div>
+          <div class="team-name">Co-founder - Daksh</div>
+          <div class="team-role">// COO & Co-founder</div>
+          <div class="team-bio">Handles operations and keeps things running smoothly. Making sure every claim is processed fast.</div>
+        </div>
+        <div class="team-add" onclick="showToast('Hiring soon! Email us to join the team 🚀')">
+          <span>+</span>
+          <p>We're hiring! Join the team this August when we launch.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FAQ ═══════ -->
+<section id="faq">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">// faq</p>
+      <h2 class="section-title">Questions answered.</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How many times can I claim? <span class="faq-arrow">+</span></button><div class="faq-a">Up to <strong>5 times per item per payment cycle</strong>. Covers all school-time losses — lost, broken, or damaged.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What if I lose something at home? <span class="faq-arrow">+</span></button><div class="faq-a">Our policy covers <strong>school-time losses only</strong>. This keeps premiums low while covering the moments that matter most.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I cancel my plan? <span class="faq-arrow">+</span></button><div class="faq-a">Yes — cancel anytime. If the current cycle is unused, you get a <strong>full refund</strong>. No lock-in, no hidden fees.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How does the supply option work? <span class="faq-arrow">+</span></button><div class="faq-a">Instead of buying stationery separately, pay us your plan amount and we supply everything in your plan for the month. It's hassle-free and often cheaper than shopping yourself.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I upgrade my plan mid-cycle? <span class="faq-arrow">+</span></button><div class="faq-a">Yes! Contact us and we'll sort the pro-rated difference. Better coverage kicks in immediately.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How quickly do I get my replacement? <span class="faq-arrow">+</span></button><div class="faq-a">We aim to respond within 24 hours and sort your replacement as fast as possible. Efficiency plan holders get priority handling.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ CONTACT ═══════ -->
+<section id="contact">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">// contact</p>
+      <h2 class="section-title">Get in touch.</h2>
+    </div>
+    <div class="contact-grid reveal">
+      <div class="contact-info">
+        <div class="contact-item"><div class="contact-icon">✉️</div><div><h4>Email</h4><a href="mailto:pencil.insurance.buisness@gmail.com">pencil.insurance.buisness@gmail.com</a></div></div>
+        <div class="contact-item"><div class="contact-icon">💬</div><div><h4>WhatsApp</h4><a href="https://wa.me/919901126174">+91 99011 26174</a></div></div>
+        <div class="contact-item"><div class="contact-icon">📍</div><div><h4>Location</h4><p>OWIS</p></div></div>
+        <div style="padding:1.2rem;background:rgba(var(--accent-rgb,232,200,74),.07);border:1px solid rgba(var(--accent-rgb,232,200,74),.15);border-radius:var(--radius)">
+          <p style="font-size:.83rem;color:var(--muted);line-height:1.7">We respond within <strong style="color:var(--text)">24 hours</strong>. For urgent claims, WhatsApp is fastest. Efficiency plan holders get priority.</p>
+        </div>
+      </div>
+      <div>
+        <form class="contact-form" id="contactForm" onsubmit="submitContact(event)">
+          <div class="form-row">
+            <div class="field-group"><label>Name</label><input type="text" name="name" placeholder="Your name" required/></div>
+            <div class="field-group"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required/></div>
+          </div>
+          <div class="field-group">
+            <label>Plan interested in</label>
+            <select name="plan" id="contactPlan">
+              <option value="">Select a plan…</option>
+              <option>Default — ₹60/mo</option><option>Deluxe — ₹100/mo</option>
+              <option>Ultra — ₹200/mo</option><option>Efficiency — ₹1000/mo</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+          <div class="field-group"><label>Message</label><textarea name="message" placeholder="Tell us what you need — sign up, claim, or just a question…" required></textarea></div>
+          <button type="submit" class="btn-primary" style="width:100%;border:none;text-align:center" id="contactSubmit">Send Message →</button>
+          <div id="contactErr" style="font-size:.82rem;color:#f87171;margin-top:.4rem;display:none"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">✏️ Pencil Insurance</div>
+      <p>Reliable stationery protection for students. Trusted since 2024. Your peace of mind, our priority.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="#plans">Plans</a></li><li><a href="#savings">Savings Calc</a></li>
+        <li><a href="#how">How it works</a></li><li><a href="#about">About</a></li>
+        <li><a href="#faq">FAQ</a></li><li><a href="/profile">My Profile</a></li>
+        <li><a href="/parent">Parent Portal</a></li>
+        <li><a href="/scanner">Pouch Scanner</a></li>
+        <li><a href="/plans-explorer">Explore Plans</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="/tnc">Terms & Conditions</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Pencil Insurance. All rights reserved.</span>
+    <span>Made with ❤️ for students everywhere</span>
+  </div>
+</footer>
+
+<!-- ═══════ MOBILE BOTTOM NAV ═══════ -->
+<div class="bottom-nav">
+  <a href="/" class="bnav-item active"><span class="icon">🏠</span>Home</a>
+  <a href="/profile" class="bnav-item"><span class="icon">👤</span>Profile</a>
+  <a href="/shop" class="bnav-item"><span class="icon">🛒</span>Shop</a>
+  <a href="/parent" class="bnav-item"><span class="icon">👨‍👩‍👧</span>Parents</a>
+  <a href="/tnc" class="bnav-item"><span class="icon">📄</span>Terms</a>
+</div>
+
+{% if google_configured %}
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+{% endif %}
+
+<script>
+  window.GEMINI_API_KEY = "{{ gemini_api_key }}";
+</script>
+<script src="/static/google-agent.js" defer></script>
+
+<script>
+// ══════════════════════════════════════════════
+// STATIONERY ITEMS DATABASE (200 items)
+// ══════════════════════════════════════════════
+const ITEMS = [
+  // Writing
+  {n:"Pencil (HB)",p:5,cat:"Writing",plans:["Default","Deluxe","Ultra","Efficiency"]},
+  {n:"Pencil (2B)",p:8,cat:"Writing",plans:["Default","Deluxe","Ultra","Efficiency"]},
+  {n:"Pencil (4B)",p:10,cat:"Writing",plans:["Ultra","Efficiency"]},
+  {n:"Pencil (6B)",p:12,cat:"Writing",plans:["Efficiency"]},
+  {n:"Mechanical Pencil",p:60,cat:"Writing",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Mechanical Pencil Refill",p:15,cat:"Writing",plans:["Ultra","Efficiency"]},
+  {n:"Pen (Butterflow)",p:10,cat:"Writing",plans:["Default","Deluxe","Ultra","Efficiency"]},
+  {n:"Pen (Octane)",p:15,cat:"Writing",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Pen (Cello Gripper)",p:12,cat:"Writing",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Pen (Reynolds 045)",p:8,cat:"Writing",plans:["Default","Deluxe","Ultra","Efficiency"]},
+  {n:"Gel Pen (Pilot G2)",p:40,cat:"Writing",plans:["Ultra","Efficiency"]},
+  {n:"Gel Pen (Cello Finegrip)",p:15,cat:"Writing",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Highlighter (Stabilo)",p:45,cat:"Writing",plans:["Ultra","Efficiency"]},
+  {n:"Highlighter (Camlin)",p:25,cat:"Writing",plans:["Ultra","Efficiency"]},
+  {n:"Highlighter Set (4 colors)",p:80,cat:"Writing",plans:["Efficiency"]},
+  {n:"Sketch Pen Set (12)",p:60,cat:"Writing",plans:["Ultra","Efficiency"]},
+  {n:"Sketch Pen Set (24)",p:100,cat:"Writing",plans:["Efficiency"]},
+  {n:"Whiteboard Marker",p:30,cat:"Writing",plans:["Ultra","Efficiency"]},
+  {n:"Permanent Marker (Camlin)",p:25,cat:"Writing",plans:["Ultra","Efficiency"]},
+  {n:"Brush Pen",p:50,cat:"Writing",plans:["Efficiency"]},
+  {n:"Eraser (Apsara)",p:5,cat:"Erasing",plans:["Default","Deluxe","Ultra","Efficiency"]},
+  {n:"Eraser (Faber-Castell)",p:15,cat:"Erasing",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Eraser (Nataraj)",p:5,cat:"Erasing",plans:["Default","Deluxe","Ultra","Efficiency"]},
+  {n:"Eraser (Staedtler)",p:20,cat:"Erasing",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Kneaded Eraser",p:30,cat:"Erasing",plans:["Efficiency"]},
+  {n:"Correction Pen",p:30,cat:"Erasing",plans:["Ultra","Efficiency"]},
+  {n:"Correction Tape",p:40,cat:"Erasing",plans:["Ultra","Efficiency"]},
+  {n:"Sharpener (single)",p:5,cat:"Sharpening",plans:["Default","Deluxe","Ultra","Efficiency"]},
+  {n:"Sharpener (double)",p:10,cat:"Sharpening",plans:["Default","Deluxe","Ultra","Efficiency"]},
+  {n:"Sharpener (with container)",p:20,cat:"Sharpening",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Electric Sharpener",p:200,cat:"Sharpening",plans:["Efficiency"]},
+  {n:"Scale 15cm",p:10,cat:"Measuring",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Scale 30cm",p:15,cat:"Measuring",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Set Square (30-60)",p:20,cat:"Measuring",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Set Square (45)",p:20,cat:"Measuring",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Protractor",p:20,cat:"Measuring",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Compass (basic)",p:30,cat:"Measuring",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Compass (precision)",p:80,cat:"Measuring",plans:["Efficiency"]},
+  {n:"Divider",p:30,cat:"Measuring",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Geometry Box (Camlin)",p:120,cat:"Measuring",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Geometry Box (Classmate)",p:100,cat:"Measuring",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Geometry Box (Faber-Castell)",p:180,cat:"Measuring",plans:["Efficiency"]},
+  {n:"A4 Notebook (100 pages)",p:60,cat:"Paper",plans:["Ultra","Efficiency"]},
+  {n:"A4 Notebook (200 pages)",p:100,cat:"Paper",plans:["Ultra","Efficiency"]},
+  {n:"A5 Notebook",p:40,cat:"Paper",plans:["Ultra","Efficiency"]},
+  {n:"Spiral Notebook",p:70,cat:"Paper",plans:["Ultra","Efficiency"]},
+  {n:"Classmate Notebook (140p)",p:55,cat:"Paper",plans:["Ultra","Efficiency"]},
+  {n:"Hardbound Notebook",p:90,cat:"Paper",plans:["Efficiency"]},
+  {n:"Drawing Book",p:50,cat:"Paper",plans:["Ultra","Efficiency"]},
+  {n:"Graph Book",p:30,cat:"Paper",plans:["Ultra","Efficiency"]},
+  {n:"A4 Sheets (10)",p:5,cat:"Paper",plans:["Ultra","Efficiency"]},
+  {n:"A4 Sheets (50)",p:20,cat:"Paper",plans:["Ultra","Efficiency"]},
+  {n:"A4 Sheets (100)",p:40,cat:"Paper",plans:["Efficiency"]},
+  {n:"A4 Paper Ream (500)",p:200,cat:"Paper",plans:["Efficiency"]},
+  {n:"Sticky Notes (100)",p:40,cat:"Paper",plans:["Ultra","Efficiency"]},
+  {n:"Chart Paper (pack 10)",p:50,cat:"Paper",plans:["Ultra","Efficiency"]},
+  {n:"Tracing Paper (10 sheets)",p:30,cat:"Paper",plans:["Ultra","Efficiency"]},
+  {n:"Pencil Pouch (simple)",p:60,cat:"Organizing",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Pencil Pouch (branded)",p:120,cat:"Organizing",plans:["Efficiency"]},
+  {n:"Pencil Box (plastic)",p:50,cat:"Organizing",plans:["Deluxe","Ultra","Efficiency"]},
+  {n:"Pencil Box (metal)",p:80,cat:"Organizing",plans:["Efficiency"]},
+  {n:"File Folder",p:15,cat:"Organizing",plans:["Ultra","Efficiency"]},
+  {n:"L-Folder",p:10,cat:"Organizing",plans:["Ultra","Efficiency"]},
+  {n:"Binder (2-ring)",p:60,cat:"Organizing",plans:["Ultra","Efficiency"]},
+  {n:"Clipboard",p:40,cat:"Organizing",plans:["Ultra","Efficiency"]},
+  {n:"Index Dividers (pack 5)",p:30,cat:"Organizing",plans:["Ultra","Efficiency"]},
+  {n:"Scissors (student)",p:40,cat:"Cutting",plans:["Ultra","Efficiency"]},
+  {n:"Scissors (craft)",p:60,cat:"Cutting",plans:["Efficiency"]},
+  {n:"Cutter/Blade",p:20,cat:"Cutting",plans:["Ultra","Efficiency"]},
+  {n:"Glue Stick (Fevistik small)",p:20,cat:"Cutting",plans:["Ultra","Efficiency"]},
+  {n:"Glue Stick (large)",p:40,cat:"Cutting",plans:["Ultra","Efficiency"]},
+  {n:"Fevicol (small)",p:15,cat:"Cutting",plans:["Ultra","Efficiency"]},
+  {n:"Double-Sided Tape",p:25,cat:"Cutting",plans:["Ultra","Efficiency"]},
+  {n:"Clear Tape",p:15,cat:"Cutting",plans:["Ultra","Efficiency"]},
+  {n:"Stapler (mini)",p:60,cat:"Cutting",plans:["Efficiency"]},
+  {n:"Stapler Pins (box)",p:20,cat:"Cutting",plans:["Ultra","Efficiency"]},
+  {n:"Binder Clips (10)",p:20,cat:"Cutting",plans:["Ultra","Efficiency"]},
+  {n:"Paper Clips (50)",p:10,cat:"Cutting",plans:["Ultra","Efficiency"]},
+  {n:"Colored Pencils (12)",p:60,cat:"Art",plans:["Ultra","Efficiency"]},
+  {n:"Colored Pencils (24)",p:100,cat:"Art",plans:["Ultra","Efficiency"]},
+  {n:"Colored Pencils (36)",p:150,cat:"Art",plans:["Efficiency"]},
+  {n:"Shading Pencils set",p:120,cat:"Art",plans:["Efficiency"]},
+  {n:"Pastel Crayons (12)",p:50,cat:"Art",plans:["Ultra","Efficiency"]},
+  {n:"Oil Pastels (12)",p:40,cat:"Art",plans:["Ultra","Efficiency"]},
+  {n:"Oil Pastels (24)",p:70,cat:"Art",plans:["Efficiency"]},
+  {n:"Watercolor Set (12)",p:80,cat:"Art",plans:["Ultra","Efficiency"]},
+  {n:"Watercolor Set (24)",p:130,cat:"Art",plans:["Efficiency"]},
+  {n:"Acrylic Paint Set",p:200,cat:"Art",plans:["Efficiency"]},
+  {n:"Paint Brush Set",p:80,cat:"Art",plans:["Efficiency"]},
+  {n:"Blending Stump set",p:40,cat:"Art",plans:["Efficiency"]},
+  {n:"Origami Paper (50 sheets)",p:50,cat:"Art",plans:["Ultra","Efficiency"]},
+  {n:"Washi Tape",p:30,cat:"Art",plans:["Ultra","Efficiency"]},
+  {n:"Refill (Reynolds)",p:5,cat:"Refills",plans:["Ultra","Efficiency"]},
+  {n:"Refill (Pilot)",p:20,cat:"Refills",plans:["Ultra","Efficiency"]},
+  {n:"Ink Bottle",p:50,cat:"Refills",plans:["Ultra","Efficiency"]},
+  {n:"Rubber Bands (pack)",p:10,cat:"Misc",plans:["Ultra","Efficiency"]},
+  {n:"Book Cover Sheet",p:10,cat:"Misc",plans:["Ultra","Efficiency"]},
+  {n:"Protector Sheet (10)",p:25,cat:"Misc",plans:["Ultra","Efficiency"]},
+  {n:"Name Label Stickers",p:20,cat:"Misc",plans:["Ultra","Efficiency"]},
+  {n:"Pencil Grip",p:10,cat:"Misc",plans:["Default","Deluxe","Ultra","Efficiency"]},
+  {n:"Calculator (basic)",p:150,cat:"Tech",plans:["Efficiency"]},
+  {n:"Calculator (scientific)",p:400,cat:"Tech",plans:["Efficiency"]},
+  {n:"USB Drive (8GB)",p:200,cat:"Tech",plans:["Efficiency"]},
+];
+
+// Plan definitions
+const PLANS = [
+  {name:"Default",  price:60},
+  {name:"Deluxe",   price:100},
+  {name:"Ultra",    price:200},
+  {name:"Efficiency",price:1000},
+];
+
+let cart = {};
+
+function getMonthlySpend(){
+  return Object.entries(cart).reduce((sum,[name,qty])=>{
+    const item = ITEMS.find(i=>i.n===name);
+    return sum + (item ? item.p * qty : 0);
+  },0);
+}
+
+function itemCoveredBy(itemName, planName){
+  const item = ITEMS.find(i=>i.n===itemName);
+  if(!item) return false;
+  return item.plans ? item.plans.includes(planName) : false;
+}
+
+function scorePlans(){
+  const entries = Object.entries(cart).filter(([,q])=>q>0);
+  const buyAllCost = entries.reduce((s,[name,qty])=>{
+    const item = ITEMS.find(i=>i.n===name);
+    return s + (item ? item.p*qty : 0);
+  },0);
+  return PLANS.map(plan=>{
+    const coveredCost = entries.reduce((s,[name,qty])=>{
+      if(!itemCoveredBy(name,plan.name)) return s;
+      const item = ITEMS.find(i=>i.n===name);
+      return s + (item ? item.p*qty : 0);
+    },0);
+    const uncoveredCost = buyAllCost - coveredCost;
+    const totalWithPlan = plan.price + uncoveredCost;
+    const saving = buyAllCost - totalWithPlan;
+    const coversPct = buyAllCost>0 ? Math.round(coveredCost/buyAllCost*100) : 0;
+    return {plan, totalWithPlan, coveredCost, uncoveredCost, saving, coversPct, buyAllCost};
+  });
+}
+
+function renderCalcGrid(){
+  const q = document.getElementById('calcSearch').value.toLowerCase();
+  const grid = document.getElementById('calcGrid');
+  const visible = ITEMS.filter(i=>!q || i.n.toLowerCase().includes(q) || i.cat.toLowerCase().includes(q));
+  grid.innerHTML = visible.slice(0,60).map(item=>{
+    const qty = cart[item.n] || 0;
+    return `<div class="calc-item ${qty>0?'selected':''}" id="ci-${encodeURIComponent(item.n)}">
+      <div class="calc-item-name">${item.n}</div>
+      <div style="display:flex;align-items:center;gap:4px;flex-shrink:0">
+        <button class="qty-btn" onclick="changeQty('${item.n}',-1)">−</button>
+        <span class="qty-num">${qty}</span>
+        <button class="qty-btn" onclick="changeQty('${item.n}',1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function changeQty(name, delta){
+  const cur = cart[name] || 0;
+  const next = Math.max(0, cur + delta);
+  if(next === 0) delete cart[name];
+  else cart[name] = next;
+  renderCalcGrid();
+  renderCalcResults();
+}
+
+function filterCalcItems(){renderCalcGrid();renderCalcResults();}
+
+function renderCalcResults(){
+  const results = document.getElementById("calcResults");
+  const entries = Object.entries(cart).filter(([,q])=>q>0);
+  if(!entries.length){
+    results.innerHTML="<div class='calc-empty'>Select items above to see your savings and recommended plan</div>";
+    return;
+  }
+
+  const buyAllCost = getMonthlySpend();
+  const scores = scorePlans();
+  const savingPlans = scores.filter(s=>s.saving>0).sort((a,b)=>b.saving-a.saving);
+  const best = savingPlans[0] || null;
+
+  const itemsHtml = entries.map(([name,qty])=>{
+    const item = ITEMS.find(i=>i.n===name);
+    const lowestCoveringPlan = ["Default","Deluxe","Ultra","Efficiency"].find(p=>itemCoveredBy(name,p));
+    const coveredTag = lowestCoveringPlan
+      ? "<span style='color:var(--accent);font-size:.7rem;margin-left:4px'>✓ "+lowestCoveringPlan+"+"+"</span>"
+      : "<span style='color:var(--muted);font-size:.7rem;margin-left:4px'>not covered</span>";
+    return "<div class='calc-selected-item'><span>"+name+" ×"+qty+coveredTag+"</span><span style='color:var(--accent)'>&#x20B9;"+(item.p*qty)+"</span></div>";
+  }).join("");
+
+  const planRows = scores.map(({plan,saving,coversPct,coveredCost,totalWithPlan})=>{
+    const isBest = best && plan.name===best.plan.name;
+    return "<div style='display:flex;justify-content:space-between;align-items:center;padding:.55rem .8rem;border-radius:var(--radius);border:1px solid "+(isBest?"var(--accent)":"var(--border)")+";background:"+(isBest?"var(--accent-dim)":"var(--bg)")+";margin-bottom:.4rem;'>"+
+      "<div>"+
+        "<span style='font-weight:500;font-size:.88rem'>"+plan.name+"</span>"+
+        "<span style='color:var(--muted);font-size:.75rem;margin-left:.5rem'>&#x20B9;"+plan.price+"/mo</span>"+
+        (isBest?"<span style='font-size:.65rem;background:var(--accent);color:var(--bg);padding:.1rem .45rem;border-radius:50px;margin-left:.5rem;font-weight:700;vertical-align:middle'>BEST</span>":"")+
+        "<div style='font-size:.72rem;color:var(--muted);margin-top:.15rem'>covers "+coversPct+"% · you pay &#x20B9;"+totalWithPlan+"/mo total</div>"+
+      "</div>"+
+      "<div style='text-align:right;flex-shrink:0'>"+
+        (saving>0
+          ?"<div style='color:var(--accent);font-size:.85rem;font-weight:600'>saves &#x20B9;"+saving+"</div>"
+          :"<div style='color:var(--muted);font-size:.78rem'>no saving</div>")+
+      "</div>"+
+    "</div>";
+  }).join("");
+
+  const chooseBtn = best
+    ? "<button class='plan-btn' style='margin-top:.75rem;width:100%;border-radius:50px' onclick='pickPlan(\""+best.plan.name+"\",\"&#x20B9;"+best.plan.price+"\")'>Choose "+best.plan.name+" &#8594;</button>"
+    : "<p style='font-size:.82rem;color:var(--muted);margin-top:.75rem;line-height:1.6'>Your items are cheap to buy — but a plan protects you when you <em>lose</em> them at school. Default (&#x20B9;60/mo) is great peace of mind.</p>"+
+      "<button class='plan-btn' style='margin-top:.75rem;width:100%;border-radius:50px' onclick='pickPlan(\"Default\",\"&#x20B9;60\")'>Get Default plan &#8594;</button>";
+
+  results.innerHTML =
+    "<div class='calc-summary'>"+
+      "<h3>Your monthly spend</h3>"+
+      "<div class='calc-selected-list'>"+itemsHtml+"</div>"+
+      "<div class='calc-total'><span>Buying yourself</span><strong>&#x20B9;"+buyAllCost+"/mo</strong></div>"+
+    "</div>"+
+    "<div class='calc-recommendation'>"+
+      "<h3>Plan comparison</h3>"+
+      planRows+chooseBtn+
+    "</div>";
+}
+
+// ══════════════════════════════════════════════
+// CURSOR
+// ══════════════════════════════════════════════
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px';
+});
+(function tick(){rx+=(parseFloat(cur.style.left||0)-rx)*.12;ry+=(parseFloat(cur.style.top||0)-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(tick)})();
+if(/Mobi|Android/i.test(navigator.userAgent)) document.body.classList.add('native-cursor');
+
+// ══════════════════════════════════════════════
+// SCROLL REVEAL
+// ══════════════════════════════════════════════
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach((el,i)=>{
+  el.style.transitionDelay=(i%4)*0.08+'s';
+  obs.observe(el);
+});
+
+// ══════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ══════════════════════════════════════════════
+// THEME
+// ══════════════════════════════════════════════
+function applyTheme(id,el){
+  document.documentElement.setAttribute('data-theme',id);
+  document.querySelectorAll('.theme-option').forEach(o=>o.classList.remove('active'));
+  if(el) el.classList.add('active');
+  localStorage.setItem('pi-theme',id);
+  if(window.__piProfile) updateProfileTheme(id);
+}
+function openThemeModal(){document.getElementById('themeModal').classList.add('open')}
+function closeThemeModal(){document.getElementById('themeModal').classList.remove('open')}
+document.getElementById('themeModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeThemeModal()});
+const savedTheme = localStorage.getItem('pi-theme');
+if(savedTheme){
+  applyTheme(savedTheme);
+  const opt = document.querySelector(`[data-theme-id="${savedTheme}"]`);
+  if(opt){document.querySelectorAll('.theme-option').forEach(o=>o.classList.remove('active'));opt.classList.add('active');}
+}
+
+// ══════════════════════════════════════════════
+// FAQ
+// ══════════════════════════════════════════════
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const open=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!open) item.classList.add('open');
+}
+
+// ══════════════════════════════════════════════
+// PLAN PICKER
+// ══════════════════════════════════════════════
+function pickPlan(name, price) {
+  // Show a rich toast with link to profile
+  const toast = document.getElementById('planToast');
+  const planName = document.getElementById('planToastName');
+  planName.textContent = name;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 5000);
+
+  // Also update the contact form — match by plan name prefix (avoids ₹ vs &#x20B9; entity mismatch)
+  const sel = document.getElementById('contactPlan');
+  if (sel) {
+    const opt = Array.from(sel.options).find(o => o.text.startsWith(name));
+    if (opt) sel.value = opt.value;
+  }
+  if (window.__piProfile) updateProfilePlan(name);
+}
+
+function dismissPlanToast() {
+  document.getElementById('planToast').classList.remove('show');
+}
+// ══════════════════════════════════════════════
+// CONTACT FORM
+// ══════════════════════════════════════════════
+async function submitContact(e){
+  e.preventDefault();
+  const btn = document.getElementById('contactSubmit');
+  const errEl = document.getElementById('contactErr');
+  btn.disabled=true; btn.textContent='Sending…'; errEl.style.display='none';
+  const fd = new FormData(e.target);
+  const payload = {name:fd.get('name'),email:fd.get('email'),plan:fd.get('plan'),message:fd.get('message')};
+  // Basic validation
+  if(!payload.name || payload.name.length < 2){errEl.textContent='Name is required.';errEl.style.display='block';btn.disabled=false;btn.textContent='Send Message →';return;}
+  if(!payload.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)){errEl.textContent='Enter a valid email address.';errEl.style.display='block';btn.disabled=false;btn.textContent='Send Message →';return;}
+  if(!payload.message || payload.message.length < 10){errEl.textContent='Message must be at least 10 characters.';errEl.style.display='block';btn.disabled=false;btn.textContent='Send Message →';return;}
+  try{
+    // Send to Formspree so the message is actually emailed
+    const res = await fetch('https://formspree.io/f/movgbkyw',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    if(res.ok){
+      showToast('✓ Message sent! We\'ll reply within 24 hours.');
+      e.target.reset();
+    } else {
+      const data = await res.json().catch(()=>({}));
+      errEl.textContent = (data.errors && data.errors.map(e=>e.message).join(' ')) || 'Failed to send. Please try again.';
+      errEl.style.display='block';
+    }
+    // Also send to local backend as a backup log
+    fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
+  }catch{errEl.textContent='Network error. Please email us directly at pencil.insurance.buisness@gmail.com';errEl.style.display='block';}
+  btn.disabled=false; btn.textContent='Send Message →';
+}
+
+// ══════════════════════════════════════════════
+// PROFILE + AUTH
+// ══════════════════════════════════════════════
+window.__piProfile = null;
+
+async function loadProfile(){
+  try{
+    const res = await fetch('/api/profile');
+    const data = await res.json();
+    if(data.authenticated && data.profile){
+      window.__piProfile = data.profile;
+      updateNavProfile(data.profile);
+      if(data.profile.theme) applyTheme(data.profile.theme);
+    } else {
+      checkShowSignup();
+    }
+  }catch{checkShowSignup();}
+}
+
+function updateNavProfile(p){
+  const btn = document.getElementById('navProfileBtn');
+  if(p.avatarUrl){
+    btn.innerHTML=`<img src="${p.avatarUrl}" style="width:100%;height:100%;border-radius:50%;object-fit:cover" alt=""/>`;
+  } else {
+    btn.textContent = (p.avatarInitials||'PI').slice(0,2);
+    btn.style.color = p.avatarColor||'var(--accent)';
+  }
+}
+
+function checkShowSignup(){
+  const skipped = localStorage.getItem('pi-signup-skipped');
+  if(!skipped) setTimeout(()=>document.getElementById('signupOverlay').classList.add('open'),1800);
+}
+
+function skipSignup(){
+  localStorage.setItem('pi-signup-skipped','1');
+  document.getElementById('signupOverlay').classList.remove('open');
+}
+
+async function handleGoogleCallback(response){
+  try{
+    const res = await fetch('/api/auth/google',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({credential:response.credential})});
+    const data = await res.json();
+    if(data.success){
+      window.__piProfile = data.profile;
+      updateNavProfile(data.profile);
+      document.getElementById('signupOverlay').classList.remove('open');
+      showToast('✓ Signed in as '+data.profile.name+'!');
+    }
+  }catch{showToast('Sign-in failed. Try again.');}
+}
+
+async function updateProfileTheme(theme){
+  if(!window.__piProfile) return;
+  const p = window.__piProfile;
+  await fetch('/api/profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...p,theme})});
+}
+
+async function updateProfilePlan(plan){
+  if(!window.__piProfile) return;
+  const p = window.__piProfile;
+  await fetch('/api/profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...p,plan})});
+}
+
+// ══════════════════════════════════════════════
+// GOOGLE SIGN-IN
+// ══════════════════════════════════════════════
+{% if google_configured %}
+window.onload = function(){
+  loadProfile();
+  if(typeof google !== 'undefined'){
+    google.accounts.id.initialize({
+      client_id:'{{ google_client_id }}',
+      callback: handleGoogleCallback,
+      auto_select: false,
+    });
+    google.accounts.id.renderButton(
+      document.getElementById('google-signin-btn'),
+      {theme:'outline',size:'large',width:'100%',text:'continue_with',shape:'pill'}
+    );
+  }
+};
+{% else %}
+document.addEventListener('DOMContentLoaded', loadProfile);
+{% endif %}
+
+// Init calc
+renderCalcGrid();
+renderCalcResults();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+<script src="/static/global-animations.js" defer></script>
+</body>
+</html>

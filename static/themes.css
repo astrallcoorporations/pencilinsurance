@@ -1,0 +1,784 @@
+/* ═══════════════════════════════════════════════
+   Pencil Insurance – Unified Theme System 2026
+   9 Themes – Gold & Navy, Terminal, Claude,
+   Neon, Sakura, Ocean, Glass, Apple Light,
+   Netflix Red
+   ═══════════════════════════════════════════════ */
+ 
+   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root, [data-theme="default"] {
+  /* ── Claude — warm dark (primary identity) ── */
+  --bg: #1a1714;
+  --bg2: #221f1b;
+  --bg3: #2b2722;
+  --bg4: #353029;
+  --accent: #d97757;
+  --accent2: #e89b80;
+  --accent-dim: rgba(217, 119, 87, 0.13);
+  --text: #f2ede3;
+  --text-bright: #fefdfb;
+  --muted: #a89f93;
+  --muted2: #7c7268;
+  --border: rgba(240, 230, 214, 0.10);
+  --border-strong: rgba(240, 230, 214, 0.18);
+  --radius: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --font-head: 'Fraunces', 'Playfair Display', serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-ui: 'DM Sans', 'Space Grotesk', sans-serif;
+  --shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.32);
+  --glow: rgba(217, 119, 87, 0.10);
+  --glass: rgba(26, 23, 20, 0.82);
+  --success: #6cc08b;
+  --error: #d9655b;
+
+  /* ── 2026 polish layer: elevation, motion, rhythm ── */
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.22);
+  --shadow-2: 0 4px 10px rgba(0,0,0,0.24), 0 10px 26px rgba(0,0,0,0.32);
+  --shadow-3: 0 10px 24px rgba(0,0,0,0.30), 0 24px 60px rgba(0,0,0,0.42);
+  --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --ring: 0 0 0 3px color-mix(in srgb, var(--accent) 38%, transparent);
+  --ring-soft: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 0.22s;
+  --dur-slow: 0.42s;
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --gradient-accent: linear-gradient(135deg, var(--accent2, var(--accent)), var(--accent));
+}
+
+[data-theme="terminal"] {
+  --bg: #000400; --bg2: #030800; --bg3: #091200; --bg4: #0f1a00;
+  --accent: #00ff41; --accent2: #39ff14; --accent-dim: rgba(0, 255, 65, 0.08);
+  --text: #00ff41; --muted: #2a7a40; --muted2: #1a5028;
+  --border: rgba(0, 255, 65, 0.1); --border-strong: rgba(0, 255, 65, 0.2);
+  --font-head: 'JetBrains Mono', monospace; --font-body: 'JetBrains Mono', monospace; --font-mono: 'JetBrains Mono', monospace; --font-ui: 'JetBrains Mono', monospace;
+  --shadow: 0 24px 64px rgba(0, 255, 65, 0.07); --glow: rgba(0, 255, 65, 0.06); --glass: rgba(0, 8, 0, 0.9);
+}
+/* Claude Paper — warm cream light variant */
+[data-theme="claude"] {
+  --bg: #faf9f5; --bg2: #ffffff; --bg3: #f3f0e7; --bg4: #eae5d8;
+  --accent: #c15f3c; --accent2: #d97757; --accent-dim: rgba(193, 95, 60, 0.10);
+  --text: #1f1d1a; --text-bright: #000; --muted: #6b6357; --muted2: #938b7c;
+  --border: rgba(40, 30, 20, 0.10); --border-strong: rgba(40, 30, 20, 0.18);
+  --font-head: 'Fraunces', serif; --font-body: 'DM Sans', sans-serif; --font-mono: 'JetBrains Mono', monospace; --font-ui: 'DM Sans', sans-serif;
+  --glow: rgba(193, 95, 60, 0.10); --shadow: 0 24px 64px rgba(60, 40, 20, 0.12); --shadow-sm: 0 4px 16px rgba(60, 40, 20, 0.06); --glass: rgba(250, 249, 245, 0.80);
+}
+[data-theme="claude"] .card, [data-theme="claude"] .glass-panel, [data-theme="claude"] .plan-card,
+[data-theme="claude"] .val-card, [data-theme="claude"] .modal-box, [data-theme="claude"] .ai-wrap {
+  background: #ffffff; border: 1px solid rgba(40, 30, 20, 0.10);
+}
+/* Gold & Navy — original Pencil identity, preserved as a theme */
+[data-theme="gold"] {
+  --bg: #0d1117; --bg2: #161b22; --bg3: #21262d; --bg4: #2d333b;
+  --accent: #e8c84a; --accent2: #f5d86a; --accent-dim: rgba(232, 200, 74, 0.12);
+  --text: #f0ece3; --text-bright: #fff; --muted: #8b949e; --muted2: #6e7681;
+  --border: rgba(255, 255, 255, 0.08); --border-strong: rgba(255, 255, 255, 0.14);
+  --font-head: 'Playfair Display', serif; --font-body: 'DM Sans', sans-serif; --font-mono: 'JetBrains Mono', monospace; --font-ui: 'Space Grotesk', sans-serif;
+  --glow: rgba(232, 200, 74, 0.10); --shadow: 0 20px 60px rgba(0, 0, 0, 0.55); --glass: rgba(22, 27, 34, 0.8);
+  --gradient-accent: linear-gradient(135deg, #f5d86a, #e8c84a);
+}
+[data-theme="neon"] {
+  --bg: #f6f7fb; --bg2: #ffffff; --bg3: #eef0f6; --bg4: #e5e8f0;
+  --accent: #ff007f; --accent2: #00e5ff; --accent-dim: rgba(255, 0, 127, 0.07);
+  --text: #0f1020; --muted: #6b7280; --muted2: #9ca3af;
+  --border: rgba(0, 0, 0, 0.06); --border-strong: rgba(0, 0, 0, 0.1);
+  --font-head: 'Playfair Display', serif; --font-body: 'DM Sans', sans-serif; --font-mono: 'JetBrains Mono', monospace; --font-ui: 'Space Grotesk', sans-serif;
+  --glow: rgba(255, 0, 127, 0.06); --shadow: 0 24px 64px rgba(0, 0, 0, 0.08); --glass: rgba(255, 255, 255, 0.85);
+}
+[data-theme="sakura"] {
+  --bg: #0e0409; --bg2: #180812; --bg3: #220c1a; --bg4: #2c1022;
+  --accent: #ff6eb0; --accent2: #ff96c8; --accent-dim: rgba(255, 110, 176, 0.1);
+  --text: #ffe4f0; --muted: #8a4d6a; --muted2: #6a3450;
+  --border: rgba(255, 110, 176, 0.1); --border-strong: rgba(255, 110, 176, 0.2);
+  --font-head: 'Playfair Display', serif; --font-body: 'DM Sans', sans-serif; --font-mono: 'JetBrains Mono', monospace; --font-ui: 'Space Grotesk', sans-serif;
+  --glow: rgba(255, 110, 176, 0.08); --shadow: 0 24px 64px rgba(100, 0, 60, 0.4); --glass: rgba(24, 8, 18, 0.85);
+}
+[data-theme="ocean"] {
+  --bg: #010a14; --bg2: #02101e; --bg3: #041828; --bg4: #062030;
+  --accent: #00cfff; --accent2: #5de8ff; --accent-dim: rgba(0, 207, 255, 0.09);
+  --text: #d8f0ff; --muted: #3a7a9a; --muted2: #2a5a7a;
+  --border: rgba(0, 207, 255, 0.09); --border-strong: rgba(0, 207, 255, 0.18);
+  --font-head: 'Playfair Display', serif; --font-body: 'DM Sans', sans-serif; --font-mono: 'JetBrains Mono', monospace; --font-ui: 'Space Grotesk', sans-serif;
+  --glow: rgba(0, 207, 255, 0.06); --shadow: 0 24px 64px rgba(0, 60, 120, 0.4); --glass: rgba(2, 16, 30, 0.85);
+}
+[data-theme="glass"] {
+  --bg: #0f0f1e; --bg2: rgba(255,255,255,0.045); --bg3: rgba(255,255,255,0.07); --bg4: rgba(255,255,255,0.1);
+  --accent: #a78bfa; --accent2: #c4b5fd; --accent-dim: rgba(167,139,250,0.1);
+  --text: #f0f0ff; --muted: #8888bb; --muted2: #6666aa;
+  --border: rgba(255,255,255,0.1); --border-strong: rgba(255,255,255,0.18);
+  --radius: 18px; --radius-lg: 26px; --radius-xl: 32px; --glow: rgba(167,139,250,0.1); --shadow: 0 24px 64px rgba(0,0,0,0.65); --glass: rgba(255,255,255,0.05);
+  --font-head: 'Playfair Display', serif; --font-body: 'DM Sans', sans-serif; --font-mono: 'JetBrains Mono', monospace; --font-ui: 'Space Grotesk', sans-serif;
+}
+/* Apple Light */
+[data-theme="apple-light"] {
+  --bg: #ffffff; --bg2: #f5f5f7; --bg3: #e8e8ed; --bg4: #d9d9e0;
+  --accent: #007aff; --accent2: #5ac8fa; --accent-dim: rgba(0,122,255,0.08);
+  --text: #1d1d1f; --text-bright: #000; --muted: #6e6e73; --muted2: #86868b;
+  --border: rgba(0,0,0,0.06); --border-strong: rgba(0,0,0,0.12);
+  --radius: 16px; --radius-lg: 24px; --radius-xl: 32px;
+  --font-head: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  --font-mono: 'SF Mono', 'JetBrains Mono', monospace;
+  --font-ui: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  --shadow: 0 20px 60px rgba(0,0,0,0.08); --shadow-sm: 0 4px 16px rgba(0,0,0,0.04);
+  --glow: rgba(0,122,255,0.1); --glass: rgba(255,255,255,0.72);
+}
+[data-theme="apple-light"] .card, [data-theme="apple-light"] .glass-panel {
+  background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(0,0,0,0.06);
+}
+/* ═══════════════════════════════════════════════
+   NETFLIX CINEMATIC THEME — Pencil Insurance
+   Modern streaming-platform aesthetic
+   ═══════════════════════════════════════════════ */
+
+[data-theme="netflix"] {
+
+  /* Core Colors */
+  --bg: #141414;
+  --bg2: #181818;
+  --bg3: #1f1f1f;
+  --bg4: #2a2a2a;
+
+  /* Netflix Red */
+  --accent: #e50914;
+  --accent2: #ff2b2b;
+  --accent3: #b20710;
+
+  --accent-dim: rgba(229, 9, 20, 0.12);
+  --accent-glow: rgba(229, 9, 20, 0.28);
+
+  /* Typography */
+  --text: #f5f5f1;
+  --text-bright: #ffffff;
+  --muted: #b3b3b3;
+  --muted2: #808080;
+
+  /* Borders */
+  --border: rgba(255,255,255,0.06);
+  --border-strong: rgba(255,255,255,0.14);
+
+  /* Fonts */
+  --font-head: 'Bebas Neue', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-ui: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Shadows */
+  --shadow: 0 24px 80px rgba(0,0,0,0.75);
+  --shadow-sm: 0 6px 20px rgba(0,0,0,0.45);
+
+  /* Effects */
+  --glow: rgba(229,9,20,0.18);
+  --glass: rgba(20,20,20,0.88);
+
+  /* Radius */
+  --radius: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Extra */
+  --hero-gradient:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,0.35) 0%,
+      rgba(20,20,20,0.9) 70%,
+      rgba(20,20,20,1) 100%
+    );
+
+  --card-gradient:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.03),
+      rgba(255,255,255,0.01)
+    );
+}
+
+/* ═══════════════════════════════════════════════
+   GLOBAL NETFLIX OVERRIDES
+   ═══════════════════════════════════════════════ */
+
+[data-theme="netflix"] body {
+  background:
+    radial-gradient(circle at top, rgba(229,9,20,0.08), transparent 35%),
+    #141414;
+  color: var(--text);
+}
+
+/* Navigation */
+[data-theme="netflix"] nav {
+  background: rgba(10,10,10,0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Headings */
+[data-theme="netflix"] h1,
+[data-theme="netflix"] h2,
+[data-theme="netflix"] h3,
+[data-theme="netflix"] .hero-title,
+[data-theme="netflix"] .section-title {
+
+  font-family: var(--font-head);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 400;
+  color: var(--text-bright);
+}
+
+/* Hero */
+[data-theme="netflix"] .hero {
+  background:
+    var(--hero-gradient),
+    url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070&auto=format&fit=crop')
+    center/cover no-repeat;
+}
+
+/* Cards */
+[data-theme="netflix"] .card,
+[data-theme="netflix"] .glass-panel {
+
+  background:
+    var(--card-gradient),
+    var(--bg2);
+
+  border: 1px solid var(--border);
+
+  box-shadow: var(--shadow-sm);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+/* Hover Effect */
+[data-theme="netflix"] .card:hover,
+[data-theme="netflix"] .glass-panel:hover {
+
+  transform:
+    scale(1.025)
+    translateY(-4px);
+
+  border-color: rgba(255,255,255,0.16);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.05),
+      rgba(255,255,255,0.015)
+    ),
+    #222;
+}
+
+/* Buttons */
+[data-theme="netflix"] .btn-primary,
+[data-theme="netflix"] button.primary {
+
+  background:
+    linear-gradient(
+      180deg,
+      #ff2b2b,
+      #e50914
+    );
+
+  color: white;
+
+  border: none;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 10px 30px rgba(229,9,20,0.28);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+[data-theme="netflix"] .btn-primary:hover,
+[data-theme="netflix"] button.primary:hover {
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 34px rgba(229,9,20,0.4);
+}
+
+/* Secondary Buttons */
+[data-theme="netflix"] .btn-secondary {
+
+  background: rgba(255,255,255,0.08);
+
+  color: white;
+
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+[data-theme="netflix"] .btn-secondary:hover {
+
+  background: rgba(255,255,255,0.14);
+}
+
+/* Inputs */
+[data-theme="netflix"] input,
+[data-theme="netflix"] textarea,
+[data-theme="netflix"] select {
+
+  background: rgba(255,255,255,0.05);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
+  color: white;
+
+  backdrop-filter: blur(8px);
+}
+
+[data-theme="netflix"] input:focus,
+[data-theme="netflix"] textarea:focus,
+[data-theme="netflix"] select:focus {
+
+  border-color: var(--accent);
+
+  box-shadow:
+    0 0 0 4px rgba(229,9,20,0.12);
+}
+
+/* Theme Chips */
+[data-theme="netflix"] .theme-chip.active {
+
+  border-color: var(--accent);
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(229,9,20,0.16),
+      rgba(229,9,20,0.08)
+    );
+}
+
+/* Scrollbar */
+[data-theme="netflix"] ::-webkit-scrollbar {
+  width: 10px;
+}
+
+[data-theme="netflix"] ::-webkit-scrollbar-track {
+  background: #111;
+}
+
+[data-theme="netflix"] ::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 999px;
+}
+
+[data-theme="netflix"] ::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Selection */
+[data-theme="netflix"] ::selection {
+  background: rgba(229,9,20,0.35);
+  color: white;
+}
+
+/* Glow Accent */
+[data-theme="netflix"] .accent-glow {
+  box-shadow:
+    0 0 40px rgba(229,9,20,0.24);
+}
+
+/* Loading Spinner */
+[data-theme="netflix"] .spinner {
+  border-color: rgba(255,255,255,0.08);
+  border-top-color: var(--accent);
+}
+
+/* Footer */
+[data-theme="netflix"] footer {
+  border-top: 1px solid rgba(255,255,255,0.05);
+  background: #101010;
+}
+
+/* Mobile Polish */
+@media (max-width: 768px) {
+
+  [data-theme="netflix"] .card:hover {
+    transform: none;
+  }
+
+  [data-theme="netflix"] nav {
+    background: rgba(10,10,10,0.94);
+  }
+}
+
+/* Global resets & shared components */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+.theme-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--muted); padding: 0.4rem 0.9rem; border-radius: 50px;
+  font-size: 0.82rem; font-family: var(--font-body); cursor: pointer;
+  transition: all 0.2s;
+}
+.theme-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+@media (hover: none) and (pointer: coarse) {
+  body { cursor: auto; }
+  .cursor, .cursor-ring { display: none !important; }
+}
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+/* ═══════════════════════════════════════════════
+   GLOBAL POLISH LAYER 2026 — applies to every page
+   & every theme. Token-driven so theme colors win.
+   ═══════════════════════════════════════════════ */
+
+/* — Typography rendering — */
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  letter-spacing: 0.001em;
+}
+h1, h2, h3, .hero-title, .section-title, .hero h1 { text-wrap: balance; }
+p, .section-sub, .hero-sub, li { text-wrap: pretty; }
+h1, .hero h1 { letter-spacing: -0.015em; }
+
+/* — Focus-visible: accessible, never clipped — */
+a:focus-visible, button:focus-visible, [role="button"]:focus-visible,
+input:focus-visible, textarea:focus-visible, select:focus-visible,
+[tabindex]:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* — Themed selection & accent text — */
+::selection { background: color-mix(in srgb, var(--accent) 32%, transparent); color: var(--text-bright, var(--text)); }
+
+/* — Themed scrollbars — */
+* { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 30%, var(--border)) transparent; }
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--accent) 26%, var(--border));
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--accent) 50%, var(--border)); background-clip: content-box; }
+
+/* — Media rendering — */
+img, svg, video { image-rendering: auto; }
+img { vertical-align: middle; }
+
+/* — Button & link micro-interactions (layered, low-specificity) — */
+button, .btn, .btn-primary, .btn-outline, .btn-secondary, .nav-cta, .nav-button,
+.plan-btn, .ai-send, .theme-btn, [type="button"], [type="submit"], a.btn {
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+              background var(--dur) var(--ease), border-color var(--dur) var(--ease),
+              color var(--dur) var(--ease), opacity var(--dur) var(--ease);
+  will-change: transform;
+}
+button:active, .btn:active, .btn-primary:active, .btn-outline:active,
+.nav-cta:active, .plan-btn:active, .ai-send:active, .theme-btn:active, a.btn:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+/* — Input focus glow (layers on top of each page's border styles) — */
+input:focus, textarea:focus, select:focus, .ai-input:focus {
+  box-shadow: var(--ring-soft);
+}
+
+/* — Card depth on hover (shadow only; no transform so page hovers don't fight) — */
+.card, .plan-card, .val-card, .profile-card, .ai-wrap, .glass-panel {
+  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease),
+              box-shadow var(--dur-slow) var(--ease), background var(--dur-slow) var(--ease);
+}
+.card:hover, .plan-card:hover, .val-card:hover, .profile-card:hover, .glass-panel:hover {
+  box-shadow: var(--shadow);
+}
+
+/* — Smooth scroll-reveal helper — */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out); }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* — Skeleton/shimmer utility for loading states — */
+.shimmer {
+  background: linear-gradient(100deg, var(--bg3) 30%, color-mix(in srgb, var(--accent) 10%, var(--bg3)) 50%, var(--bg3) 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+/* — Respect reduced-motion preferences — */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .floating-pencil, .ai-dot { animation: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   THEME SIGNATURES 2026
+   A distinct creative identity for every theme — not just a
+   recolor. data-theme lives on <html>, so [data-theme="x"]
+   cascades to every page. Ambient backgrounds use a fixed,
+   click-through ::before so they sit behind content.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ---------- GOOGLE / GEMINI — tokens (were undefined → fell back to default) ---------- */
+[data-theme="google"] {
+  --bg:#0b0d12; --bg2:#14161c; --bg3:#1c1e26; --bg4:#24262e;
+  --accent:#4285f4; --accent2:#8ab4f8; --accent-dim:rgba(66,133,244,0.12);
+  --text:#e8eaed; --text-bright:#ffffff; --muted:#9aa0a6; --muted2:#6b7178;
+  --border:rgba(255,255,255,0.09); --border-strong:rgba(255,255,255,0.16);
+  --radius:16px; --radius-lg:24px; --radius-xl:30px;
+  --font-head:'Outfit','Inter',sans-serif; --font-body:'Inter',sans-serif;
+  --font-ui:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
+  --shadow:0 20px 60px rgba(0,0,0,0.5); --shadow-sm:0 4px 16px rgba(0,0,0,0.35);
+  --glow:rgba(66,133,244,0.18); --glass:rgba(20,22,28,0.85);
+  --g-grad:linear-gradient(90deg,#4285f4,#9b72cb 50%,#d96570);
+}
+
+/* ───────────── DEFAULT — Claude, warm dark editorial ───────────── */
+[data-theme="default"] body::before {
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(72% 55% at 50% -6%, rgba(217,119,87,0.13), transparent 72%),
+    radial-gradient(42% 42% at 92% 96%, rgba(232,155,128,0.06), transparent 70%);
+}
+[data-theme="default"] .section-title, [data-theme="default"] .hero h1 {
+  font-family:var(--font-head); letter-spacing:-.018em; font-weight:400;
+}
+[data-theme="default"] .hero h1 em, [data-theme="default"] .section-title em { font-style:italic; color:var(--accent); }
+[data-theme="default"] .card, [data-theme="default"] .plan-card, [data-theme="default"] .val-card,
+[data-theme="default"] .ai-wrap, [data-theme="default"] .modal-box { border-radius:20px; }
+[data-theme="default"] .btn-primary, [data-theme="default"] .nav-cta { border-radius:12px; }
+[data-theme="default"] .nav-links a:hover, [data-theme="default"] .footer-col a:hover {
+  text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px;
+}
+
+/* ───────────── GOLD & NAVY — Art-Deco luxe (legacy default) ───────────── */
+[data-theme="gold"] body::before {
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(60% 50% at 50% -8%, rgba(232,200,74,0.12), transparent 70%),
+    radial-gradient(45% 45% at 100% 100%, rgba(232,200,74,0.06), transparent 70%);
+}
+[data-theme="gold"] .section-title {
+  background:linear-gradient(115deg, var(--text-bright,#fff) 10%, var(--accent2) 60%, var(--accent));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+[data-theme="gold"] .section-label { position:relative; padding-left:2.4rem; }
+[data-theme="gold"] .section-label::before {
+  content:""; position:absolute; left:0; top:50%; width:2rem; height:1px;
+  background:linear-gradient(90deg, transparent, var(--accent)); transform:translateY(-50%);
+}
+[data-theme="gold"] .plan-card, [data-theme="gold"] .card { position:relative; }
+[data-theme="gold"] .plan-card::after {
+  content:""; position:absolute; left:0; right:0; top:0; height:1px;
+  background:linear-gradient(90deg, transparent, var(--accent), transparent); opacity:.55;
+}
+[data-theme="gold"] .btn-primary, [data-theme="gold"] .nav-cta {
+  background:linear-gradient(135deg, var(--accent2), var(--accent));
+}
+
+/* ───────────── TERMINAL — CRT phosphor ───────────── */
+[data-theme="terminal"] body::before {
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,255,65,0.045) 0 1px, transparent 1px 3px),
+    radial-gradient(circle at 50% 50%, transparent 55%, rgba(0,0,0,0.55));
+}
+[data-theme="terminal"] .nav-logo::before { content:"~/ "; opacity:.7; }
+[data-theme="terminal"] h1, [data-theme="terminal"] h2, [data-theme="terminal"] h3,
+[data-theme="terminal"] .section-title, [data-theme="terminal"] .nav-logo {
+  text-shadow:0 0 9px rgba(0,255,65,0.45); letter-spacing:.02em;
+}
+[data-theme="terminal"] .section-title::after { content:"▋"; margin-left:.25em; animation:pulse 1.1s steps(1) infinite; }
+[data-theme="terminal"] .card, [data-theme="terminal"] .plan-card, [data-theme="terminal"] .val-card,
+[data-theme="terminal"] .ai-wrap, [data-theme="terminal"] .modal-box,
+[data-theme="terminal"] input, [data-theme="terminal"] textarea, [data-theme="terminal"] select { border-radius:0 !important; }
+[data-theme="terminal"] .card, [data-theme="terminal"] .plan-card {
+  box-shadow:inset 0 0 0 1px rgba(0,255,65,.18), 0 0 26px rgba(0,255,65,.06);
+}
+[data-theme="terminal"] .btn-primary, [data-theme="terminal"] .nav-cta {
+  background:transparent; border:1px solid var(--accent); color:var(--accent);
+  border-radius:0; text-transform:uppercase; letter-spacing:.12em;
+}
+[data-theme="terminal"] .btn-primary:hover, [data-theme="terminal"] .nav-cta:hover {
+  background:var(--accent); color:#000; box-shadow:0 0 26px rgba(0,255,65,.45);
+}
+
+/* ───────────── CLAUDE PAPER — warm cream editorial (light) ───────────── */
+[data-theme="claude"] body::before {
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(70% 55% at 50% -5%, rgba(193,95,60,0.08), transparent 72%),
+    radial-gradient(40% 40% at 90% 95%, rgba(217,119,87,0.05), transparent 70%);
+}
+[data-theme="claude"] .section-title, [data-theme="claude"] .hero h1 {
+  font-family:var(--font-head); letter-spacing:-.012em; font-weight:400;
+}
+[data-theme="claude"] .hero h1 em, [data-theme="claude"] .section-title em { font-style:italic; color:var(--accent); }
+[data-theme="claude"] .card, [data-theme="claude"] .plan-card, [data-theme="claude"] .val-card,
+[data-theme="claude"] .ai-wrap, [data-theme="claude"] .modal-box {
+  border-radius:20px; box-shadow:0 10px 30px rgba(60,40,20,0.08);
+}
+[data-theme="claude"] .btn-primary, [data-theme="claude"] .nav-cta { border-radius:12px; }
+[data-theme="claude"] .nav-links a:hover, [data-theme="claude"] .footer-col a:hover {
+  text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:1px;
+}
+
+/* ───────────── NEON — neo-brutalist pop (light) ───────────── */
+[data-theme="neon"] body::before {
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(42% 42% at 12% 10%, rgba(255,0,127,0.10), transparent 60%),
+    radial-gradient(42% 42% at 88% 82%, rgba(0,229,255,0.13), transparent 60%);
+}
+[data-theme="neon"] .card, [data-theme="neon"] .plan-card, [data-theme="neon"] .val-card, [data-theme="neon"] .modal-box {
+  border:2px solid #0f1020 !important; border-radius:14px; box-shadow:6px 6px 0 #0f1020 !important;
+}
+[data-theme="neon"] .card:hover, [data-theme="neon"] .plan-card:hover, [data-theme="neon"] .val-card:hover {
+  transform:translate(-2px,-2px); box-shadow:9px 9px 0 #0f1020 !important;
+}
+[data-theme="neon"] .btn-primary, [data-theme="neon"] .nav-cta {
+  background:var(--accent); color:#fff; border:2px solid #0f1020; box-shadow:4px 4px 0 #0f1020; border-radius:10px;
+}
+[data-theme="neon"] .btn-primary:hover, [data-theme="neon"] .nav-cta:hover { transform:translate(-1px,-1px); box-shadow:6px 6px 0 #0f1020; }
+[data-theme="neon"] .section-label { background:var(--accent); color:#fff; padding:3px 10px; border-radius:6px; display:inline-block; }
+[data-theme="neon"] .section-title { font-weight:800; letter-spacing:-.02em; }
+
+/* ───────────── SAKURA — cherry-blossom dream ───────────── */
+[data-theme="sakura"] body::before {
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(30% 24% at 14% 12%, rgba(255,150,200,0.13), transparent 70%),
+    radial-gradient(34% 30% at 86% 24%, rgba(255,110,176,0.11), transparent 70%),
+    radial-gradient(42% 36% at 50% 102%, rgba(255,110,176,0.12), transparent 70%);
+}
+[data-theme="sakura"] .section-title, [data-theme="sakura"] .hero h1 {
+  background:linear-gradient(120deg,#ffe4f0,var(--accent2),var(--accent));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+[data-theme="sakura"] .card, [data-theme="sakura"] .plan-card, [data-theme="sakura"] .val-card,
+[data-theme="sakura"] .ai-wrap, [data-theme="sakura"] .modal-box {
+  position:relative; border-radius:24px; box-shadow:0 16px 44px rgba(150,0,80,.32);
+}
+[data-theme="sakura"] .plan-card::before, [data-theme="sakura"] .val-card::before {
+  content:"❀"; position:absolute; top:.7rem; right:.9rem; color:var(--accent); opacity:.28; font-size:1.05rem;
+}
+[data-theme="sakura"] .btn-primary, [data-theme="sakura"] .nav-cta {
+  background:linear-gradient(135deg,var(--accent2),var(--accent)); border-radius:50px;
+  box-shadow:0 10px 26px rgba(255,110,176,.35);
+}
+
+/* ───────────── OCEAN — bioluminescent depths ───────────── */
+[data-theme="ocean"] body::before {
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(60% 50% at 50% -10%, rgba(0,207,255,0.13), transparent 70%),
+    radial-gradient(55% 60% at 82% 102%, rgba(0,120,180,0.20), transparent 70%);
+}
+[data-theme="ocean"] body::after {
+  content:""; position:fixed; inset:-25%; z-index:-1; pointer-events:none; opacity:.5;
+  background:repeating-linear-gradient(115deg, transparent 0 42px, rgba(0,207,255,0.045) 42px 44px);
+  animation:oceanDrift 22s linear infinite;
+}
+@keyframes oceanDrift { to { transform:translateX(64px); } }
+[data-theme="ocean"] .section-title, [data-theme="ocean"] .hero h1 {
+  background:linear-gradient(120deg,#d8f0ff,var(--accent2),var(--accent));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+[data-theme="ocean"] .card, [data-theme="ocean"] .plan-card, [data-theme="ocean"] .ai-wrap {
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  box-shadow:0 14px 44px rgba(0,60,120,.42), inset 0 1px 0 rgba(255,255,255,.06);
+}
+[data-theme="ocean"] .btn-primary, [data-theme="ocean"] .nav-cta { box-shadow:0 0 24px rgba(0,207,255,.42); }
+
+/* ───────────── GLASS — iridescent prism ───────────── */
+[data-theme="glass"] body::before {
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; filter:blur(64px); opacity:.62;
+  background:
+    radial-gradient(30% 30% at 20% 22%, #a78bfa, transparent 60%),
+    radial-gradient(28% 28% at 80% 30%, #ff6ec7, transparent 60%),
+    radial-gradient(36% 36% at 60% 86%, #6ec3ff, transparent 60%);
+}
+[data-theme="glass"] .card, [data-theme="glass"] .plan-card, [data-theme="glass"] .val-card,
+[data-theme="glass"] .topnav, [data-theme="glass"] .modal-box, [data-theme="glass"] .ai-wrap {
+  background:rgba(255,255,255,0.06) !important;
+  backdrop-filter:blur(22px) saturate(160%); -webkit-backdrop-filter:blur(22px) saturate(160%);
+  border:1px solid rgba(255,255,255,.16);
+}
+[data-theme="glass"] .card, [data-theme="glass"] .plan-card { position:relative; overflow:hidden; }
+[data-theme="glass"] .plan-card::before {
+  content:""; position:absolute; inset:0; padding:1px; border-radius:inherit; pointer-events:none;
+  background:linear-gradient(135deg, rgba(167,139,250,.6), rgba(255,110,199,.4), rgba(110,195,255,.5));
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;
+}
+[data-theme="glass"] .section-title, [data-theme="glass"] .hero h1 {
+  background:linear-gradient(120deg,#fff,var(--accent2),#ff6ec7);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+
+/* ───────────── GOOGLE — Gemini gradient + Material elevation ───────────── */
+[data-theme="google"] body::before {
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(42% 36% at 12% 8%, rgba(66,133,244,0.13), transparent 65%),
+    radial-gradient(36% 32% at 88% 18%, rgba(217,101,112,0.10), transparent 65%),
+    radial-gradient(42% 40% at 70% 96%, rgba(155,114,203,0.13), transparent 65%);
+}
+[data-theme="google"] .section-title, [data-theme="google"] .hero h1, [data-theme="google"] .section-label {
+  background:var(--g-grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+[data-theme="google"] .card, [data-theme="google"] .plan-card, [data-theme="google"] .val-card,
+[data-theme="google"] .ai-wrap, [data-theme="google"] .modal-box {
+  border-radius:24px; box-shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.36);
+}
+[data-theme="google"] .btn-primary, [data-theme="google"] .nav-cta {
+  background:var(--g-grad); color:#fff; border-radius:999px; box-shadow:0 6px 22px rgba(66,133,244,.36);
+}
+[data-theme="google"] .btn-primary:hover, [data-theme="google"] .nav-cta:hover { filter:brightness(1.06); box-shadow:0 10px 28px rgba(155,114,203,.4); }
+[data-theme="google"] input:focus, [data-theme="google"] textarea:focus, [data-theme="google"] select:focus { box-shadow:0 0 0 3px rgba(66,133,244,.25); }
+
+/* ───────────── NETFLIX — add subtle film grain over the cinematic base ───────────── */
+[data-theme="netflix"] body::after {
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.5;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 2px);
+}
