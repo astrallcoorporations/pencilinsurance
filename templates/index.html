@@ -764,9 +764,6 @@ footer{
       <div class="theme-option" data-theme-id="gold" onclick="applyTheme('gold',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#0d1117,#e8c84a)"></div><div class="theme-option-name">Gold & Navy</div><div class="theme-option-desc">Original elegant dark</div></div>
       <div class="theme-option" data-theme-id="terminal" onclick="applyTheme('terminal',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#000,#00ff41)"></div><div class="theme-option-name">1994 Terminal</div><div class="theme-option-desc">Hacker green on black</div></div>
       <div class="theme-option" data-theme-id="neon" onclick="applyTheme('neon',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#f8f9fc,#ff007f)"></div><div class="theme-option-name">Neon Pop</div><div class="theme-option-desc">Bright & electric</div></div>
-      <div class="theme-option" data-theme-id="sakura" onclick="applyTheme('sakura',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#1a0a12,#ff6eb0)"></div><div class="theme-option-name">Sakura</div><div class="theme-option-desc">Cherry blossom pink</div></div>
-      <div class="theme-option" data-theme-id="ocean" onclick="applyTheme('ocean',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#030d1a,#00cfff)"></div><div class="theme-option-name">Deep Ocean</div><div class="theme-option-desc">Electric cyan on navy</div></div>
-      <div class="theme-option" data-theme-id="glass" onclick="applyTheme('glass',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#1a1a2e,#a78bfa)"></div><div class="theme-option-name">Glass Prism</div><div class="theme-option-desc">Frosted glass & neon</div></div>
       <div class="theme-option" data-theme-id="google" onclick="applyTheme('google',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#0b0d12,#1a73e8)"></div><div class="theme-option-name">Google</div><div class="theme-option-desc">Material & Gemini</div></div>
       <div class="theme-option" data-theme-id="netflix" onclick="applyTheme('netflix',this)"><div class="theme-swatch" style="background:linear-gradient(135deg,#141414,#e50914)"></div><div class="theme-option-name">Netflix Red</div><div class="theme-option-desc">Bold crimson</div></div>
     </div>
@@ -818,6 +815,68 @@ footer{
     </div>
   </div>
 </section>
+
+<!-- ═══════ SOCIAL PROOF + URGENCY (marketing) ═══════ -->
+<style>
+.mkt-proof{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:color-mix(in srgb,var(--accent) 4%,var(--bg2));padding:1.1rem 0;overflow:hidden}
+.mkt-proof-inner{display:flex;align-items:center;justify-content:center;gap:1.4rem;flex-wrap:wrap;max-width:1100px;margin:0 auto;padding:0 1.5rem}
+.mkt-rating{display:flex;align-items:center;gap:.5rem;font-size:.9rem;color:var(--text)}
+.mkt-stars{color:var(--accent);letter-spacing:1px;font-size:1rem}
+.mkt-sep{width:1px;height:18px;background:var(--border)}
+.mkt-ptext{font-size:.9rem;color:var(--muted)}
+.mkt-ptext b{color:var(--accent)}
+.mkt-marquee{margin-top:.9rem;-webkit-mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.mkt-track{display:flex;gap:2.6rem;width:max-content;animation:mktScroll 32s linear infinite;color:var(--muted);font-family:var(--font-mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;opacity:.65}
+.mkt-proof:hover .mkt-track{animation-play-state:paused}
+@keyframes mktScroll{to{transform:translateX(-50%)}}
+.mkt-urgency{max-width:1100px;margin:2.2rem auto 0;padding:0 1.5rem}
+.mkt-urgency-in{display:flex;align-items:center;gap:.7rem;justify-content:center;flex-wrap:wrap;background:linear-gradient(135deg,var(--accent-dim),transparent);border:1px solid color-mix(in srgb,var(--accent) 26%,transparent);border-radius:var(--radius-lg);padding:.7rem 1.2rem;font-size:.9rem}
+.mkt-urgency-in .tag{background:var(--accent);color:var(--bg);font-weight:700;padding:.22rem .65rem;border-radius:50px;font-size:.73rem;white-space:nowrap}
+.mkt-urgency-in .t{color:var(--text)}
+.mkt-urgency-in b{color:var(--accent)}
+.mkt-urgency-in #mktCountdown{color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums}
+.mkt-tst{max-width:1100px;margin:0 auto;padding:4rem 1.5rem}
+.mkt-tst h2{font-family:var(--font-head);font-size:clamp(1.7rem,3.5vw,2.4rem);text-align:center;margin-bottom:.4rem}
+.mkt-tst .sub{text-align:center;color:var(--muted);margin-bottom:2.4rem}
+.mkt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:1.1rem}
+.mkt-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow-sm);transition:transform .25s var(--ease,ease),border-color .25s ease}
+.mkt-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent) 30%,var(--border))}
+.mkt-card .s{color:var(--accent);letter-spacing:1px;margin-bottom:.7rem}
+.mkt-card p{color:var(--text);line-height:1.7;font-size:.95rem;margin-bottom:1.1rem}
+.mkt-card .who{display:flex;align-items:center;gap:.7rem}
+.mkt-card .av{width:38px;height:38px;border-radius:50%;background:var(--accent);color:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0}
+.mkt-card .who b{display:block;font-size:.86rem}
+.mkt-card .who span{font-size:.76rem;color:var(--muted)}
+</style>
+<section class="mkt-proof">
+  <div class="mkt-proof-inner">
+    <div class="mkt-rating"><span class="mkt-stars">★★★★★</span> <b>4.9/5</b></div>
+    <div class="mkt-sep"></div>
+    <div class="mkt-ptext">Loved by <b>12,000+</b> students across <b>300+</b> schools</div>
+    <div class="mkt-sep"></div>
+    <div class="mkt-ptext"><b>₹48L+</b> in stationery replaced</div>
+  </div>
+  <div class="mkt-marquee"><div class="mkt-track" id="mktTrack"></div></div>
+</section>
+<div class="mkt-urgency">
+  <div class="mkt-urgency-in">
+    <span class="tag">🔥 LAUNCH OFFER</span>
+    <span class="t">50% off your first month — only <b>200</b> spots left.</span>
+    <span class="t">Ends in <span id="mktCountdown">--:--:--</span></span>
+  </div>
+</div>
+<script>
+(function(){
+  var schools=['Delhi Public School','Kendriya Vidyalaya','DAV Public','St. Xavier\'s','Ryan International','Army Public School','Bal Bharati','Greenwood High','National Public School','Modern School','Sacred Heart','Amity International'];
+  var t=document.getElementById('mktTrack');
+  if(t){var h=schools.map(function(s){return '<span>'+s+'</span>';}).join('');t.innerHTML=h+h;}
+  var cd=document.getElementById('mktCountdown');
+  var end=+localStorage.getItem('pi-offer-end');
+  if(!end||end<Date.now()){end=Date.now()+7*24*3600*1000;localStorage.setItem('pi-offer-end',end);}
+  function tick(){var d=Math.max(0,end-Date.now());var H=String(Math.floor(d/3.6e6)).padStart(2,'0');var M=String(Math.floor(d%3.6e6/6e4)).padStart(2,'0');var S=String(Math.floor(d%6e4/1e3)).padStart(2,'0');if(cd)cd.textContent=H+':'+M+':'+S;}
+  tick();setInterval(tick,1000);
+})();
+</script>
 
 <!-- ═══════ PLANS ═══════ -->
 <section id="plans">

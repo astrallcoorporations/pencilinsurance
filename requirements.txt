@@ -5,3 +5,5 @@ anthropic==0.38.0
 google-generativeai==0.8.3
 httpx<0.28
 python-dotenv==1.0.0
+# Supabase / Postgres backend — only needed once SUPABASE_DB_URL is set in .env
+psycopg2-binary==2.9.10

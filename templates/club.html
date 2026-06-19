@@ -199,9 +199,6 @@
         <div class="theme-opt" data-tid="gold" onclick="applyTheme('gold',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#0d1117,#e8c84a)"></div><div class="theme-name">Gold & Navy</div><div class="theme-desc">Original elegant dark</div></div>
         <div class="theme-opt" data-tid="terminal" onclick="applyTheme('terminal',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#000,#00ff41)"></div><div class="theme-name">1994 Terminal</div><div class="theme-desc">Hacker green on black</div></div>
         <div class="theme-opt" data-tid="neon" onclick="applyTheme('neon',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#f6f7fb,#ff007f)"></div><div class="theme-name">Neon Pop</div><div class="theme-desc">Bright & electric</div></div>
-        <div class="theme-opt" data-tid="sakura" onclick="applyTheme('sakura',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#0e0409,#ff6eb0)"></div><div class="theme-name">Sakura</div><div class="theme-desc">Cherry blossom</div></div>
-        <div class="theme-opt" data-tid="ocean" onclick="applyTheme('ocean',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#010a14,#00cfff)"></div><div class="theme-name">Deep Ocean</div><div class="theme-desc">Cyan on navy</div></div>
-        <div class="theme-opt" data-tid="glass" onclick="applyTheme('glass',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#0f0f1e,#a78bfa)"></div><div class="theme-name">Glass Prism</div><div class="theme-desc">Frosted violet</div></div>
         <div class="theme-opt" data-tid="google" onclick="applyTheme('google',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#0b0d12,#4285f4)"></div><div class="theme-name">Google</div><div class="theme-desc">Material & Gemini</div></div>
         <div class="theme-opt" data-tid="netflix" onclick="applyTheme('netflix',true)"><div class="theme-swatch" style="background:linear-gradient(135deg,#141414,#e50914)"></div><div class="theme-name">Netflix Red</div><div class="theme-desc">Bold crimson</div></div>
       </div>
@@ -281,16 +278,31 @@
     function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
     async function loadClub() {
-      const res = await fetch('/api/club/announcements');
-      const data = await res.json();
       const container = document.getElementById('clubContent');
+      const [annRes, statusRes] = await Promise.all([
+        fetch('/api/club/announcements'),
+        fetch('/api/club/status')
+      ]);
+      const data = await annRes.json();
+      const status = await statusRes.json().catch(() => ({ state: 'guest' }));
 
-      if (!data.canPost && !data.canComment && data.announcements.length === 0) {
-        container.innerHTML = `<div class="empty-state"><span>🔒</span><p>This club is for approved members only.<br>If you are a Pencil Insurance subscriber, ask the founder to add you!</p></div>`;
+      // Non-members get a real path in — apply, pending, or sign-in — not a dead end.
+      if (status.state === 'guest') {
+        container.innerHTML = `<div class="empty-state"><span>🔒</span><p>The Members Club is for Pencil Insurance students.<br><a href="/profile" style="color:var(--accent);text-decoration:underline">Sign in</a> to apply for access.</p></div>`;
         return;
       }
-      if (!data.canPost && !data.canComment) {
-        container.innerHTML = `<div class="empty-state"><span>🔒</span><p>You must be an approved member to view posts.</p></div>`;
+      if (status.state === 'pending') {
+        container.innerHTML = `<div class="empty-state"><span>⏳</span><p><strong>Your application is in review.</strong><br>We'll wave you in soon — keep an eye on your profile.</p></div>`;
+        return;
+      }
+      if (status.state === 'none') {
+        container.innerHTML = `
+          <div class="new-post">
+            <h3>✨ Join the Members Club</h3>
+            <p style="color:var(--muted);margin:.2rem 0 .9rem;line-height:1.6">Early item drops, member-only claim perks, and a vote on new plans. Tell us why you want in:</p>
+            <textarea id="applyReason" placeholder="I want to join because…"></textarea>
+            <button class="btn-primary" onclick="applyToClub()">Apply to join →</button>
+          </div>`;
         return;
       }
 
@@ -336,6 +348,14 @@
       });
 
       container.innerHTML = html || '<p style="color:var(--muted);">No announcements yet.</p>';
+    }
+
+    async function applyToClub() {
+      const reason = (document.getElementById('applyReason')?.value || '').trim();
+      const res = await fetch('/api/club/apply', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ reason }) });
+      const out = await res.json().catch(() => ({}));
+      if (res.ok) { showToast(out.message || 'Application submitted! 🎉'); loadClub(); }
+      else { showToast(out.error || 'Could not submit — try again'); }
     }
 
     async function postAnnouncement() {

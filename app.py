@@ -31,6 +31,9 @@ from flask_limiter.util import get_remote_address
 
 load_dotenv()
 
+# Database adapter: SQLite locally, Supabase/Postgres when SUPABASE_DB_URL is set.
+from db import get_db, IS_POSTGRES  # noqa: E402  (must follow load_dotenv)
+
 app = Flask(__name__)
 
 # ─── Environment mode ─────────────────────────────────────
@@ -219,13 +222,16 @@ def clean_text(value: Any, max_length: int | None = MAX_MESSAGE_LENGTH) -> str:
     cleaned = normalized.strip()
     return cleaned[:max_length] if max_length else cleaned
 
-def get_db() -> sqlite3.Connection:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    connection = sqlite3.connect(DB_PATH)
-    connection.row_factory = sqlite3.Row
-    return connection
-
 def init_db() -> None:
+    # Supabase/Postgres: provision from schema_supabase.sql and stop here.
+    if IS_POSTGRES:
+        schema = (Path(__file__).parent / "schema_supabase.sql").read_text(encoding="utf-8")
+        with get_db() as db:
+            db.executescript(schema)
+            db.commit()
+        seed_plans()
+        seed_items()
+        return
     with get_db() as db:
         db.execute("""
             CREATE TABLE IF NOT EXISTS profiles (
@@ -296,6 +302,17 @@ def init_db() -> None:
                 approved_by TEXT NOT NULL,
                 approved_at TEXT NOT NULL DEFAULT '',
                 FOREIGN KEY(user_id) REFERENCES profiles(id)
+            )
+        """)
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS club_applications (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id TEXT NOT NULL DEFAULT '',
+                name TEXT NOT NULL DEFAULT '',
+                email TEXT NOT NULL DEFAULT '',
+                reason TEXT NOT NULL DEFAULT '',
+                status TEXT NOT NULL DEFAULT 'pending',
+                created_at TEXT NOT NULL DEFAULT ''
             )
         """)
         db.execute("""
@@ -1234,6 +1251,89 @@ def admin_remove_club_member(user_id: str):
         db.execute("DELETE FROM club_members WHERE user_id = ?", (user_id,))
         db.commit()
     return jsonify({"success": True}), 200
+
+@app.route("/api/club/status", methods=["GET"])
+def club_status():
+    """Where the current user stands with the members club."""
+    profile = get_profile()
+    if not profile:
+        return jsonify({"authenticated": False, "state": "guest"}), 200
+    if is_admin():
+        state = "admin"
+    elif is_club_member(profile["id"]):
+        state = "member"
+    else:
+        with get_db() as db:
+            pending = db.execute(
+                "SELECT 1 FROM club_applications WHERE user_id = ? AND status = 'pending'",
+                (profile["id"],),
+            ).fetchone()
+        state = "pending" if pending else "none"
+    return jsonify({"authenticated": True, "state": state}), 200
+
+
+@app.route("/api/club/apply", methods=["POST"])
+@limiter.limit("5 per minute")
+def club_apply():
+    """Self-service: a signed-in user applies to join the club."""
+    profile = get_profile()
+    if not profile:
+        return jsonify({"error": "Please sign in to apply"}), 401
+    if is_admin() or is_club_member(profile["id"]):
+        return jsonify({"error": "You're already a member", "state": "member"}), 400
+    reason = clean_text((request.get_json(silent=True) or {}).get("reason"), 500)
+    timestamp = now_iso()
+    with get_db() as db:
+        if db.execute(
+            "SELECT 1 FROM club_applications WHERE user_id = ? AND status = 'pending'",
+            (profile["id"],),
+        ).fetchone():
+            return jsonify({"success": True, "state": "pending", "message": "Application already submitted"}), 200
+        db.execute(
+            "INSERT INTO club_applications (user_id, name, email, reason, status, created_at) "
+            "VALUES (?, ?, ?, ?, 'pending', ?)",
+            (profile["id"], profile.get("name", ""), profile.get("email", ""), reason, timestamp),
+        )
+        db.commit()
+    return jsonify({"success": True, "state": "pending"}), 201
+
+
+@app.route("/api/admin/club/applications", methods=["GET"])
+@require_admin
+def admin_get_applications():
+    with get_db() as db:
+        rows = db.execute(
+            "SELECT id, user_id, name, email, reason, status, created_at "
+            "FROM club_applications WHERE status = 'pending' ORDER BY created_at ASC"
+        ).fetchall()
+    return jsonify({"applications": [dict(r) for r in rows]}), 200
+
+
+@app.route("/api/admin/club/applications/<int:app_id>/approve", methods=["POST"])
+@require_admin
+def admin_approve_application(app_id):
+    timestamp = now_iso()
+    with get_db() as db:
+        row = db.execute("SELECT user_id FROM club_applications WHERE id = ?", (app_id,)).fetchone()
+        if not row:
+            return jsonify({"error": "Application not found"}), 404
+        db.execute(
+            "INSERT OR IGNORE INTO club_members (user_id, approved_by, approved_at) VALUES (?, ?, ?)",
+            (row["user_id"], get_session_profile_id(), timestamp),
+        )
+        db.execute("UPDATE club_applications SET status = 'approved' WHERE id = ?", (app_id,))
+        db.commit()
+    return jsonify({"success": True}), 200
+
+
+@app.route("/api/admin/club/applications/<int:app_id>/reject", methods=["POST"])
+@require_admin
+def admin_reject_application(app_id):
+    with get_db() as db:
+        db.execute("UPDATE club_applications SET status = 'rejected' WHERE id = ?", (app_id,))
+        db.commit()
+    return jsonify({"success": True}), 200
+
 
 @app.route("/api/items", methods=["GET"])
 def public_get_items():
