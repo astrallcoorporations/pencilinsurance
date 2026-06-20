@@ -4,7 +4,7 @@
     {
       "name": "pencil",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["app.py"],
+      "runtimeArgs": [".claude/run_preview.py"],
       "port": 5000
     }
   ]
