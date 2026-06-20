@@ -822,7 +822,7 @@ footer{
   <div class="floating-el fp2">📐</div>
   <div class="floating-el fp3">📏</div>
   <div class="hero-content">
-    <div class="hero-badge">✦ Now live at OWIS · Built by Arsh &amp; Daksh</div>
+    <div class="hero-badge">✦ Launching July 1 at OWIS · Built by Arsh &amp; Daksh</div>
     <h1>Never lose a<br><em>pencil</em> again.</h1>
     <svg class="hero-underline" viewBox="0 0 360 16" preserveAspectRatio="none" aria-hidden="true">
       <path d="M4 11 C 70 4, 150 4, 200 9 C 250 14, 320 10, 356 6"/>
@@ -878,30 +878,34 @@ footer{
 </style>
 <section class="mkt-proof">
   <div class="mkt-proof-inner">
-    <div class="mkt-rating"><span class="mkt-stars">★★★★★</span> <b>4.9/5</b></div>
+    <div class="mkt-ptext">🏫 First school: <b>OWIS, Bangalore</b></div>
     <div class="mkt-sep"></div>
-    <div class="mkt-ptext">Loved by <b>12,000+</b> students across <b>300+</b> schools</div>
+    <div class="mkt-ptext">✏️ Built by students <b>Arsh &amp; Daksh</b></div>
     <div class="mkt-sep"></div>
-    <div class="mkt-ptext"><b>₹48L+</b> in stationery replaced</div>
+    <div class="mkt-ptext">🎓 Now accepting <b>founding members</b></div>
   </div>
-  <div class="mkt-marquee"><div class="mkt-track" id="mktTrack"></div></div>
 </section>
 <div class="mkt-urgency">
   <div class="mkt-urgency-in">
-    <span class="tag">🎉 NOW LIVE AT OWIS</span>
-    <span class="t">We just launched at <b>OWIS, Bangalore</b> — 50% off your first month, only <b>200</b> spots left.</span>
-    <span class="t">Ends in <span id="mktCountdown">--:--:--</span></span>
+    <span class="tag">🚀 LAUNCHING JULY 1</span>
+    <span class="t">We open at <b>OWIS, Bangalore</b> on <b>July 1</b> — founding members get first access.</span>
+    <span class="t" id="mktCdWrap">Launches in <span id="mktCountdown">--d --:--:--</span></span>
   </div>
 </div>
 <script>
 (function(){
-  var schools=['Delhi Public School','Kendriya Vidyalaya','DAV Public','St. Xavier\'s','Ryan International','Army Public School','Bal Bharati','Greenwood High','National Public School','Modern School','Sacred Heart','Amity International'];
-  var t=document.getElementById('mktTrack');
-  if(t){var h=schools.map(function(s){return '<span>'+s+'</span>';}).join('');t.innerHTML=h+h;}
+  var target=new Date('2026-07-01T00:00:00').getTime();
   var cd=document.getElementById('mktCountdown');
-  var end=+localStorage.getItem('pi-offer-end');
-  if(!end||end<Date.now()){end=Date.now()+7*24*3600*1000;localStorage.setItem('pi-offer-end',end);}
-  function tick(){var d=Math.max(0,end-Date.now());var H=String(Math.floor(d/3.6e6)).padStart(2,'0');var M=String(Math.floor(d%3.6e6/6e4)).padStart(2,'0');var S=String(Math.floor(d%6e4/1e3)).padStart(2,'0');if(cd)cd.textContent=H+':'+M+':'+S;}
+  var wrap=document.getElementById('mktCdWrap');
+  function tick(){
+    var d=target-Date.now();
+    if(d<=0){ if(wrap)wrap.textContent='Now live at OWIS!'; return; }
+    var days=Math.floor(d/8.64e7);
+    var H=String(Math.floor(d%8.64e7/3.6e6)).padStart(2,'0');
+    var M=String(Math.floor(d%3.6e6/6e4)).padStart(2,'0');
+    var S=String(Math.floor(d%6e4/1e3)).padStart(2,'0');
+    if(cd)cd.textContent=days+'d '+H+':'+M+':'+S;
+  }
   tick();setInterval(tick,1000);
 })();
 </script>
@@ -1009,7 +1013,7 @@ footer{
       <div>
         <p class="section-label">// about_us</p>
         <h2 class="section-title">Built <b>By students</b>, <b>For students.</b></h2>
-        <p style="color:var(--muted);line-height:1.8;margin-top:1rem;font-size:.93rem;font-weight:300;">Pencil Insurance was born from a simple frustration — losing a pencil mid-exam, or finding your eraser missing when it matters most. So <strong style="color:var(--text)">Arsh &amp; Daksh</strong> built something affordable, fast, and designed for real student life. We're proud to have <strong style="color:var(--text)">just launched at OWIS, Bangalore</strong> — with more schools coming soon.</p>
+        <p style="color:var(--muted);line-height:1.8;margin-top:1rem;font-size:.93rem;font-weight:300;">Pencil Insurance was born from a simple frustration — losing a pencil mid-exam, or finding your eraser missing when it matters most. So <strong style="color:var(--text)">Arsh &amp; Daksh</strong> built something affordable, fast, and designed for real student life. We're <strong style="color:var(--text)">launching at OWIS, Bangalore on July 1</strong> — our very first school, with more to follow.</p>
         <p style="color:var(--muted);line-height:1.8;margin-top:.7rem;font-size:.93rem;font-weight:300;">We also offer a <strong style="color:var(--text)">direct supply option</strong> — give us your monthly budget instead of buying stationery yourself, and we'll keep you stocked with everything in your plan.</p>
       </div>
       <div class="about-values">
@@ -1035,9 +1039,9 @@ footer{
           <div class="team-role">// COO &amp; Co-founder</div>
           <div class="team-bio">Handles operations and keeps things running smoothly — making sure every claim is delivered to OWIS fast.</div>
         </div>
-        <div class="team-add" onclick="showToast('We just launched at OWIS! Email us to join the team 🚀')">
+        <div class="team-add" onclick="showToast('We launch at OWIS on July 1! Email us to join the team 🚀')">
           <span>+</span>
-          <p>We just launched at OWIS — and we're hiring. Email us to join the team.</p>
+          <p>We launch at OWIS on July 1 — and we're hiring. Email us to join the team.</p>
         </div>
       </div>
     </div>
@@ -1129,8 +1133,8 @@ footer{
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2024–2026 Pencil Insurance · Astral.inc. All rights reserved.</span>
-    <span>Made with ❤️ by Arsh &amp; Daksh · Now live at OWIS</span>
+    <span>© 2026 Pencil Insurance · Astral.inc. All rights reserved.</span>
+    <span>Made with ❤️ by Arsh &amp; Daksh · Launching July 1 at OWIS</span>
   </div>
 </footer>
 
