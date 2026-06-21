@@ -749,6 +749,13 @@ footer{
   --font-vercel:'Geist','Space Grotesk','Inter',sans-serif;
   --font-vercel-mono:'Geist Mono','JetBrains Mono',monospace;
 }
+/* ── Premium giant display for EVERY theme — each in its OWN typeface
+   (var(--font-head)), so all themes feel equally designed on the landing.
+   Default refines this further below (Geist + flat black canvas). ── */
+.hero h1{ font-family:var(--font-head); font-weight:800; letter-spacing:-.03em; font-size:clamp(2.8rem,8.5vw,6.5rem); line-height:.95; }
+.section-title{ font-family:var(--font-head); font-weight:800; letter-spacing:-.025em; font-size:clamp(2.2rem,6vw,4.6rem); line-height:1.02; }
+.section-label{ letter-spacing:.14em; text-transform:uppercase; }
+
 /* ── The Vercel look is scoped to the DEFAULT (Void Gold) theme ONLY.
    Every other theme keeps its own fonts, colours and signature. No
    !important: this <style> is last in the cascade, so it already wins. ── */

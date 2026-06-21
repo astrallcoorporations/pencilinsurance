@@ -5,7 +5,7 @@
    Netflix Red
    ═══════════════════════════════════════════════ */
  
-   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
+   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Sora:wght@400;600;700;800&family=Cinzel:wght@500;700;900&display=swap');
 
 :root, [data-theme="default"] {
   /* ═══ VOID GOLD — godmode primary identity (gold + navy on near-black) ═══ */
@@ -50,10 +50,10 @@
   --radius: 12px;
   --radius-lg: 20px;
   --radius-xl: 32px;
-  --font-display: 'Syne', 'Space Grotesk', sans-serif;
-  --font-head: 'Syne', 'Space Grotesk', sans-serif;
+  --font-display: 'Geist', 'Space Grotesk', sans-serif;
+  --font-head: 'Geist', 'Space Grotesk', sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-mono: 'Geist Mono', 'JetBrains Mono', monospace;
   --font-ui: 'Inter', system-ui, sans-serif;
   --shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
   --glow: var(--gold-glow);
@@ -154,6 +154,7 @@
   --navy-mid:#0A1628; --navy-glow:rgba(100,181,246,0.25);
   --text:#D2DCF0; --text-bright:#EAF2FF; --muted:#8A98B8; --border:rgba(200,224,255,0.08); --border-strong:rgba(200,224,255,0.15);
   --glass:rgba(6,8,15,0.72); --gradient-accent:linear-gradient(135deg,#A9D8FF,#64B5F6);
+  --font-display:'Sora','Space Grotesk',sans-serif; --font-head:'Sora','Space Grotesk',sans-serif; --font-body:'Inter',sans-serif; --font-ui:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
 }
 
 /* ───────────── ROYAL OBSIDIAN — purple haze, regal dark ───────────── */
@@ -166,6 +167,7 @@
   --navy-mid:#1A0B2E; --navy-glow:rgba(124,58,237,0.3);
   --text:#DDD4F0; --text-bright:#F2EBFF; --muted:#9A8FB8; --border:rgba(226,199,255,0.08); --border-strong:rgba(226,199,255,0.15);
   --glass:rgba(6,5,16,0.72); --gradient-accent:linear-gradient(135deg,#E2C7FF,#C084FC);
+  --font-display:'Cinzel',serif; --font-head:'Cinzel',serif; --font-body:'Inter',sans-serif; --font-ui:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
 }
 
 /* ───────────── EMBER — warm orange/amber fire ───────────── */
@@ -178,6 +180,7 @@
   --navy-mid:#1C0A00; --navy-glow:rgba(184,84,22,0.3);
   --text:#F0E2D2; --text-bright:#FFF3E8; --muted:#B8A28A; --border:rgba(255,224,200,0.08); --border-strong:rgba(255,224,200,0.15);
   --glass:rgba(12,8,0,0.72); --gradient-accent:linear-gradient(135deg,#FFD0A6,#FB923C);
+  --font-display:'Syne','Space Grotesk',sans-serif; --font-head:'Syne','Space Grotesk',sans-serif; --font-body:'Inter',sans-serif; --font-ui:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
 }
 
 [data-theme="neon"] {
@@ -185,7 +188,7 @@
   --accent: #ff007f; --accent2: #00e5ff; --accent-dim: rgba(255, 0, 127, 0.07);
   --text: #0f1020; --muted: #6b7280; --muted2: #9ca3af;
   --border: rgba(0, 0, 0, 0.06); --border-strong: rgba(0, 0, 0, 0.1);
-  --font-head: 'Playfair Display', serif; --font-body: 'DM Sans', sans-serif; --font-mono: 'JetBrains Mono', monospace; --font-ui: 'Space Grotesk', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif; --font-head: 'Space Grotesk', sans-serif; --font-body: 'DM Sans', sans-serif; --font-mono: 'JetBrains Mono', monospace; --font-ui: 'Space Grotesk', sans-serif;
   --glow: rgba(255, 0, 127, 0.06); --shadow: 0 24px 64px rgba(0, 0, 0, 0.08); --glass: rgba(255, 255, 255, 0.85);
 }
 /* Apple Light */
@@ -794,6 +797,48 @@ input:focus, textarea:focus, select:focus, .ai-input:focus {
   content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.5;
   background:repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 2px);
 }
+
+/* ───────────── ARCTIC VAULT — icy aurora + frost grid ───────────── */
+[data-theme="arctic"] body::before{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(60% 50% at 50% -10%, rgba(100,181,246,0.16), transparent 70%),
+    radial-gradient(45% 45% at 88% 100%, rgba(169,216,255,0.08), transparent 70%),
+    linear-gradient(rgba(120,170,230,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120,170,230,0.05) 1px, transparent 1px);
+  background-size:100% 100%,100% 100%,26px 26px,26px 26px;
+}
+[data-theme="arctic"] .section-title{
+  background:linear-gradient(115deg, var(--text-bright) 8%, var(--accent2) 55%, var(--accent));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+[data-theme="arctic"] .btn-primary, [data-theme="arctic"] .nav-cta{ background:linear-gradient(135deg,var(--accent2),var(--accent)); }
+
+/* ───────────── ROYAL OBSIDIAN — purple haze, regal Cinzel ───────────── */
+[data-theme="obsidian"] body::before{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(55% 50% at 50% 0%, rgba(168,85,247,0.18), transparent 72%),
+    radial-gradient(42% 42% at 85% 96%, rgba(124,58,237,0.10), transparent 70%);
+}
+[data-theme="obsidian"] .section-title{ letter-spacing:.015em;
+  background:linear-gradient(115deg, var(--text-bright) 8%, var(--accent2) 55%, var(--accent));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+[data-theme="obsidian"] .btn-primary, [data-theme="obsidian"] .nav-cta{ background:linear-gradient(135deg,var(--accent2),var(--accent)); }
+
+/* ───────────── EMBER — warm fire glow from below ───────────── */
+[data-theme="ember"] body::before{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(72% 55% at 50% 110%, rgba(251,146,60,0.20), transparent 70%),
+    radial-gradient(40% 40% at 12% 4%, rgba(234,127,30,0.10), transparent 70%);
+}
+[data-theme="ember"] .section-title{
+  background:linear-gradient(115deg, var(--text-bright) 8%, var(--accent2) 55%, var(--accent));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+[data-theme="ember"] .btn-primary, [data-theme="ember"] .nav-cta{ background:linear-gradient(135deg,var(--accent2),var(--accent)); }
 
 /* ═══════════════════════════════════════════════════════════════════════
    GODMODE LAYER — component + utility system (token-driven, additive).
