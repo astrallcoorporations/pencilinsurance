@@ -446,7 +446,10 @@ def seed_items() -> None:
             )
         db.commit()
 
-init_db()
+try:
+    init_db()
+except Exception:  # noqa: BLE001 — never let DB setup crash serverless boot
+    app.logger.exception("init_db() failed at startup; continuing so the app can still boot")
 
 # ---------- Session helpers ----------
 def get_session_profile_id() -> str | None:
