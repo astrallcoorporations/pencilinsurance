@@ -737,6 +737,76 @@ footer{
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style id="vercel-layer">
+/* ═══════════════════════════════════════════════════════════════
+   VERCEL LAYER — Vercel's layout/type language, Pencil's gold soul.
+   Pure-black canvas · giant Geist display · Geist Mono captions ·
+   flat hairline cards · generous negative space. Loads after the
+   base styles so it wins; gold accents stay via the theme tokens.
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --font-vercel:'Geist','Space Grotesk','Inter',sans-serif;
+  --font-vercel-mono:'Geist Mono','JetBrains Mono',monospace;
+}
+body{ background:#000; }
+[data-theme="default"] body::before{ opacity:.5; }
+
+/* Roomier sections */
+section{ padding:clamp(4.5rem,9vw,8rem) 2rem; }
+
+/* Section header: mono micro-label + giant display title + mono sub */
+.section-label{ font-family:var(--font-vercel-mono)!important; color:var(--muted)!important; text-transform:uppercase; letter-spacing:.14em; font-size:.7rem; font-weight:500; }
+.section-title{ font-family:var(--font-vercel)!important; font-weight:800!important; letter-spacing:-.04em!important; font-size:clamp(2.4rem,6.5vw,5rem)!important; line-height:.96!important; }
+.section-sub{ font-family:var(--font-vercel-mono); font-size:.82rem; line-height:1.75; color:var(--muted); }
+
+/* Hero: flat Vercel display (drop the 3D extrusion), keep pencils + orbital */
+.hero h1, [data-theme="default"] .hero h1{ font-family:var(--font-vercel)!important; font-weight:800!important; letter-spacing:-.045em!important; font-size:clamp(3rem,9vw,7rem)!important; line-height:.92!important; text-shadow:none!important; }
+.hero-badge{ font-family:var(--font-vercel-mono); letter-spacing:.1em; }
+.hero-sub{ font-family:var(--font-vercel-mono); color:var(--muted); font-size:.9rem; line-height:1.7; }
+.hero-stat strong{ font-family:var(--font-vercel)!important; }
+.hero-stat span{ font-family:var(--font-vercel-mono); }
+.hero-underline{ opacity:.9; }
+
+/* Cards: Vercel flat dark, hairline border, subtle gradient */
+.plan-card,.val-card,.team-card,.mkt-card,.card,.team-add{
+  border-radius:12px!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.008))!important;
+  border:1px solid var(--border-base)!important; box-shadow:none!important;
+}
+.plan-card:hover,.val-card:hover,.team-card:hover,.mkt-card:hover{
+  border-color:var(--border-strong)!important; transform:translateY(-3px);
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.012))!important;
+}
+.plan-card.featured{ border-color:var(--gold-dim)!important; }
+.plan-name,.team-name,.val-card h4{ font-family:var(--font-vercel); font-weight:600; }
+.plan-price strong{ font-family:var(--font-vercel); }
+
+/* Nav + buttons: Geist, tight radii like Vercel; primary stays gold */
+.nav-logo,.nav-links a{ font-family:var(--font-vercel); }
+.nav-cta,.btn-primary{ border-radius:8px!important; font-family:var(--font-vercel); font-weight:600; }
+.btn-outline{ border-radius:8px!important; font-family:var(--font-vercel); border-color:var(--border-strong)!important; }
+.btn-outline:hover{ background:rgba(255,255,255,.06)!important; }
+
+/* Founding strip + launch bar: mono, flatter */
+.mkt-proof{ background:rgba(255,255,255,.015); }
+.mkt-ptext,.mkt-urgency-in .t,.mkt-urgency-in .tag{ font-family:var(--font-vercel-mono); }
+
+/* ── Explainer / "watch" section (Vercel big-heading + media card) ── */
+#watch .watch-inner{ display:grid; grid-template-columns:1fr 1.2fr; gap:3rem; align-items:center; }
+#watch .section-sub{ margin-top:1.2rem; max-width:380px; }
+.watch-media{ position:relative; border:1px solid var(--border-base); border-radius:16px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.005)); aspect-ratio:16/10; }
+.watch-media .explainer-video{ width:100%; height:100%; object-fit:cover; display:block; }
+.explainer-steps{ position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; gap:1.1rem; padding:2rem; }
+.exp-step{ display:flex; align-items:center; gap:1rem; opacity:0; transform:translateY(10px); animation:expIn .6s var(--ease-out,ease) forwards; }
+.exp-step:nth-child(1){ animation-delay:.2s } .exp-step:nth-child(2){ animation-delay:1.4s } .exp-step:nth-child(3){ animation-delay:2.6s }
+.exp-dot{ width:42px; height:42px; flex-shrink:0; border-radius:50%; display:grid; place-items:center; font-size:1.2rem; background:var(--gold-glow); border:1px solid var(--gold-dim); }
+.exp-step b{ font-family:var(--font-vercel); font-size:1.05rem; display:block }
+.exp-step span{ font-family:var(--font-vercel-mono); font-size:.74rem; color:var(--muted) }
+.exp-watermark{ position:absolute; right:14px; bottom:12px; font-family:var(--font-vercel-mono); font-size:.66rem; color:var(--muted2); letter-spacing:.1em; }
+@keyframes expIn{ to{ opacity:1; transform:none } }
+@media(max-width:820px){ #watch .watch-inner{ grid-template-columns:1fr; gap:1.6rem } }
+</style>
 </head>
 <body>
 
@@ -907,6 +977,35 @@ footer{
     if(cd)cd.textContent=days+'d '+H+':'+M+':'+S;
   }
   tick();setInterval(tick,1000);
+})();
+</script>
+
+<!-- ═══════ EXPLAINER / WATCH ═══════ -->
+<section id="watch">
+  <div class="container watch-inner">
+    <div class="watch-head reveal">
+      <p class="section-label">// see_it_in_action</p>
+      <h2 class="section-title">Lose it.<br>Claim it.<br><em>Get it back.</em></h2>
+      <p class="section-sub">The whole flow in under a minute — no forms, no fuss. File from your phone and we deliver the replacement to OWIS the same school day.</p>
+    </div>
+    <div class="watch-media reveal" id="watchMedia">
+      <div class="explainer-steps">
+        <div class="exp-step"><div class="exp-dot">✏️</div><div><b>Lose it</b><span>pencil gone before the exam</span></div></div>
+        <div class="exp-step"><div class="exp-dot">📲</div><div><b>Claim it</b><span>2 taps from your dashboard</span></div></div>
+        <div class="exp-step"><div class="exp-dot">🎒</div><div><b>Get it back</b><span>delivered to OWIS, same day</span></div></div>
+      </div>
+      <div class="exp-watermark">PENCIL INSURANCE</div>
+    </div>
+  </div>
+</section>
+<script>
+/* Upgrade the CSS explainer to the rendered Manim clip once it exists in /static */
+(function(){
+  fetch('/static/how_it_works.mp4',{method:'HEAD'}).then(function(r){
+    if(!r.ok) return;
+    var m=document.getElementById('watchMedia');
+    if(m) m.innerHTML='<video class="explainer-video" src="/static/how_it_works.mp4" autoplay muted loop playsinline preload="metadata"></video>';
+  }).catch(function(){});
 })();
 </script>
 
