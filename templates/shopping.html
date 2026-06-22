@@ -270,7 +270,7 @@ function applyFilters(){
 }
 function renderGrid(items){
   const grid=document.getElementById('productGrid');
-  if(!items.length){grid.innerHTML='<div class="no-results">No items match your search.</div>';return;}
+  if(!items.length){grid.innerHTML=ALL_ITEMS.length?'<div class="no-results">No items match your search.</div>':'<div class="no-results">🛒 The shop is being stocked — items coming soon.</div>';return;}
   grid.innerHTML=items.map(item=>{
     const qty=cart[item.name]?.qty||0;
     const covered=isCovered(item,userPlan);

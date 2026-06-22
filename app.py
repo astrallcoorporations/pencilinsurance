@@ -420,6 +420,9 @@ def default_catalog_items() -> list[dict[str, Any]]:
     return items
 
 def seed_items() -> None:
+    # Shop catalog intentionally starts EMPTY — we don't auto-stock placeholder
+    # items at launch. Admins add real inventory via the admin panel when ready.
+    return
     catalog = default_catalog_items()
     if not catalog:
         return
